@@ -30,9 +30,7 @@ const App = () => {
       if (!monster.lastDeath) return;
 
       const lastDeath = new Date(monster.lastDeath);
-      const respawnTime = new Date(
-        lastDeath.getTime() + monster.respawn * 60 * 60 * 1000
-      );
+      const respawnTime = new Date(lastDeath.getTime() + monster.respawn * 60 * 60 * 1000);
       const diff = respawnTime - new Date();
 
       if (diff <= 0) {
@@ -41,11 +39,9 @@ const App = () => {
         const hours = Math.floor(diff / (1000 * 60 * 60));
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-        updatedTimers[monster.id] = `${hours
+        updatedTimers[monster.id] = `${hours.toString().padStart(2, "0")}:${minutes
           .toString()
-          .padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds
-          .toString()
-          .padStart(2, "0")}`;
+          .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
       }
     });
 
@@ -88,64 +84,155 @@ const App = () => {
 
   return (
     <div style={{ padding: "20px", fontFamily: "Arial" }}>
-      <h2>Lista de Respawns</h2>
-      <table
-        border="1"
-        cellPadding="10"
-        cellSpacing="0"
-        style={{ width: "100%", textAlign: "center" }}
-      >
-        <thead>
-          <tr>
-            <th>Imagem</th>
-            <th>Monstro</th>
-            <th>Respawn (h)</th>
-            <th>Morreu às</th>
-            <th>Vai nascer às</th>
-            <th>Contagem Regressiva</th>
-            <th>Atualizar horário</th>
-          </tr>
-        </thead>
-        <tbody>
+      <h2 style={{ textAlign: "center", fontSize: "18px" }}>Lista de Respawns</h2>
+
+      {/* Estilo para desktop */}
+      <div className="table-container">
+        <table className="monster-table">
+          <thead>
+            <tr>
+              <th>Imagem</th>
+              <th>Monstro</th>
+              <th>Respawn (h)</th>
+              <th>Morreu às</th>
+              <th>Vai nascer às</th>
+              <th>Contagem Regressiva</th>
+              <th>Atualizar horário</th>
+            </tr>
+          </thead>
+          <tbody>
+            {monsters.map((monster) => (
+              <tr key={monster.id}>
+                <td>
+                  <img src={monster.spriteUrl} alt={monster.name} width="40" height="40" />
+                </td>
+                <td>{monster.name}</td>
+                <td>{monster.respawn}</td>
+                <td>
+                  {monster.lastDeath
+                    ? new Date(monster.lastDeath).toLocaleString()
+                    : "—"}
+                </td>
+                <td>
+                  {monster.lastDeath
+                    ? calculateRespawnTime(monster.lastDeath, monster.respawn)
+                    : "—"}
+                </td>
+                <td style={{ color: "red", fontWeight: "bold" }}>
+                  {timers[monster.id] || "—"}
+                </td>
+                <td>
+                  <input
+                    type="datetime-local"
+                    value={inputValues[monster.id] || ""}
+                    onChange={(e) =>
+                      handleInputChange(monster.id, e.target.value)
+                    }
+                  />
+                  <button
+                    style={{ marginLeft: "5px" }}
+                    onClick={() => handleConfirm(monster)}
+                  >
+                    Atualizar
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {/* Estilo para mobile */}
+        <div className="cards-container">
           {monsters.map((monster) => (
-            <tr key={monster.id}>
-              <td>
-                <img src={monster.spriteUrl} alt={monster.name} width="50" />
-              </td>
-              <td>{monster.name}</td>
-              <td>{monster.respawn}</td>
-              <td>
-                {monster.lastDeath
-                  ? new Date(monster.lastDeath).toLocaleString()
-                  : "—"}
-              </td>
-              <td>
-                {monster.lastDeath
-                  ? calculateRespawnTime(monster.lastDeath, monster.respawn)
-                  : "—"}
-              </td>
-              <td style={{ color: "red", fontWeight: "bold" }}>
-                {timers[monster.id] || "—"}
-              </td>
-              <td>
+            <div key={monster.id} className="monster-card">
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <img src={monster.spriteUrl} alt={monster.name} width="40" height="40" />
+                <strong style={{ fontSize: "14px" }}>{monster.name}</strong>
+              </div>
+              <p><strong>Respawn:</strong> {monster.respawn}h</p>
+              <p><strong>Morreu às:</strong> {monster.lastDeath ? new Date(monster.lastDeath).toLocaleString() : "—"}</p>
+              <p><strong>Vai nascer às:</strong> {monster.lastDeath ? calculateRespawnTime(monster.lastDeath, monster.respawn) : "—"}</p>
+              <p style={{ color: "red", fontWeight: "bold" }}>
+                <strong>Contagem Regressiva:</strong> {timers[monster.id] || "—"}
+              </p>
+              <div>
                 <input
                   type="datetime-local"
                   value={inputValues[monster.id] || ""}
                   onChange={(e) =>
                     handleInputChange(monster.id, e.target.value)
                   }
+                  style={{ fontSize: "12px", width: "100%" }}
                 />
                 <button
-                  style={{ marginLeft: "5px" }}
+                  style={{
+                    marginTop: "5px",
+                    fontSize: "12px",
+                    padding: "4px 8px",
+                    width: "100%",
+                  }}
                   onClick={() => handleConfirm(monster)}
                 >
-                  Confirmar
+                  Atualizar
                 </button>
-              </td>
-            </tr>
+              </div>
+            </div>
           ))}
-        </tbody>
-      </table>
+        </div>
+      </div>
+
+      {/* Estilo CSS */}
+      <style>{`
+        .table-container {
+          width: 100%;
+        }
+
+        .monster-table {
+          width: 100%;
+          border-collapse: collapse;
+          font-size: 14px;
+        }
+
+        .monster-table th,
+        .monster-table td {
+          border: 1px solid #ccc;
+          padding: 6px;
+        }
+
+        .cards-container {
+          display: none;
+        }
+
+        .monster-card {
+          border: 1px solid #ccc;
+          padding: 10px;
+          margin-bottom: 10px;
+          border-radius: 6px;
+          font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+          .monster-table {
+            display: none;
+          }
+
+          .cards-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+          }
+
+          .monster-card {
+            font-size: 12px;
+          }
+        }
+
+        @media (max-width: 500px) {
+          .cards-container {
+            grid-template-columns: 1fr;
+          }
+        }
+      `}</style>
     </div>
   );
 };
