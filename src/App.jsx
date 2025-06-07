@@ -5,7 +5,7 @@ const App = () => {
   const [monsters, setMonsters] = useState([]);
   const [inputValues, setInputValues] = useState({});
   const [timers, setTimers] = useState({});
-  const [loadingIds, setLoadingIds] = useState({}); // novo estado para controlar loading
+  const [loadingIds, setLoadingIds] = useState({});
 
   useEffect(() => {
     fetchMonsters();
@@ -62,7 +62,7 @@ const App = () => {
 
   const handleConfirm = async (monster) => {
     const newDate = new Date(inputValues[monster.id]);
-    setLoadingIds((prev) => ({ ...prev, [monster.id]: true })); // começa loading
+    setLoadingIds((prev) => ({ ...prev, [monster.id]: true }));
 
     try {
       await axios.put("https://undertimer-biel.onrender.com/edit", {
@@ -80,7 +80,7 @@ const App = () => {
     } catch (error) {
       console.error("Erro ao atualizar o horário:", error);
     } finally {
-      setLoadingIds((prev) => ({ ...prev, [monster.id]: false })); // termina loading
+      setLoadingIds((prev) => ({ ...prev, [monster.id]: false }));
     }
   };
 
@@ -91,10 +91,39 @@ const App = () => {
   };
 
   return (
-    <div style={{ padding: "20px", fontFamily: "Arial" }}>
-      <h2 style={{ textAlign: "center", fontSize: "18px" }}>
-        Lista de Respawns
+    <div
+      style={{
+        padding: "20px",
+        fontFamily: "Arial",
+        backgroundColor: "#cfcfcf",
+        minHeight: "100vh",
+      }}
+    >
+      <h2
+        style={{ textAlign: "center", fontSize: "20px", marginBottom: "4px" }}
+      >
+        UnderTimer
       </h2>
+      <p
+        style={{
+          textAlign: "center",
+          fontSize: "14px",
+          marginTop: 0,
+          marginBottom: "2px",
+        }}
+      >
+        Sistema de Controle de Tempos para Ragnarok Online
+      </p>
+      <p
+        style={{
+          textAlign: "center",
+          fontSize: "12px",
+          color: "#666",
+          marginTop: 0,
+        }}
+      >
+        Beta - v0.2
+      </p>
 
       <div className="table-container">
         <table className="monster-table">
@@ -103,7 +132,6 @@ const App = () => {
               <th>Imagem</th>
               <th>Monstro</th>
               <th>Respawn (h)</th>
-              {/* Troca a ordem aqui */}
               <th>Vai nascer às</th>
               <th>Morreu às</th>
               <th>Contagem Regressiva</th>
@@ -115,12 +143,10 @@ const App = () => {
               const timerValue = timers[monster.id] || "—";
               const isAlive = timerValue === "Nasceu";
 
-              // Para deixar em vermelho só a hora da coluna "Vai nascer às":
               let fullRespawn = monster.lastDeath
                 ? calculateRespawnTime(monster.lastDeath, monster.respawn)
                 : "—";
 
-              // Separar data e hora para aplicar cor só na hora
               let respawnDatePart = "—";
               let respawnTimePart = "";
 
@@ -142,8 +168,6 @@ const App = () => {
                   </td>
                   <td>{monster.name}</td>
                   <td>{monster.respawn}</td>
-
-                  {/* Vai nascer às antes de Morreu às */}
                   <td>
                     {respawnDatePart}{" "}
                     <span style={{ color: isAlive ? "black" : "red" }}>
@@ -155,7 +179,6 @@ const App = () => {
                       ? new Date(monster.lastDeath).toLocaleString()
                       : "—"}
                   </td>
-
                   <td
                     style={{
                       color: isAlive ? "black" : "red",
@@ -186,7 +209,6 @@ const App = () => {
           </tbody>
         </table>
 
-        {/* Estilo para mobile */}
         <div className="cards-container">
           {monsters.map((monster) => {
             const timerValue = timers[monster.id] || "—";
@@ -206,7 +228,11 @@ const App = () => {
             }
 
             return (
-              <div key={monster.id} className="monster-card">
+              <div
+                key={monster.id}
+                className="monster-card"
+                style={{ backgroundColor: "#fff" }}
+              >
                 <div className="visual-section">
                   <div className="left-visual">
                     <img
@@ -266,7 +292,6 @@ const App = () => {
         </div>
       </div>
 
-      {/* Estilo CSS permanece o mesmo */}
       <style>{`
         .table-container {
           width: 100%;
@@ -276,6 +301,7 @@ const App = () => {
           width: 100%;
           border-collapse: collapse;
           font-size: 14px;
+          background-color: #fff;
         }
 
         .monster-table th,
@@ -347,7 +373,7 @@ const App = () => {
             gap: 4px;
             margin: 0;
           }
-        
+
           .right-visual p {
             margin: 2px 0;
           }
