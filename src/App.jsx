@@ -5,6 +5,7 @@ const App = () => {
   const [monsters, setMonsters] = useState([]);
   const [inputValues, setInputValues] = useState({});
   const [timers, setTimers] = useState({});
+  const [loadingIds, setLoadingIds] = useState({}); // novo estado para controlar loading
 
   useEffect(() => {
     fetchMonsters();
@@ -61,6 +62,7 @@ const App = () => {
 
   const handleConfirm = async (monster) => {
     const newDate = new Date(inputValues[monster.id]);
+    setLoadingIds((prev) => ({ ...prev, [monster.id]: true })); // começa loading
 
     try {
       await axios.put("https://undertimer-biel.onrender.com/edit", {
@@ -77,6 +79,8 @@ const App = () => {
       alert("Atualizado com sucesso");
     } catch (error) {
       console.error("Erro ao atualizar o horário:", error);
+    } finally {
+      setLoadingIds((prev) => ({ ...prev, [monster.id]: false })); // termina loading
     }
   };
 
@@ -92,7 +96,6 @@ const App = () => {
         Lista de Respawns
       </h2>
 
-      {/* Estilo para desktop */}
       <div className="table-container">
         <table className="monster-table">
           <thead>
@@ -100,55 +103,86 @@ const App = () => {
               <th>Imagem</th>
               <th>Monstro</th>
               <th>Respawn (h)</th>
-              <th>Morreu às</th>
+              {/* Troca a ordem aqui */}
               <th>Vai nascer às</th>
+              <th>Morreu às</th>
               <th>Contagem Regressiva</th>
               <th>Atualizar horário</th>
             </tr>
           </thead>
           <tbody>
-            {monsters.map((monster) => (
-              <tr key={monster.id}>
-                <td>
-                  <img
-                    src={monster.spriteUrl}
-                    alt={monster.name}
-                    width="40"
-                    height="40"
-                  />
-                </td>
-                <td>{monster.name}</td>
-                <td>{monster.respawn}</td>
-                <td>
-                  {monster.lastDeath
-                    ? new Date(monster.lastDeath).toLocaleString()
-                    : "—"}
-                </td>
-                <td>
-                  {monster.lastDeath
-                    ? calculateRespawnTime(monster.lastDeath, monster.respawn)
-                    : "—"}
-                </td>
-                <td style={{ color: "red", fontWeight: "bold" }}>
-                  {timers[monster.id] || "—"}
-                </td>
-                <td>
-                  <input
-                    type="datetime-local"
-                    value={inputValues[monster.id] || ""}
-                    onChange={(e) =>
-                      handleInputChange(monster.id, e.target.value)
-                    }
-                  />
-                  <button
-                    style={{ marginLeft: "5px" }}
-                    onClick={() => handleConfirm(monster)}
+            {monsters.map((monster) => {
+              const timerValue = timers[monster.id] || "—";
+              const isAlive = timerValue === "Nasceu";
+
+              // Para deixar em vermelho só a hora da coluna "Vai nascer às":
+              let fullRespawn = monster.lastDeath
+                ? calculateRespawnTime(monster.lastDeath, monster.respawn)
+                : "—";
+
+              // Separar data e hora para aplicar cor só na hora
+              let respawnDatePart = "—";
+              let respawnTimePart = "";
+
+              if (fullRespawn !== "—") {
+                const [datePart, timePart] = fullRespawn.split(", ");
+                respawnDatePart = datePart;
+                respawnTimePart = timePart || "";
+              }
+
+              return (
+                <tr key={monster.id}>
+                  <td>
+                    <img
+                      src={monster.spriteUrl}
+                      alt={monster.name}
+                      width="40"
+                      height="40"
+                    />
+                  </td>
+                  <td>{monster.name}</td>
+                  <td>{monster.respawn}</td>
+
+                  {/* Vai nascer às antes de Morreu às */}
+                  <td>
+                    {respawnDatePart}{" "}
+                    <span style={{ color: isAlive ? "black" : "red" }}>
+                      {respawnTimePart}
+                    </span>
+                  </td>
+                  <td>
+                    {monster.lastDeath
+                      ? new Date(monster.lastDeath).toLocaleString()
+                      : "—"}
+                  </td>
+
+                  <td
+                    style={{
+                      color: isAlive ? "black" : "red",
+                      fontWeight: "bold",
+                    }}
                   >
-                    Atualizar
-                  </button>
-                </td>
-              </tr>
-            ))}
+                    {timerValue}
+                  </td>
+                  <td>
+                    <input
+                      type="datetime-local"
+                      value={inputValues[monster.id] || ""}
+                      onChange={(e) =>
+                        handleInputChange(monster.id, e.target.value)
+                      }
+                    />
+                    <button
+                      style={{ marginLeft: "5px" }}
+                      onClick={() => handleConfirm(monster)}
+                      disabled={loadingIds[monster.id]}
+                    >
+                      {loadingIds[monster.id] ? "Carregando..." : "Atualizar"}
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
 
@@ -157,9 +191,22 @@ const App = () => {
           {monsters.map((monster) => {
             const timerValue = timers[monster.id] || "—";
             const isAlive = timerValue === "Nasceu";
+
+            let fullRespawn = monster.lastDeath
+              ? calculateRespawnTime(monster.lastDeath, monster.respawn)
+              : "—";
+
+            let respawnDatePart = "—";
+            let respawnTimePart = "";
+
+            if (fullRespawn !== "—") {
+              const [datePart, timePart] = fullRespawn.split(", ");
+              respawnDatePart = datePart;
+              respawnTimePart = timePart || "";
+            }
+
             return (
               <div key={monster.id} className="monster-card">
-                {/* Seção Visual */}
                 <div className="visual-section">
                   <div className="left-visual">
                     <img
@@ -174,18 +221,15 @@ const App = () => {
                   <div className="spacer" />
                   <div className="right-visual">
                     <p>
+                      <strong>Vai nascer às:</strong> {respawnDatePart}{" "}
+                      <span style={{ color: isAlive ? "black" : "red" }}>
+                        {respawnTimePart}
+                      </span>
+                    </p>
+                    <p>
                       <strong>Morreu às:</strong>{" "}
                       {monster.lastDeath
                         ? new Date(monster.lastDeath).toLocaleString()
-                        : "—"}
-                    </p>
-                    <p>
-                      <strong>Vai nascer às:</strong>{" "}
-                      {monster.lastDeath
-                        ? calculateRespawnTime(
-                            monster.lastDeath,
-                            monster.respawn
-                          )
                         : "—"}
                     </p>
                     <p
@@ -199,7 +243,6 @@ const App = () => {
                   </div>
                 </div>
 
-                {/* Seção de Interação */}
                 <div className="interaction-section">
                   <input
                     type="datetime-local"
@@ -212,8 +255,9 @@ const App = () => {
                   <button
                     className="update-button"
                     onClick={() => handleConfirm(monster)}
+                    disabled={loadingIds[monster.id]}
                   >
-                    Atualizar
+                    {loadingIds[monster.id] ? "Carregando..." : "Atualizar"}
                   </button>
                 </div>
               </div>
@@ -222,7 +266,7 @@ const App = () => {
         </div>
       </div>
 
-      {/* Estilo CSS */}
+      {/* Estilo CSS permanece o mesmo */}
       <style>{`
         .table-container {
           width: 100%;
@@ -252,7 +296,6 @@ const App = () => {
           font-size: 13px;
         }
 
-        /* NOVAS REGRAS PARA MOBILE */
         @media (max-width: 768px) {
           .monster-table {
             display: none;
@@ -301,12 +344,12 @@ const App = () => {
             display: flex;
             flex-direction: column;
             justify-content: center;
-            gap: 4px; /* mantido */
-            margin: 0; /* reduzindo vertical espaçamento */
+            gap: 4px;
+            margin: 0;
           }
         
           .right-visual p {
-            margin: 2px 0; /* reduzindo margem vertical para aproximar os itens */
+            margin: 2px 0;
           }
 
           .interaction-section {
