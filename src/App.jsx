@@ -90,41 +90,11 @@ const App = () => {
     return respawnDate.toLocaleString();
   };
 
-  return (
-    <div
-      style={{
-        padding: "20px",
-        fontFamily: "Arial",
-        backgroundColor: "#cfcfcf",
-        minHeight: "100vh",
-      }}
-    >
-      <h2
-        style={{ textAlign: "center", fontSize: "20px", marginBottom: "4px" }}
-      >
-        UnderTimer
-      </h2>
-      <p
-        style={{
-          textAlign: "center",
-          fontSize: "14px",
-          marginTop: 0,
-          marginBottom: "2px",
-        }}
-      >
-        Sistema de Controle de Tempos para Ragnarok Online
-      </p>
-      <p
-        style={{
-          textAlign: "center",
-          fontSize: "12px",
-          color: "#666",
-          marginTop: 0,
-        }}
-      >
-        Beta - v0.2
-      </p>
-
+  const renderTableAndCards = (filteredMonsters, tierLabel) => (
+    <>
+      <h3 style={{ marginTop: "20px", textAlign: "center" }}>
+        Tier {tierLabel}
+      </h3>
       <div className="table-container">
         <table className="monster-table">
           <thead>
@@ -139,7 +109,7 @@ const App = () => {
             </tr>
           </thead>
           <tbody>
-            {monsters.map((monster) => {
+            {filteredMonsters.map((monster) => {
               const timerValue = timers[monster.id] || "—";
               const isAlive = timerValue === "Nasceu";
 
@@ -210,7 +180,7 @@ const App = () => {
         </table>
 
         <div className="cards-container">
-          {monsters.map((monster) => {
+          {filteredMonsters.map((monster) => {
             const timerValue = timers[monster.id] || "—";
             const isAlive = timerValue === "Nasceu";
 
@@ -291,123 +261,165 @@ const App = () => {
           })}
         </div>
       </div>
+    </>
+  );
+
+  const monstersS = monsters.filter((m) => m.tier === "S");
+  const monstersA = monsters.filter((m) => m.tier === "A");
+
+  return (
+    <div
+      style={{
+        padding: "20px",
+        fontFamily: "Arial",
+        backgroundColor: "#cfcfcf",
+        minHeight: "100vh",
+      }}
+    >
+      <h2
+        style={{ textAlign: "center", fontSize: "20px", marginBottom: "4px" }}
+      >
+        UnderTimer
+      </h2>
+      <p
+        style={{
+          textAlign: "center",
+          fontSize: "14px",
+          marginTop: 0,
+          marginBottom: "2px",
+        }}
+      >
+        Sistema de Controle de Tempos para Ragnarok Online
+      </p>
+      <p
+        style={{
+          textAlign: "center",
+          fontSize: "12px",
+          color: "#666",
+          marginTop: 0,
+        }}
+      >
+        Beta - v0.2
+      </p>
+
+      {renderTableAndCards(monstersS, "S")}
+      {renderTableAndCards(monstersA, "A")}
 
       <style>{`
-
 body {
   background-color: #cfcfcf;
 }
 
-        .table-container {
-          width: 100%;
-        }
+.table-container {
+  width: 100%;
+}
 
-        .monster-table {
-          width: 100%;
-          border-collapse: collapse;
-          font-size: 14px;
-          background-color: #fff;
-        }
+.monster-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  background-color: #fff;
+}
 
-        .monster-table th,
-        .monster-table td {
-          border: 1px solid #ccc;
-          padding: 6px;
-        }
+.monster-table th,
+.monster-table td {
+  border: 1px solid #ccc;
+  padding: 6px;
+}
 
-        .cards-container {
-          display: none;
-        }
+.cards-container {
+  display: none;
+}
 
-        .monster-card {
-          border: 1px solid #ccc;
-          padding: 10px;
-          margin-bottom: 10px;
-          border-radius: 6px;
-          font-size: 13px;
-        }
+.monster-card {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  font-size: 13px;
+}
 
-        @media (max-width: 768px) {
-          .monster-table {
-            display: none;
-          }
+@media (max-width: 768px) {
+  .monster-table {
+    display: none;
+  }
 
-          .cards-container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
-          }
+  .cards-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
 
-          .monster-card {
-            font-size: 12px;
-          }
+  .monster-card {
+    font-size: 12px;
+  }
 
-          .visual-section {
-            display: flex;
-            margin-bottom: 8px;
-            gap: 4px;
-          }
+  .visual-section {
+    display: flex;
+    margin-bottom: 8px;
+    gap: 4px;
+  }
 
-          .left-visual {
-            width: 30%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-          }
+  .left-visual {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
 
-          .monster-name {
-            margin-top: 4px;
-          }
+  .monster-name {
+    margin-top: 4px;
+  }
 
-          .respawn-left {
-            margin-top: 4px;
-            margin-bottom: 0;
-          }
+  .respawn-left {
+    margin-top: 4px;
+    margin-bottom: 0;
+  }
 
-          .spacer {
-            width: 5%;
-          }
+  .spacer {
+    width: 5%;
+  }
 
-          .right-visual {
-            width: 65%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 4px;
-            margin: 0;
-          }
+  .right-visual {
+    width: 65%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    margin: 0;
+  }
 
-          .right-visual p {
-            margin: 2px 0;
-          }
+  .right-visual p {
+    margin: 2px 0;
+  }
 
-          .interaction-section {
-            display: flex;
-            gap: 6px;
-          }
+  .interaction-section {
+    display: flex;
+    gap: 6px;
+  }
 
-          .datetime-input {
-            flex: 1;
-            font-size: 12px;
-            padding: 4px 6px;
-          }
+  .datetime-input {
+    flex: 1;
+    font-size: 12px;
+    padding: 4px 6px;
+  }
 
-          .update-button {
-            flex: 1;
-            font-size: 12px;
-            padding: 4px 8px;
-            cursor: pointer;
-          }
-        }
+  .update-button {
+    flex: 1;
+    font-size: 12px;
+    padding: 4px 8px;
+    cursor: pointer;
+  }
+}
 
-        @media (max-width: 500px) {
-          .cards-container {
-            grid-template-columns: 1fr;
-          }
-        }
-      `}</style>
+@media (max-width: 500px) {
+  .cards-container {
+    grid-template-columns: 1fr;
+  }
+}
+`}</style>
     </div>
   );
 };
