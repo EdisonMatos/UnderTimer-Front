@@ -293,6 +293,11 @@ const App = () => {
       </div>
 
       <style>{`
+
+body {
+  background-color: #cfcfcf;
+}
+
         .table-container {
           width: 100%;
         }
