@@ -30,18 +30,22 @@ const App = () => {
       if (!monster.lastDeath) return;
 
       const lastDeath = new Date(monster.lastDeath);
-      const respawnTime = new Date(lastDeath.getTime() + monster.respawn * 60 * 60 * 1000);
+      const respawnTime = new Date(
+        lastDeath.getTime() + monster.respawn * 60 * 60 * 1000
+      );
       const diff = respawnTime - new Date();
 
       if (diff <= 0) {
-        updatedTimers[monster.id] = "Já nasceu";
+        updatedTimers[monster.id] = "Nasceu";
       } else {
         const hours = Math.floor(diff / (1000 * 60 * 60));
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-        updatedTimers[monster.id] = `${hours.toString().padStart(2, "0")}:${minutes
+        updatedTimers[monster.id] = `${hours
           .toString()
-          .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+          .padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds
+          .toString()
+          .padStart(2, "0")}`;
       }
     });
 
@@ -84,7 +88,9 @@ const App = () => {
 
   return (
     <div style={{ padding: "20px", fontFamily: "Arial" }}>
-      <h2 style={{ textAlign: "center", fontSize: "18px" }}>Lista de Respawns</h2>
+      <h2 style={{ textAlign: "center", fontSize: "18px" }}>
+        Lista de Respawns
+      </h2>
 
       {/* Estilo para desktop */}
       <div className="table-container">
@@ -104,7 +110,12 @@ const App = () => {
             {monsters.map((monster) => (
               <tr key={monster.id}>
                 <td>
-                  <img src={monster.spriteUrl} alt={monster.name} width="40" height="40" />
+                  <img
+                    src={monster.spriteUrl}
+                    alt={monster.name}
+                    width="40"
+                    height="40"
+                  />
                 </td>
                 <td>{monster.name}</td>
                 <td>{monster.respawn}</td>
@@ -143,41 +154,71 @@ const App = () => {
 
         {/* Estilo para mobile */}
         <div className="cards-container">
-          {monsters.map((monster) => (
-            <div key={monster.id} className="monster-card">
-              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <img src={monster.spriteUrl} alt={monster.name} width="40" height="40" />
-                <strong style={{ fontSize: "14px" }}>{monster.name}</strong>
+          {monsters.map((monster) => {
+            const timerValue = timers[monster.id] || "—";
+            const isAlive = timerValue === "Nasceu";
+            return (
+              <div key={monster.id} className="monster-card">
+                {/* Seção Visual */}
+                <div className="visual-section">
+                  <div className="left-visual">
+                    <img
+                      src={monster.spriteUrl}
+                      alt={monster.name}
+                      width="40"
+                      height="40"
+                    />
+                    <strong className="monster-name">{monster.name}</strong>
+                    <p className="respawn-left">{monster.respawn}h</p>
+                  </div>
+                  <div className="spacer" />
+                  <div className="right-visual">
+                    <p>
+                      <strong>Morreu às:</strong>{" "}
+                      {monster.lastDeath
+                        ? new Date(monster.lastDeath).toLocaleString()
+                        : "—"}
+                    </p>
+                    <p>
+                      <strong>Vai nascer às:</strong>{" "}
+                      {monster.lastDeath
+                        ? calculateRespawnTime(
+                            monster.lastDeath,
+                            monster.respawn
+                          )
+                        : "—"}
+                    </p>
+                    <p
+                      style={{
+                        color: isAlive ? "black" : "red",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      <strong>Tempo:</strong> {timerValue}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Seção de Interação */}
+                <div className="interaction-section">
+                  <input
+                    type="datetime-local"
+                    value={inputValues[monster.id] || ""}
+                    onChange={(e) =>
+                      handleInputChange(monster.id, e.target.value)
+                    }
+                    className="datetime-input"
+                  />
+                  <button
+                    className="update-button"
+                    onClick={() => handleConfirm(monster)}
+                  >
+                    Atualizar
+                  </button>
+                </div>
               </div>
-              <p><strong>Respawn:</strong> {monster.respawn}h</p>
-              <p><strong>Morreu às:</strong> {monster.lastDeath ? new Date(monster.lastDeath).toLocaleString() : "—"}</p>
-              <p><strong>Vai nascer às:</strong> {monster.lastDeath ? calculateRespawnTime(monster.lastDeath, monster.respawn) : "—"}</p>
-              <p style={{ color: "red", fontWeight: "bold" }}>
-                <strong>Contagem Regressiva:</strong> {timers[monster.id] || "—"}
-              </p>
-              <div>
-                <input
-                  type="datetime-local"
-                  value={inputValues[monster.id] || ""}
-                  onChange={(e) =>
-                    handleInputChange(monster.id, e.target.value)
-                  }
-                  style={{ fontSize: "12px", width: "100%" }}
-                />
-                <button
-                  style={{
-                    marginTop: "5px",
-                    fontSize: "12px",
-                    padding: "4px 8px",
-                    width: "100%",
-                  }}
-                  onClick={() => handleConfirm(monster)}
-                >
-                  Atualizar
-                </button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
@@ -211,6 +252,7 @@ const App = () => {
           font-size: 13px;
         }
 
+        /* NOVAS REGRAS PARA MOBILE */
         @media (max-width: 768px) {
           .monster-table {
             display: none;
@@ -224,6 +266,65 @@ const App = () => {
 
           .monster-card {
             font-size: 12px;
+          }
+
+          .visual-section {
+            display: flex;
+            margin-bottom: 8px;
+            gap: 4px;
+          }
+
+          .left-visual {
+            width: 30%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+          }
+
+          .monster-name {
+            margin-top: 4px;
+          }
+
+          .respawn-left {
+            margin-top: 4px;
+            margin-bottom: 0;
+          }
+
+          .spacer {
+            width: 5%;
+          }
+
+          .right-visual {
+            width: 65%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 4px; /* mantido */
+            margin: 0; /* reduzindo vertical espaçamento */
+          }
+        
+          .right-visual p {
+            margin: 2px 0; /* reduzindo margem vertical para aproximar os itens */
+          }
+
+          .interaction-section {
+            display: flex;
+            gap: 6px;
+          }
+
+          .datetime-input {
+            flex: 1;
+            font-size: 12px;
+            padding: 4px 6px;
+          }
+
+          .update-button {
+            flex: 1;
+            font-size: 12px;
+            padding: 4px 8px;
+            cursor: pointer;
           }
         }
 
