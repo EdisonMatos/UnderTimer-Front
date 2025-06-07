@@ -90,11 +90,9 @@ const App = () => {
     return respawnDate.toLocaleString();
   };
 
-  const renderTableAndCards = (filteredMonsters, tierLabel) => (
+  const renderTableAndCards = (filteredMonsters, label) => (
     <>
-      <h3 style={{ marginTop: "20px", textAlign: "center" }}>
-        Tier {tierLabel}
-      </h3>
+      <h3 style={{ marginTop: "20px", textAlign: "center" }}>{label}</h3>
       <div className="table-container">
         <table className="monster-table">
           <thead>
@@ -266,6 +264,7 @@ const App = () => {
 
   const monstersS = monsters.filter((m) => m.tier === "S");
   const monstersA = monsters.filter((m) => m.tier === "A");
+  const minibosses = monsters.filter((m) => m.type === "Miniboss");
 
   return (
     <div
@@ -302,8 +301,9 @@ const App = () => {
         Beta - v0.2
       </p>
 
-      {renderTableAndCards(monstersS, "S")}
-      {renderTableAndCards(monstersA, "A")}
+      {renderTableAndCards(monstersS, "MVPs Tier S")}
+      {renderTableAndCards(monstersA, "MVPs Tier A")}
+      {renderTableAndCards(minibosses, "Miniboss")}
 
       <style>{`
 body {
