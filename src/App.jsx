@@ -168,7 +168,7 @@ const App = () => {
                   width="40"
                   height="40"
                 />
-                <strong style={{ fontSize: "14px" }}>{monster.name}</strong>
+                <strong style={{ fontSize: "20px" }}>{monster.name}</strong>
               </div>
               <p>
                 <strong>Respawn:</strong> {monster.respawn}h
@@ -196,12 +196,12 @@ const App = () => {
                   onChange={(e) =>
                     handleInputChange(monster.id, e.target.value)
                   }
-                  style={{ fontSize: "12px", width: "100%" }}
+                  style={{ fontSize: "16px", width: "100%" }}
                 />
                 <button
                   style={{
                     marginTop: "5px",
-                    fontSize: "12px",
+                    fontSize: "16px",
                     padding: "4px 8px",
                     width: "100%",
                   }}
@@ -224,7 +224,7 @@ const App = () => {
         .monster-table {
           width: 100%;
           border-collapse: collapse;
-          font-size: 14px;
+          font-size: 20px;
         }
 
         .monster-table th,
@@ -257,7 +257,7 @@ const App = () => {
           }
 
           .monster-card {
-            font-size: 12px;
+            font-size: 16px;
           }
         }
 
