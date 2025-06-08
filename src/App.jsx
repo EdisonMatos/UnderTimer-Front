@@ -31,7 +31,9 @@ const App = () => {
       if (!monster.lastDeath) return;
 
       const lastDeath = new Date(monster.lastDeath);
-      const respawnTime = new Date(lastDeath.getTime() + monster.respawn * 60 * 60 * 1000);
+      const respawnTime = new Date(
+        lastDeath.getTime() + monster.respawn * 60 * 60 * 1000
+      );
       const diff = respawnTime - new Date();
 
       if (diff <= 0) {
@@ -40,9 +42,11 @@ const App = () => {
         const hours = Math.floor(diff / (1000 * 60 * 60));
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-        updatedTimers[monster.id] = `${hours.toString().padStart(2, "0")}:${minutes
+        updatedTimers[monster.id] = `${hours
           .toString()
-          .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+          .padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds
+          .toString()
+          .padStart(2, "0")}`;
       }
     });
 
@@ -88,7 +92,9 @@ const App = () => {
 
   return (
     <div style={{ padding: "20px", fontFamily: "Arial" }}>
-      <h2 style={{ textAlign: "center", fontSize: "18px" }}>Lista de Respawns</h2>
+      <h2 style={{ textAlign: "center", fontSize: "18px" }}>
+        Lista de Respawns
+      </h2>
 
       <div className="table-container">
         <table className="monster-table">
@@ -107,7 +113,12 @@ const App = () => {
             {monsters.map((monster) => (
               <tr key={monster.id}>
                 <td>
-                  <img src={monster.spriteUrl} alt={monster.name} width="40" height="40" />
+                  <img
+                    src={monster.spriteUrl}
+                    alt={monster.name}
+                    width="40"
+                    height="40"
+                  />
                 </td>
                 <td>{monster.name}</td>
                 <td>{monster.respawn}</td>
@@ -148,15 +159,35 @@ const App = () => {
         <div className="cards-container">
           {monsters.map((monster) => (
             <div key={monster.id} className="monster-card">
-              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <img src={monster.spriteUrl} alt={monster.name} width="40" height="40" />
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "8px" }}
+              >
+                <img
+                  src={monster.spriteUrl}
+                  alt={monster.name}
+                  width="40"
+                  height="40"
+                />
                 <strong style={{ fontSize: "14px" }}>{monster.name}</strong>
               </div>
-              <p><strong>Respawn:</strong> {monster.respawn}h</p>
-              <p><strong>Morreu às:</strong> {monster.lastDeath ? new Date(monster.lastDeath).toLocaleString() : "—"}</p>
-              <p><strong>Vai nascer às:</strong> {monster.lastDeath ? calculateRespawnTime(monster.lastDeath, monster.respawn) : "—"}</p>
+              <p>
+                <strong>Respawn:</strong> {monster.respawn}h
+              </p>
+              <p>
+                <strong>Morreu às:</strong>{" "}
+                {monster.lastDeath
+                  ? new Date(monster.lastDeath).toLocaleString()
+                  : "—"}
+              </p>
+              <p>
+                <strong>Vai nascer às:</strong>{" "}
+                {monster.lastDeath
+                  ? calculateRespawnTime(monster.lastDeath, monster.respawn)
+                  : "—"}
+              </p>
               <p style={{ color: "red", fontWeight: "bold" }}>
-                <strong>Contagem Regressiva:</strong> {timers[monster.id] || "—"}
+                <strong>Contagem Regressiva:</strong>{" "}
+                {timers[monster.id] || "—"}
               </p>
               <div>
                 <input
