@@ -5,6 +5,7 @@ const App = () => {
   const [monsters, setMonsters] = useState([]);
   const [inputValues, setInputValues] = useState({});
   const [timers, setTimers] = useState({});
+  const [loadingButtons, setLoadingButtons] = useState({}); // <- ADICIONADO
 
   useEffect(() => {
     fetchMonsters();
@@ -57,6 +58,7 @@ const App = () => {
 
   const handleConfirm = async (monster) => {
     const newDate = new Date(inputValues[monster.id]);
+    setLoadingButtons((prev) => ({ ...prev, [monster.id]: true }));
 
     try {
       await axios.put("https://undertimer-biel.onrender.com/edit", {
@@ -73,6 +75,8 @@ const App = () => {
       alert("Atualizado com sucesso");
     } catch (error) {
       console.error("Erro ao atualizar o horário:", error);
+    } finally {
+      setLoadingButtons((prev) => ({ ...prev, [monster.id]: false }));
     }
   };
 
@@ -86,7 +90,6 @@ const App = () => {
     <div style={{ padding: "20px", fontFamily: "Arial" }}>
       <h2 style={{ textAlign: "center", fontSize: "18px" }}>Lista de Respawns</h2>
 
-      {/* Estilo para desktop */}
       <div className="table-container">
         <table className="monster-table">
           <thead>
@@ -132,8 +135,9 @@ const App = () => {
                   <button
                     style={{ marginLeft: "5px" }}
                     onClick={() => handleConfirm(monster)}
+                    disabled={loadingButtons[monster.id]}
                   >
-                    Atualizar
+                    {loadingButtons[monster.id] ? "Aguarde…" : "Atualizar"}
                   </button>
                 </td>
               </tr>
@@ -141,7 +145,6 @@ const App = () => {
           </tbody>
         </table>
 
-        {/* Estilo para mobile */}
         <div className="cards-container">
           {monsters.map((monster) => (
             <div key={monster.id} className="monster-card">
@@ -172,8 +175,9 @@ const App = () => {
                     width: "100%",
                   }}
                   onClick={() => handleConfirm(monster)}
+                  disabled={loadingButtons[monster.id]}
                 >
-                  Atualizar
+                  {loadingButtons[monster.id] ? "Aguarde…" : "Atualizar"}
                 </button>
               </div>
             </div>
@@ -181,7 +185,6 @@ const App = () => {
         </div>
       </div>
 
-      {/* Estilo CSS */}
       <style>{`
         .table-container {
           width: 100%;
