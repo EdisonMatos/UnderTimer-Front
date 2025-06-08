@@ -6,6 +6,7 @@ const App = () => {
   const [inputValues, setInputValues] = useState({});
   const [timers, setTimers] = useState({});
   const [loadingIds, setLoadingIds] = useState({});
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     fetchMonsters();
@@ -63,7 +64,6 @@ const App = () => {
   const handleConfirm = async (monster) => {
     const newDate = new Date(inputValues[monster.id]);
 
-    // Verificação da data futura
     if (newDate > new Date()) {
       alert(
         "A data/hora que você inseriu está errada.\nInsira apenas datas no passado.\n\nExplicação: Como o sistema atualiza baseado na morte do monstro que já aconteceu, é impossível a morte ter acontecido no futuro."
@@ -266,6 +266,11 @@ const App = () => {
               </div>
             );
           })}
+          {filteredMonsters.length === 0 && (
+            <p style={{ textAlign: "center", marginTop: "20px" }}>
+              A pesquisa não localizou nada com os dados informados. Verifique.
+            </p>
+          )}
         </div>
       </div>
     </>
@@ -274,6 +279,13 @@ const App = () => {
   const monstersS = monsters.filter((m) => m.tier === "S");
   const monstersA = monsters.filter((m) => m.tier === "A");
   const minibosses = monsters.filter((m) => m.type === "Miniboss");
+
+  const filteredSearchResults =
+    search.trim() === ""
+      ? []
+      : monsters.filter((m) =>
+          m.name.toLowerCase().includes(search.toLowerCase())
+        );
 
   return (
     <div
@@ -307,12 +319,28 @@ const App = () => {
           marginTop: 0,
         }}
       >
-        Beta - v0.2
+        Beta - v0.5
       </p>
 
-      {renderTableAndCards(monstersS, "MVPs Tier S")}
-      {renderTableAndCards(monstersA, "MVPs Tier A")}
-      {renderTableAndCards(minibosses, "Miniboss")}
+      <div style={{ textAlign: "center", marginBottom: "20px" }}>
+        <input
+          type="text"
+          placeholder="Digite para buscar..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="search-input"
+        />
+      </div>
+
+      {search.trim() !== "" ? (
+        renderTableAndCards(filteredSearchResults, "Resultado da busca")
+      ) : (
+        <>
+          {renderTableAndCards(monstersS, "MVPs Tier S")}
+          {renderTableAndCards(monstersA, "MVPs Tier A")}
+          {renderTableAndCards(minibosses, "Miniboss")}
+        </>
+      )}
 
       <style>{`
 body {
@@ -420,6 +448,21 @@ body {
     font-size: 12px;
     padding: 4px 8px;
     cursor: pointer;
+  }
+}
+
+.search-input {
+  padding: 8px;
+  width: 100%;
+  max-width: 400px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+@media (max-width: 768px) {
+  .search-input {
+    width: 80%;
   }
 }
 
