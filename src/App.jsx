@@ -62,6 +62,15 @@ const App = () => {
 
   const handleConfirm = async (monster) => {
     const newDate = new Date(inputValues[monster.id]);
+
+    // Verificação da data futura
+    if (newDate > new Date()) {
+      alert(
+        "A data/hora que você inseriu está errada.\nInsira apenas datas no passado.\n\nExplicação: Como o sistema atualiza baseado na morte do monstro que já aconteceu, é impossível a morte ter acontecido no futuro."
+      );
+      return;
+    }
+
     setLoadingIds((prev) => ({ ...prev, [monster.id]: true }));
 
     try {
