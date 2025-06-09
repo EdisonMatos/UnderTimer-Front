@@ -101,7 +101,9 @@ const App = () => {
 
   const renderCardsOnly = (filteredMonsters, label) => (
     <>
-      <h3 style={{ marginTop: "20px", textAlign: "center" }}>{label}</h3>
+      <h3 className="section-title" style={{ marginTop: "20px" }}>
+        {label}
+      </h3>
 
       <div className="cards-container">
         {filteredMonsters.map((monster) => {
@@ -276,6 +278,17 @@ body {
   gap: 12px;
 }
 
+.section-title {
+  text-align: center;
+  margin-top: 20px;
+}
+
+@media screen and (min-width: 1024px) {
+  .section-title {
+    text-align: left;
+  }
+}
+
 .monster-card {
   border: 1px solid #ccc;
   padding: 10px;
@@ -361,6 +374,7 @@ body {
     justify-content: flex-start;
     gap: 12px;
   }
+  
 
   .monster-card {
     max-width: 200px;
