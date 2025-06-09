@@ -99,179 +99,95 @@ const App = () => {
     return respawnDate.toLocaleString();
   };
 
-  const renderTableAndCards = (filteredMonsters, label) => (
+  const renderCardsOnly = (filteredMonsters, label) => (
     <>
       <h3 style={{ marginTop: "20px", textAlign: "center" }}>{label}</h3>
-      <div className="table-container">
-        <table className="monster-table">
-          <thead>
-            <tr>
-              <th>Imagem</th>
-              <th>Monstro</th>
-              <th>Respawn (h)</th>
-              <th>Vai nascer às</th>
-              <th>Morreu às</th>
-              <th>Contagem Regressiva</th>
-              <th>Atualizar horário</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredMonsters.map((monster) => {
-              const timerValue = timers[monster.id] || "—";
-              const isAlive = timerValue === "Nasceu";
 
-              let fullRespawn = monster.lastDeath
-                ? calculateRespawnTime(monster.lastDeath, monster.respawn)
-                : "—";
+      <div className="cards-container">
+        {filteredMonsters.map((monster) => {
+          const timerValue = timers[monster.id] || "—";
+          const isAlive = timerValue === "Nasceu";
 
-              let respawnDatePart = "—";
-              let respawnTimePart = "";
+          let fullRespawn = monster.lastDeath
+            ? calculateRespawnTime(monster.lastDeath, monster.respawn)
+            : "—";
 
-              if (fullRespawn !== "—") {
-                const [datePart, timePart] = fullRespawn.split(", ");
-                respawnDatePart = datePart;
-                respawnTimePart = timePart || "";
-              }
+          let respawnDatePart = "—";
+          let respawnTimePart = "";
 
-              return (
-                <tr key={monster.id}>
-                  <td>
-                    <img
-                      src={monster.spriteUrl}
-                      alt={monster.name}
-                      width="40"
-                      height="40"
-                    />
-                  </td>
-                  <td>{monster.name}</td>
-                  <td>{monster.respawn}</td>
-                  <td>
-                    {respawnDatePart}{" "}
+          if (fullRespawn !== "—") {
+            const [datePart, timePart] = fullRespawn.split(", ");
+            respawnDatePart = datePart;
+            respawnTimePart = timePart || "";
+          }
+
+          return (
+            <div
+              key={monster.id}
+              className="monster-card"
+              style={{ backgroundColor: "#fff" }}
+            >
+              <div className="visual-section">
+                <div className="left-visual">
+                  <img
+                    src={monster.spriteUrl}
+                    alt={monster.name}
+                    width="40"
+                    height="40"
+                  />
+                  <strong className="monster-name">{monster.name}</strong>
+                  <p className="respawn-left">{monster.respawn}h</p>
+                </div>
+                <div className="spacer" />
+                <div className="right-visual">
+                  <p>
+                    <strong>Vai nascer às:</strong> {respawnDatePart}{" "}
                     <span style={{ color: isAlive ? "black" : "red" }}>
                       {respawnTimePart}
                     </span>
-                  </td>
-                  <td>
+                  </p>
+                  <p>
+                    <strong>Morreu às:</strong>{" "}
                     {monster.lastDeath
                       ? new Date(monster.lastDeath).toLocaleString()
                       : "—"}
-                  </td>
-                  <td
+                  </p>
+                  <p
                     style={{
                       color: isAlive ? "black" : "red",
                       fontWeight: "bold",
                     }}
                   >
-                    {timerValue}
-                  </td>
-                  <td>
-                    <input
-                      type="datetime-local"
-                      value={inputValues[monster.id] || ""}
-                      onChange={(e) =>
-                        handleInputChange(monster.id, e.target.value)
-                      }
-                    />
-                    <button
-                      style={{ marginLeft: "5px" }}
-                      onClick={() => handleConfirm(monster)}
-                      disabled={loadingIds[monster.id]}
-                    >
-                      {loadingIds[monster.id] ? "Carregando..." : "Atualizar"}
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-
-        <div className="cards-container">
-          {filteredMonsters.map((monster) => {
-            const timerValue = timers[monster.id] || "—";
-            const isAlive = timerValue === "Nasceu";
-
-            let fullRespawn = monster.lastDeath
-              ? calculateRespawnTime(monster.lastDeath, monster.respawn)
-              : "—";
-
-            let respawnDatePart = "—";
-            let respawnTimePart = "";
-
-            if (fullRespawn !== "—") {
-              const [datePart, timePart] = fullRespawn.split(", ");
-              respawnDatePart = datePart;
-              respawnTimePart = timePart || "";
-            }
-
-            return (
-              <div
-                key={monster.id}
-                className="monster-card"
-                style={{ backgroundColor: "#fff" }}
-              >
-                <div className="visual-section">
-                  <div className="left-visual">
-                    <img
-                      src={monster.spriteUrl}
-                      alt={monster.name}
-                      width="40"
-                      height="40"
-                    />
-                    <strong className="monster-name">{monster.name}</strong>
-                    <p className="respawn-left">{monster.respawn}h</p>
-                  </div>
-                  <div className="spacer" />
-                  <div className="right-visual">
-                    <p>
-                      <strong>Vai nascer às:</strong> {respawnDatePart}{" "}
-                      <span style={{ color: isAlive ? "black" : "red" }}>
-                        {respawnTimePart}
-                      </span>
-                    </p>
-                    <p>
-                      <strong>Morreu às:</strong>{" "}
-                      {monster.lastDeath
-                        ? new Date(monster.lastDeath).toLocaleString()
-                        : "—"}
-                    </p>
-                    <p
-                      style={{
-                        color: isAlive ? "black" : "red",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      <strong>Tempo:</strong> {timerValue}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="interaction-section">
-                  <input
-                    type="datetime-local"
-                    value={inputValues[monster.id] || ""}
-                    onChange={(e) =>
-                      handleInputChange(monster.id, e.target.value)
-                    }
-                    className="datetime-input"
-                  />
-                  <button
-                    className="update-button"
-                    onClick={() => handleConfirm(monster)}
-                    disabled={loadingIds[monster.id]}
-                  >
-                    {loadingIds[monster.id] ? "Carregando..." : "Atualizar"}
-                  </button>
+                    <strong>Tempo:</strong> {timerValue}
+                  </p>
                 </div>
               </div>
-            );
-          })}
-          {filteredMonsters.length === 0 && (
-            <p style={{ textAlign: "center", marginTop: "20px" }}>
-              A pesquisa não localizou nada com os dados informados. Verifique.
-            </p>
-          )}
-        </div>
+
+              <div className="interaction-section">
+                <input
+                  type="datetime-local"
+                  value={inputValues[monster.id] || ""}
+                  onChange={(e) =>
+                    handleInputChange(monster.id, e.target.value)
+                  }
+                  className="datetime-input"
+                />
+                <button
+                  className="update-button"
+                  onClick={() => handleConfirm(monster)}
+                  disabled={loadingIds[monster.id]}
+                >
+                  {loadingIds[monster.id] ? "Carregando..." : "Atualizar"}
+                </button>
+              </div>
+            </div>
+          );
+        })}
+        {filteredMonsters.length === 0 && (
+          <p style={{ textAlign: "center", marginTop: "20px" }}>
+            A pesquisa não localizou nada com os dados informados. Verifique.
+          </p>
+        )}
       </div>
     </>
   );
@@ -294,6 +210,8 @@ const App = () => {
         fontFamily: "Arial",
         backgroundColor: "#cfcfcf",
         minHeight: "100vh",
+        maxWidth: "1215px",
+        margin: "0 auto",
       }}
     >
       <h2
@@ -333,12 +251,12 @@ const App = () => {
       </div>
 
       {search.trim() !== "" ? (
-        renderTableAndCards(filteredSearchResults, "Resultado da busca")
+        renderCardsOnly(filteredSearchResults, "Resultado da busca")
       ) : (
         <>
-          {renderTableAndCards(monstersS, "MVPs Tier S")}
-          {renderTableAndCards(monstersA, "MVPs Tier A")}
-          {renderTableAndCards(minibosses, "Miniboss")}
+          {renderCardsOnly(monstersS, "MVPs Tier S")}
+          {renderCardsOnly(monstersA, "MVPs Tier A")}
+          {renderCardsOnly(minibosses, "Miniboss")}
         </>
       )}
 
@@ -347,25 +265,10 @@ body {
   background-color: #cfcfcf;
 }
 
-.table-container {
-  width: 100%;
-}
-
-.monster-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-  background-color: #fff;
-}
-
-.monster-table th,
-.monster-table td {
-  border: 1px solid #ccc;
-  padding: 6px;
-}
-
 .cards-container {
-  display: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
 }
 
 .monster-card {
@@ -374,81 +277,66 @@ body {
   margin-bottom: 10px;
   border-radius: 6px;
   font-size: 13px;
+  background-color: #fff;
 }
 
-@media (max-width: 768px) {
-  .monster-table {
-    display: none;
-  }
+.visual-section {
+  display: flex;
+  margin-bottom: 8px;
+  gap: 4px;
+}
 
-  .cards-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
-  }
+.left-visual {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
 
-  .monster-card {
-    font-size: 12px;
-  }
+.monster-name {
+  margin-top: 4px;
+}
 
-  .visual-section {
-    display: flex;
-    margin-bottom: 8px;
-    gap: 4px;
-  }
+.respawn-left {
+  margin-top: 4px;
+  margin-bottom: 0;
+}
 
-  .left-visual {
-    width: 30%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-  }
+.spacer {
+  width: 5%;
+}
 
-  .monster-name {
-    margin-top: 4px;
-  }
+.right-visual {
+  width: 65%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  margin: 0;
+}
 
-  .respawn-left {
-    margin-top: 4px;
-    margin-bottom: 0;
-  }
+.right-visual p {
+  margin: 2px 0;
+}
 
-  .spacer {
-    width: 5%;
-  }
+.interaction-section {
+  display: flex;
+  gap: 6px;
+}
 
-  .right-visual {
-    width: 65%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 4px;
-    margin: 0;
-  }
+.datetime-input {
+  flex: 1;
+  font-size: 12px;
+  padding: 4px 6px;
+}
 
-  .right-visual p {
-    margin: 2px 0;
-  }
-
-  .interaction-section {
-    display: flex;
-    gap: 6px;
-  }
-
-  .datetime-input {
-    flex: 1;
-    font-size: 12px;
-    padding: 4px 6px;
-  }
-
-  .update-button {
-    flex: 1;
-    font-size: 12px;
-    padding: 4px 8px;
-    cursor: pointer;
-  }
+.update-button {
+  flex: 1;
+  font-size: 12px;
+  padding: 4px 8px;
+  cursor: pointer;
 }
 
 .search-input {
@@ -458,18 +346,6 @@ body {
   font-size: 14px;
   border-radius: 4px;
   border: 1px solid #ccc;
-}
-
-@media (max-width: 768px) {
-  .search-input {
-    width: 80%;
-  }
-}
-
-@media (max-width: 500px) {
-  .cards-container {
-    grid-template-columns: 1fr;
-  }
 }
 `}</style>
     </div>
