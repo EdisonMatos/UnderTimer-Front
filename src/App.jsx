@@ -347,6 +347,29 @@ body {
   border-radius: 4px;
   border: 1px solid #ccc;
 }
+
+@media screen and (min-width: 1024px) {
+  .visual-section {
+    flex-direction: column;
+  }
+
+  .left-visual {
+    width: 100%;
+    margin-bottom: 6px;
+  }
+
+  .right-visual {
+    width: 100%;
+  }
+
+  .spacer {
+    display: none;
+  }
+
+  .interaction-section {
+    flex-direction: column;
+  }
+}
 `}</style>
     </div>
   );
