@@ -141,13 +141,16 @@ const App = () => {
                 <div className="spacer" />
                 <div className="right-visual">
                   <p>
-                    <strong>Vai nascer às:</strong> {respawnDatePart}{" "}
+                    <strong>Vai nascer às:</strong>
+                    <br />
+                    {respawnDatePart}{" "}
                     <span style={{ color: isAlive ? "black" : "red" }}>
                       {respawnTimePart}
                     </span>
                   </p>
                   <p>
-                    <strong>Morreu às:</strong>{" "}
+                    <strong>Morreu às:</strong>
+                    <br />
                     {monster.lastDeath
                       ? new Date(monster.lastDeath).toLocaleString()
                       : "—"}
@@ -158,7 +161,9 @@ const App = () => {
                       fontWeight: "bold",
                     }}
                   >
-                    <strong>Tempo:</strong> {timerValue}
+                    <strong>Tempo:</strong>
+                    <br />
+                    {timerValue}
                   </p>
                 </div>
               </div>
@@ -348,16 +353,23 @@ body {
   border: 1px solid #ccc;
 }
 
+/* >>> ALTERAÇÕES EXCLUSIVAS PARA DESKTOP >>> */
 @media screen and (min-width: 1024px) {
+  .monster-card {
+    max-width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
   .visual-section {
     flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 
-  .left-visual {
-    width: 100%;
-    margin-bottom: 6px;
-  }
-
+  .left-visual,
   .right-visual {
     width: 100%;
   }
@@ -366,8 +378,26 @@ body {
     display: none;
   }
 
+  .right-visual p {
+    margin: 6px 0;
+  }
+
   .interaction-section {
-    flex-direction: column;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  .datetime-input,
+  .update-button {
+    flex: 1;
+    width: 50%;
+    box-sizing: border-box;
+  }
+
+  .cards-container {
+    justify-items: center;
   }
 }
 `}</style>
