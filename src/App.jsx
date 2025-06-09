@@ -355,8 +355,16 @@ body {
 
 /* >>> ALTERAÇÕES EXCLUSIVAS PARA DESKTOP >>> */
 @media screen and (min-width: 1024px) {
+  .cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 12px;
+  }
+
   .monster-card {
     max-width: 200px;
+    flex: 0 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -394,10 +402,6 @@ body {
     flex: 1;
     width: 50%;
     box-sizing: border-box;
-  }
-
-  .cards-container {
-    justify-items: center;
   }
 }
 `}</style>
