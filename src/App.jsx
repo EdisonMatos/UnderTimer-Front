@@ -38,7 +38,7 @@ const App = () => {
       const diff = respawnTime - new Date();
 
       if (diff <= 0) {
-        updatedTimers[monster.id] = "Nasceu";
+        updatedTimers[monster.id] = "-";
       } else {
         const hours = Math.floor(diff / (1000 * 60 * 60));
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
@@ -101,7 +101,7 @@ const App = () => {
 
   const renderCardsOnly = (filteredMonsters, label) => {
     const parseTime = (t) => {
-      if (!t || t === "Nasceu") return Infinity;
+      if (!t || t === "-") return Infinity;
       const [h, m, s] = t.split(":").map(Number);
       return h * 3600 + m * 60 + s;
     };
@@ -121,7 +121,7 @@ const App = () => {
         <div className="cards-container">
           {sortedMonsters.map((monster) => {
             const timerValue = timers[monster.id] || "—";
-            const isAlive = timerValue === "Nasceu";
+            const isAlive = timerValue === "-";
 
             let fullRespawn = monster.lastDeath
               ? calculateRespawnTime(monster.lastDeath, monster.respawn)
