@@ -242,7 +242,9 @@ const App = () => {
                           }));
                         });
                     }}
-                    disabled={loadingIds[monster.id]}
+                    disabled={
+                      loadingIds[monster.id] || !!inputValues[monster.id]
+                    }
                   >
                     {loadingIds[monster.id] ? "Carregando..." : "Morreu agora"}
                   </button>
