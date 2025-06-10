@@ -1,4 +1,3 @@
-// O código JS completo permanece exatamente como enviado por você.
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -202,7 +201,9 @@ const App = () => {
                   <button
                     className="update-button"
                     onClick={() => handleConfirm(monster)}
-                    disabled={loadingIds[monster.id]}
+                    disabled={
+                      loadingIds[monster.id] || !inputValues[monster.id]
+                    }
                   >
                     {loadingIds[monster.id] ? "Carregando..." : "Atualizar"}
                   </button>
@@ -241,7 +242,9 @@ const App = () => {
                           }));
                         });
                     }}
-                    disabled={loadingIds[monster.id]}
+                    disabled={
+                      loadingIds[monster.id] || !!inputValues[monster.id]
+                    }
                   >
                     {loadingIds[monster.id] ? "Carregando..." : "Morreu agora"}
                   </button>
