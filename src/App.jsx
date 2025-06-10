@@ -100,22 +100,16 @@ const App = () => {
   };
 
   const renderCardsOnly = (filteredMonsters, label) => {
-    // Ordenação por tempo restante de forma crescente, e os que já nasceram vão para o fim
+    const parseTime = (t) => {
+      if (!t || t === "Nasceu") return Infinity;
+      const [h, m, s] = t.split(":").map(Number);
+      return h * 3600 + m * 60 + s;
+    };
+
     const sortedMonsters = [...filteredMonsters].sort((a, b) => {
-      const ta = timers[a.id];
-      const tb = timers[b.id];
-
-      if (ta === "Nasceu" && tb === "Nasceu") return 0;
-      if (ta === "Nasceu") return 1;
-      if (tb === "Nasceu") return -1;
-
-      const [ha, ma, sa] = ta.split(":").map(Number);
-      const [hb, mb, sb] = tb.split(":").map(Number);
-
-      const totalA = ha * 3600 + ma * 60 + sa;
-      const totalB = hb * 3600 + mb * 60 + sb;
-
-      return totalA - totalB;
+      const timeA = parseTime(timers[a.id]);
+      const timeB = parseTime(timers[b.id]);
+      return timeA - timeB;
     });
 
     return (
@@ -386,6 +380,7 @@ body {
   border: 1px solid #ccc;
 }
 
+/* >>> ALTERAÇÕES EXCLUSIVAS PARA DESKTOP >>> */
 @media screen and (min-width: 1024px) {
   .cards-container {
     display: flex;
