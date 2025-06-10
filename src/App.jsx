@@ -99,105 +99,125 @@ const App = () => {
     return respawnDate.toLocaleString();
   };
 
-  const renderCardsOnly = (filteredMonsters, label) => (
-    <>
-      <h3 className="section-title" style={{ marginTop: "20px" }}>
-        {label}
-      </h3>
+  const renderCardsOnly = (filteredMonsters, label) => {
+    // Ordenação por tempo restante de forma crescente, e os que já nasceram vão para o fim
+    const sortedMonsters = [...filteredMonsters].sort((a, b) => {
+      const ta = timers[a.id];
+      const tb = timers[b.id];
 
-      <div className="cards-container">
-        {filteredMonsters.map((monster) => {
-          const timerValue = timers[monster.id] || "—";
-          const isAlive = timerValue === "Nasceu";
+      if (ta === "Nasceu" && tb === "Nasceu") return 0;
+      if (ta === "Nasceu") return 1;
+      if (tb === "Nasceu") return -1;
 
-          let fullRespawn = monster.lastDeath
-            ? calculateRespawnTime(monster.lastDeath, monster.respawn)
-            : "—";
+      const [ha, ma, sa] = ta.split(":").map(Number);
+      const [hb, mb, sb] = tb.split(":").map(Number);
 
-          let respawnDatePart = "—";
-          let respawnTimePart = "";
+      const totalA = ha * 3600 + ma * 60 + sa;
+      const totalB = hb * 3600 + mb * 60 + sb;
 
-          if (fullRespawn !== "—") {
-            const [datePart, timePart] = fullRespawn.split(", ");
-            respawnDatePart = datePart;
-            respawnTimePart = timePart || "";
-          }
+      return totalA - totalB;
+    });
 
-          return (
-            <div
-              key={monster.id}
-              className="monster-card"
-              style={{ backgroundColor: "#fff" }}
-            >
-              <div className="visual-section">
-                <div className="left-visual">
-                  <img
-                    src={monster.spriteUrl}
-                    alt={monster.name}
-                    width="40"
-                    height="40"
+    return (
+      <>
+        <h3 className="section-title" style={{ marginTop: "20px" }}>
+          {label}
+        </h3>
+
+        <div className="cards-container">
+          {sortedMonsters.map((monster) => {
+            const timerValue = timers[monster.id] || "—";
+            const isAlive = timerValue === "Nasceu";
+
+            let fullRespawn = monster.lastDeath
+              ? calculateRespawnTime(monster.lastDeath, monster.respawn)
+              : "—";
+
+            let respawnDatePart = "—";
+            let respawnTimePart = "";
+
+            if (fullRespawn !== "—") {
+              const [datePart, timePart] = fullRespawn.split(", ");
+              respawnDatePart = datePart;
+              respawnTimePart = timePart || "";
+            }
+
+            return (
+              <div
+                key={monster.id}
+                className="monster-card"
+                style={{ backgroundColor: "#fff" }}
+              >
+                <div className="visual-section">
+                  <div className="left-visual">
+                    <img
+                      src={monster.spriteUrl}
+                      alt={monster.name}
+                      width="40"
+                      height="40"
+                    />
+                    <strong className="monster-name">{monster.name}</strong>
+                    <p className="respawn-left">{monster.respawn}h</p>
+                  </div>
+                  <div className="spacer" />
+                  <div className="right-visual">
+                    <p>
+                      <strong>Vai nascer às:</strong>
+                      <br />
+                      {respawnDatePart}{" "}
+                      <span style={{ color: isAlive ? "black" : "red" }}>
+                        {respawnTimePart}
+                      </span>
+                    </p>
+                    <p>
+                      <strong>Morreu às:</strong>
+                      <br />
+                      {monster.lastDeath
+                        ? new Date(monster.lastDeath).toLocaleString()
+                        : "—"}
+                    </p>
+                    <p
+                      style={{
+                        color: isAlive ? "black" : "red",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      <strong>Tempo:</strong>
+                      <br />
+                      {timerValue}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="interaction-section">
+                  <input
+                    type="datetime-local"
+                    value={inputValues[monster.id] || ""}
+                    onChange={(e) =>
+                      handleInputChange(monster.id, e.target.value)
+                    }
+                    className="datetime-input"
                   />
-                  <strong className="monster-name">{monster.name}</strong>
-                  <p className="respawn-left">{monster.respawn}h</p>
-                </div>
-                <div className="spacer" />
-                <div className="right-visual">
-                  <p>
-                    <strong>Vai nascer às:</strong>
-                    <br />
-                    {respawnDatePart}{" "}
-                    <span style={{ color: isAlive ? "black" : "red" }}>
-                      {respawnTimePart}
-                    </span>
-                  </p>
-                  <p>
-                    <strong>Morreu às:</strong>
-                    <br />
-                    {monster.lastDeath
-                      ? new Date(monster.lastDeath).toLocaleString()
-                      : "—"}
-                  </p>
-                  <p
-                    style={{
-                      color: isAlive ? "black" : "red",
-                      fontWeight: "bold",
-                    }}
+                  <button
+                    className="update-button"
+                    onClick={() => handleConfirm(monster)}
+                    disabled={loadingIds[monster.id]}
                   >
-                    <strong>Tempo:</strong>
-                    <br />
-                    {timerValue}
-                  </p>
+                    {loadingIds[monster.id] ? "Carregando..." : "Atualizar"}
+                  </button>
                 </div>
               </div>
-
-              <div className="interaction-section">
-                <input
-                  type="datetime-local"
-                  value={inputValues[monster.id] || ""}
-                  onChange={(e) =>
-                    handleInputChange(monster.id, e.target.value)
-                  }
-                  className="datetime-input"
-                />
-                <button
-                  className="update-button"
-                  onClick={() => handleConfirm(monster)}
-                  disabled={loadingIds[monster.id]}
-                >
-                  {loadingIds[monster.id] ? "Carregando..." : "Atualizar"}
-                </button>
-              </div>
-            </div>
-          );
-        })}
-        {filteredMonsters.length === 0 && (
-          <p style={{ textAlign: "center", marginTop: "20px" }}>
-            A pesquisa não localizou nada com os dados informados. Verifique.
-          </p>
-        )}
-      </div>
-    </>
-  );
+            );
+          })}
+          {sortedMonsters.length === 0 && (
+            <p style={{ textAlign: "center", marginTop: "20px" }}>
+              A pesquisa não localizou nada com os dados informados. Verifique.
+            </p>
+          )}
+        </div>
+      </>
+    );
+  };
 
   const monstersS = monsters.filter((m) => m.tier === "S");
   const monstersA = monsters.filter((m) => m.tier === "A");
@@ -366,7 +386,6 @@ body {
   border: 1px solid #ccc;
 }
 
-/* >>> ALTERAÇÕES EXCLUSIVAS PARA DESKTOP >>> */
 @media screen and (min-width: 1024px) {
   .cards-container {
     display: flex;
@@ -374,7 +393,6 @@ body {
     justify-content: flex-start;
     gap: 12px;
   }
-  
 
   .monster-card {
     max-width: 200px;
