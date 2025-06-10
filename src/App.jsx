@@ -1,3 +1,4 @@
+// O código JS completo permanece exatamente como enviado por você.
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -206,6 +207,45 @@ const App = () => {
                     {loadingIds[monster.id] ? "Carregando..." : "Atualizar"}
                   </button>
                 </div>
+                <div className="interaction-section morreu-agora-wrapper">
+                  <button
+                    className="update-button"
+                    onClick={() => {
+                      const now = new Date().toISOString();
+
+                      setLoadingIds((prev) => ({
+                        ...prev,
+                        [monster.id]: true,
+                      }));
+
+                      axios
+                        .put("https://undertimer-biel.onrender.com/edit", {
+                          id: monster.id,
+                          lastDeath: now,
+                        })
+                        .then(() => {
+                          setMonsters((prev) =>
+                            prev.map((m) =>
+                              m.id === monster.id ? { ...m, lastDeath: now } : m
+                            )
+                          );
+                          alert("Atualizado com sucesso");
+                        })
+                        .catch((error) => {
+                          console.error("Erro ao atualizar o horário:", error);
+                        })
+                        .finally(() => {
+                          setLoadingIds((prev) => ({
+                            ...prev,
+                            [monster.id]: false,
+                          }));
+                        });
+                    }}
+                    disabled={loadingIds[monster.id]}
+                  >
+                    {loadingIds[monster.id] ? "Carregando..." : "Morreu agora"}
+                  </button>
+                </div>
               </div>
             );
           })}
@@ -362,6 +402,7 @@ body {
 .interaction-section {
   display: flex;
   gap: 6px;
+  margin-top: 6px;
 }
 
 .datetime-input {
@@ -427,6 +468,11 @@ body {
     width: 100%;
     justify-content: center;
     gap: 4px;
+  }
+
+  .morreu-agora-wrapper {
+    margin-top: 4px;
+    justify-content: center;
   }
 
   .datetime-input,
