@@ -38,7 +38,7 @@ const App = () => {
       const diff = respawnTime - new Date();
 
       if (diff <= 0) {
-        updatedTimers[monster.id] = "Nasceu";
+        updatedTimers[monster.id] = "-";
       } else {
         const hours = Math.floor(diff / (1000 * 60 * 60));
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
@@ -96,12 +96,21 @@ const App = () => {
   const calculateRespawnTime = (lastDeath, hours) => {
     const deathDate = new Date(lastDeath);
     const respawnDate = new Date(deathDate.getTime() + hours * 60 * 60 * 1000);
-    return respawnDate.toLocaleString();
+    return respawnDate;
+  };
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = d.getDate().toString().padStart(2, "0");
+    const month = (d.getMonth() + 1).toString().padStart(2, "0");
+    const hours = d.getHours().toString().padStart(2, "0");
+    const minutes = d.getMinutes().toString().padStart(2, "0");
+    return [`${day}/${month}`, `${hours}:${minutes}`];
   };
 
   const renderCardsOnly = (filteredMonsters, label) => {
     const parseTime = (t) => {
-      if (!t || t === "Nasceu") return Infinity;
+      if (!t || t === "-") return Infinity;
       const [h, m, s] = t.split(":").map(Number);
       return h * 3600 + m * 60 + s;
     };
@@ -121,20 +130,19 @@ const App = () => {
         <div className="cards-container">
           {sortedMonsters.map((monster) => {
             const timerValue = timers[monster.id] || "—";
-            const isAlive = timerValue === "Nasceu";
+            const isAlive = timerValue === "-";
 
-            let fullRespawn = monster.lastDeath
+            let fullRespawnDate = monster.lastDeath
               ? calculateRespawnTime(monster.lastDeath, monster.respawn)
-              : "—";
+              : null;
 
-            let respawnDatePart = "—";
-            let respawnTimePart = "";
+            const [respawnDate, respawnTime] = fullRespawnDate
+              ? formatDate(fullRespawnDate)
+              : ["—", ""];
 
-            if (fullRespawn !== "—") {
-              const [datePart, timePart] = fullRespawn.split(", ");
-              respawnDatePart = datePart;
-              respawnTimePart = timePart || "";
-            }
+            const [deathDate, deathTime] = monster.lastDeath
+              ? formatDate(monster.lastDeath)
+              : ["—", ""];
 
             return (
               <div
@@ -158,17 +166,15 @@ const App = () => {
                     <p>
                       <strong>Vai nascer às:</strong>
                       <br />
-                      {respawnDatePart}{" "}
+                      {respawnDate} -{" "}
                       <span style={{ color: isAlive ? "black" : "red" }}>
-                        {respawnTimePart}
+                        {respawnTime}h
                       </span>
                     </p>
                     <p>
                       <strong>Morreu às:</strong>
                       <br />
-                      {monster.lastDeath
-                        ? new Date(monster.lastDeath).toLocaleString()
-                        : "—"}
+                      {deathDate} - {deathTime}h
                     </p>
                     <p
                       style={{
@@ -380,7 +386,6 @@ body {
   border: 1px solid #ccc;
 }
 
-/* >>> ALTERAÇÕES EXCLUSIVAS PARA DESKTOP >>> */
 @media screen and (min-width: 1024px) {
   .cards-container {
     display: flex;
