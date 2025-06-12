@@ -150,11 +150,11 @@ const App = () => {
               >
                 <div className="flex flex-row justify-between w-full gap-1 mb-2 lg:flex-col lg:items-center ">
                   <div className="flex flex-col items-center w-1/3 lg:w-full ">
-                    <div className="w-[70px] h-[70px] flex justify-center items-center">
+                    <div className="w-[45px] h-[45px] lg:w-[70px] lg:h-[70px] flex justify-center items-center">
                       <img
                         src={monster.spriteUrl}
                         alt={monster.name}
-                        className="max-h-[70px] w-auto"
+                        className="max-h-[45px] lg:max-h-[70px] w-auto"
                       />
                     </div>
                     <strong className="mt-1">{monster.name}</strong>
@@ -191,7 +191,7 @@ const App = () => {
                   </div>
                 </div>
 
-                <div className="flex flex-row justify-center w-full gap-2 mt-2">
+                <div className="flex flex-row justify-center w-full gap-2 mt-2 ">
                   <input
                     type="datetime-local"
                     value={inputValues[monster.id] || ""}
@@ -209,12 +209,10 @@ const App = () => {
                     disabled={
                       loadingIds[monster.id] || !inputValues[monster.id]
                     }
-                    className="flex-1 px-2 py-1 text-sm text-white rounded bg-primary disabled:opacity-30"
+                    className="flex-1 px-2 py-1 text-sm text-white transition-all rounded bg-primary disabled:opacity-30 hover:scale-110"
                   >
-                    {loadingIds[monster.id] ? "Carregando..." : "Atualizar"}
+                    {loadingIds[monster.id] ? "..." : "Atualizar"}
                   </button>
-                </div>
-                <div className="flex flex-row justify-center w-full gap-2 mt-2">
                   <button
                     onClick={() => {
                       const now = new Date().toISOString();
@@ -249,9 +247,9 @@ const App = () => {
                     disabled={
                       loadingIds[monster.id] || !!inputValues[monster.id]
                     }
-                    className="flex-1 px-2 py-1 text-sm text-white rounded bg-primary disabled:opacity-50"
+                    className="flex-1 px-2 py-1 text-sm text-white transition-all rounded bg-primary disabled:opacity-50 hover:scale-110"
                   >
-                    {loadingIds[monster.id] ? "Carregando..." : "Morreu agora"}
+                    {loadingIds[monster.id] ? "..." : "Agora"}
                   </button>
                 </div>
               </div>
