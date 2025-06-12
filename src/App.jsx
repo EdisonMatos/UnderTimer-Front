@@ -284,7 +284,7 @@ const App = () => {
         Beta - v0.8
       </p>
 
-      <div className="text-center m-5">
+      <div className="text-left mx-5 my-5 lg:my-5 lg:mx-0">
         <input
           type="text"
           placeholder="Digite para buscar..."
