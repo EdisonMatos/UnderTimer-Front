@@ -146,7 +146,7 @@ const App = () => {
             return (
               <div
                 key={monster.id}
-                className="border border-gray-300 bg-white shadow-sm shadow-neutral-400 p-2 rounded-md text-sm flex flex-col items-center text-center lg:max-w-[200px]"
+                className="border border-gray-300 bg-white shadow-sm shadow-neutral-400 p-2 rounded-md text-sm flex flex-col items-center text-center lg:w-[220px]"
               >
                 <div className="flex flex-row gap-1 mb-2 lg:flex-col lg:items-center">
                   <div className="flex flex-col items-center w-1/3 lg:w-full">
@@ -175,7 +175,7 @@ const App = () => {
                     </p>
                     <p
                       className={`font-bold ${
-                        isAlive ? "text-black" : "text-red-600"
+                        isAlive ? "text-black" : "text-red-700"
                       }`}
                     >
                       <strong>Tempo:</strong>
@@ -192,14 +192,18 @@ const App = () => {
                     onChange={(e) =>
                       handleInputChange(monster.id, e.target.value)
                     }
-                    className="text-sm px-2 py-1 flex-1 border border-gray-300 rounded"
+                    onKeyDown={(e) => e.preventDefault()}
+                    className={`appearance-none w-[20px] h-[30px] overflow-hidden text-transparent caret-transparent bg-white text
+    border border-gray-300 rounded cursor-pointer
+    ${inputValues[monster.id] ? "text-black caret-auto" : ""}
+  `}
                   />
                   <button
                     onClick={() => handleConfirm(monster)}
                     disabled={
                       loadingIds[monster.id] || !inputValues[monster.id]
                     }
-                    className="text-sm px-2 py-1 flex-1 rounded bg-primary text-white disabled:opacity-50"
+                    className="text-sm px-2 py-1 flex-1 rounded bg-primary text-white disabled:opacity-30"
                   >
                     {loadingIds[monster.id] ? "Carregando..." : "Atualizar"}
                   </button>
