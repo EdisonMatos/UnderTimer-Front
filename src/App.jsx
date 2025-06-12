@@ -279,16 +279,16 @@ const App = () => {
         );
 
   return (
-    <div className="max-w-[1215px] mx-auto px-5 py-5 font-sans text-white">
-      <h2 className="mb-1 text-lg text-center">UnderTimer</h2>
-      <p className="mt-0 mb-0 text-sm text-center">
+    <div className="max-w-[1215px] mx-auto px-5 py-5 font-sans text-white flex flex-col">
+      <h2 className="mb-1 text-lg text-center lg:text-left">UnderTimer</h2>
+      <p className="mt-0 mb-0 text-sm text-center lg:text-left">
         Sistema de Controle de Tempos para Ragnarok Online
       </p>
-      <p className="mt-0 text-xs text-center text-white opacity-50">
-        Beta - v0.8
+      <p className="mt-0 text-xs text-center text-white opacity-50 lg:text-left">
+        Beta - v0.8 (em desenvolvimento)
       </p>
-      <h1 className="hidden text-xl font-semibold lg:block">Buscar</h1>
-      <div className="my-5 mt-5 mb-0 text-left lg:my-5 lg:mx-0">
+      <h1 className="hidden mt-10 text-xl font-semibold lg:block">Buscar</h1>
+      <div className="my-5 mt-5 mb-0 text-center lg:text-left lg:my-5 lg:mx-0">
         <input
           type="text"
           placeholder="Digite para buscar..."
