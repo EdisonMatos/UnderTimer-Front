@@ -146,7 +146,7 @@ const App = () => {
             return (
               <div
                 key={monster.id}
-                className="border border-gray-300 bg-white p-2 rounded-md text-sm flex flex-col items-center text-center lg:max-w-[200px]"
+                className="border border-gray-300 bg-white shadow-sm shadow-neutral-400 p-2 rounded-md text-sm flex flex-col items-center text-center lg:max-w-[200px]"
               >
                 <div className="flex flex-row gap-1 mb-2 lg:flex-col lg:items-center">
                   <div className="flex flex-col items-center w-1/3 lg:w-full">
@@ -199,7 +199,7 @@ const App = () => {
                     disabled={
                       loadingIds[monster.id] || !inputValues[monster.id]
                     }
-                    className="text-sm px-2 py-1 flex-1 rounded bg-blue-600 text-white disabled:opacity-50"
+                    className="text-sm px-2 py-1 flex-1 rounded bg-primary text-white disabled:opacity-50"
                   >
                     {loadingIds[monster.id] ? "Carregando..." : "Atualizar"}
                   </button>
@@ -239,7 +239,7 @@ const App = () => {
                     disabled={
                       loadingIds[monster.id] || !!inputValues[monster.id]
                     }
-                    className="text-sm px-2 py-1 flex-1 rounded bg-green-600 text-white disabled:opacity-50"
+                    className="text-sm px-2 py-1 flex-1 rounded bg-primary text-white disabled:opacity-50"
                   >
                     {loadingIds[monster.id] ? "Carregando..." : "Morreu agora"}
                   </button>
