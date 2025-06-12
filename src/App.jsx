@@ -123,11 +123,10 @@ const App = () => {
 
     return (
       <>
-        <h3 className="section-title" style={{ marginTop: "20px" }}>
+        <h3 className="text-center lg:text-left mt-5 text-lg font-semibold">
           {label}
         </h3>
-
-        <div className="cards-container">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-wrap lg:justify-start gap-3">
           {sortedMonsters.map((monster) => {
             const timerValue = timers[monster.id] || "—";
             const isAlive = timerValue === "-";
@@ -147,27 +146,25 @@ const App = () => {
             return (
               <div
                 key={monster.id}
-                className="monster-card"
-                style={{ backgroundColor: "#fff" }}
+                className="border border-gray-300 bg-white p-2 rounded-md text-sm flex flex-col items-center text-center lg:max-w-[200px]"
               >
-                <div className="visual-section">
-                  <div className="left-visual">
+                <div className="flex flex-row gap-1 mb-2 lg:flex-col lg:items-center">
+                  <div className="flex flex-col items-center w-1/3 lg:w-full">
                     <img
                       src={monster.spriteUrl}
                       alt={monster.name}
-                      width="40"
-                      height="40"
+                      className="max-h-[70px] w-auto"
                     />
-                    <strong className="monster-name">{monster.name}</strong>
-                    <p className="respawn-left">{monster.respawn}h</p>
+                    <strong className="mt-1">{monster.name}</strong>
+                    <p className="mt-1 mb-0">{monster.respawn}h</p>
                   </div>
-                  <div className="spacer" />
-                  <div className="right-visual">
+                  <div className="w-1/12 hidden lg:block" />
+                  <div className="flex flex-col justify-center gap-1 w-7/12 lg:w-full">
                     <p>
                       <strong>Vai nascer às:</strong>
                       <br />
                       {respawnDate} -{" "}
-                      <span style={{ color: isAlive ? "black" : "red" }}>
+                      <span className={isAlive ? "text-black" : "text-red-600"}>
                         {respawnTime}h
                       </span>
                     </p>
@@ -177,10 +174,9 @@ const App = () => {
                       {deathDate} - {deathTime}h
                     </p>
                     <p
-                      style={{
-                        color: isAlive ? "black" : "red",
-                        fontWeight: "bold",
-                      }}
+                      className={`font-bold ${
+                        isAlive ? "text-black" : "text-red-600"
+                      }`}
                     >
                       <strong>Tempo:</strong>
                       <br />
@@ -189,31 +185,29 @@ const App = () => {
                   </div>
                 </div>
 
-                <div className="interaction-section">
+                <div className="flex flex-row gap-2 w-full mt-2 justify-center">
                   <input
                     type="datetime-local"
                     value={inputValues[monster.id] || ""}
                     onChange={(e) =>
                       handleInputChange(monster.id, e.target.value)
                     }
-                    className="datetime-input"
+                    className="text-sm px-2 py-1 flex-1 border border-gray-300 rounded"
                   />
                   <button
-                    className="update-button"
                     onClick={() => handleConfirm(monster)}
                     disabled={
                       loadingIds[monster.id] || !inputValues[monster.id]
                     }
+                    className="text-sm px-2 py-1 flex-1 rounded bg-blue-600 text-white disabled:opacity-50"
                   >
                     {loadingIds[monster.id] ? "Carregando..." : "Atualizar"}
                   </button>
                 </div>
-                <div className="interaction-section morreu-agora-wrapper">
+                <div className="flex flex-row gap-2 w-full mt-1 justify-center">
                   <button
-                    className="update-button"
                     onClick={() => {
                       const now = new Date().toISOString();
-
                       setLoadingIds((prev) => ({
                         ...prev,
                         [monster.id]: true,
@@ -245,6 +239,7 @@ const App = () => {
                     disabled={
                       loadingIds[monster.id] || !!inputValues[monster.id]
                     }
+                    className="text-sm px-2 py-1 flex-1 rounded bg-green-600 text-white disabled:opacity-50"
                   >
                     {loadingIds[monster.id] ? "Carregando..." : "Morreu agora"}
                   </button>
@@ -253,7 +248,7 @@ const App = () => {
             );
           })}
           {sortedMonsters.length === 0 && (
-            <p style={{ textAlign: "center", marginTop: "20px" }}>
+            <p className="text-center mt-5">
               A pesquisa não localizou nada com os dados informados. Verifique.
             </p>
           )}
@@ -274,49 +269,20 @@ const App = () => {
         );
 
   return (
-    <div
-      style={{
-        padding: "20px",
-        fontFamily: "Arial",
-        backgroundColor: "#cfcfcf",
-        minHeight: "100vh",
-        maxWidth: "1215px",
-        margin: "0 auto",
-      }}
-    >
-      <h2
-        style={{ textAlign: "center", fontSize: "20px", marginBottom: "4px" }}
-      >
-        UnderTimer
-      </h2>
-      <p
-        style={{
-          textAlign: "center",
-          fontSize: "14px",
-          marginTop: 0,
-          marginBottom: "2px",
-        }}
-      >
+    <div className="bg-[#cfcfcf] min-h-screen max-w-[1215px] mx-auto px-5 py-5 font-sans">
+      <h2 className="text-center text-lg mb-1">UnderTimer</h2>
+      <p className="text-center text-sm mt-0 mb-0">
         Sistema de Controle de Tempos para Ragnarok Online
       </p>
-      <p
-        style={{
-          textAlign: "center",
-          fontSize: "12px",
-          color: "#666",
-          marginTop: 0,
-        }}
-      >
-        Beta - v0.5
-      </p>
+      <p className="text-center text-xs text-gray-600 mt-0">Beta - v0.5</p>
 
-      <div style={{ textAlign: "center", marginBottom: "20px" }}>
+      <div className="text-center mb-5">
         <input
           type="text"
           placeholder="Digite para buscar..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="search-input"
+          className="w-full max-w-[400px] px-3 py-2 text-sm border border-gray-300 rounded"
         />
       </div>
 
@@ -329,163 +295,6 @@ const App = () => {
           {renderCardsOnly(minibosses, "Miniboss")}
         </>
       )}
-
-      <style>{`
-body {
-  background-color: #cfcfcf;
-}
-
-.cards-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 12px;
-}
-
-.section-title {
-  text-align: center;
-  margin-top: 20px;
-}
-
-@media screen and (min-width: 1024px) {
-  .section-title {
-    text-align: left;
-  }
-}
-
-.monster-card {
-  border: 1px solid #ccc;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 6px;
-  font-size: 13px;
-  background-color: #fff;
-}
-
-.visual-section {
-  display: flex;
-  margin-bottom: 8px;
-  gap: 4px;
-}
-
-.left-visual {
-  width: 30%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-.monster-name {
-  margin-top: 4px;
-}
-
-.respawn-left {
-  margin-top: 4px;
-  margin-bottom: 0;
-}
-
-.spacer {
-  width: 5%;
-}
-
-.right-visual {
-  width: 65%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 4px;
-  margin: 0;
-}
-
-.right-visual p {
-  margin: 2px 0;
-}
-
-.interaction-section {
-  display: flex;
-  gap: 6px;
-  margin-top: 6px;
-}
-
-.datetime-input {
-  flex: 1;
-  font-size: 12px;
-  padding: 4px 6px;
-}
-
-.update-button {
-  flex: 1;
-  font-size: 12px;
-  padding: 4px 8px;
-  cursor: pointer;
-}
-
-.search-input {
-  padding: 8px;
-  width: 100%;
-  max-width: 400px;
-  font-size: 14px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-}
-
-@media screen and (min-width: 1024px) {
-  .cards-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 12px;
-  }
-
-  .monster-card {
-    max-width: 200px;
-    flex: 0 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .visual-section {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .left-visual,
-  .right-visual {
-    width: 100%;
-  }
-
-  .spacer {
-    display: none;
-  }
-
-  .right-visual p {
-    margin: 6px 0;
-  }
-
-  .interaction-section {
-    flex-direction: row;
-    width: 100%;
-    justify-content: center;
-    gap: 4px;
-  }
-
-  .morreu-agora-wrapper {
-    margin-top: 4px;
-    justify-content: center;
-  }
-
-  .datetime-input,
-  .update-button {
-    flex: 1;
-    width: 50%;
-    box-sizing: border-box;
-  }
-}
-`}</style>
     </div>
   );
 };
