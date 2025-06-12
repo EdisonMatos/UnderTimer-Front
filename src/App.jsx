@@ -123,10 +123,10 @@ const App = () => {
 
     return (
       <>
-        <h3 className="text-white text-center lg:text-left mt-5 mb-5 text-lg font-semibold">
+        <h3 className="mt-5 mb-5 text-lg font-semibold text-center text-white lg:text-left">
           {label}
         </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-wrap lg:justify-start gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:flex lg:flex-wrap lg:justify-start">
           {sortedMonsters.map((monster) => {
             const timerValue = timers[monster.id] || "—";
             const isAlive = timerValue === "-";
@@ -148,7 +148,7 @@ const App = () => {
                 key={monster.id}
                 className="border border-neutral-900 text-white bg-neutral-700 shadow-sm shadow-black p-2 rounded-md text-sm flex flex-col items-center text-center lg:w-[220px]"
               >
-                <div className="flex justify-between w-full flex-row gap-1 mb-2 lg:flex-col lg:items-center ">
+                <div className="flex flex-row justify-between w-full gap-1 mb-2 lg:flex-col lg:items-center ">
                   <div className="flex flex-col items-center w-1/3 lg:w-full ">
                     <div className="w-[70px] h-[70px] flex justify-center items-center">
                       <img
@@ -160,34 +160,38 @@ const App = () => {
                     <strong className="mt-1">{monster.name}</strong>
                     <p className="mt-1 mb-0 opacity-60">{monster.respawn}h</p>
                   </div>
-                  <div className="w-1/12 hidden lg:block" />
-                  <div className="flex flex-col items-start lg:items-center justify-center gap-1 w-7/12 lg:w-full ">
+                  <div className="hidden w-1/12 lg:block" />
+                  <div className="flex flex-col items-start justify-center w-7/12 gap-1 lg:items-center lg:w-full ">
                     <p>
                       <strong>Vai nascer às: </strong>
                       <br className="hidden lg:flex" />
                       {respawnDate} -{" "}
-                      <span className={isAlive ? "text-white" : "text-red-300"}>
+                      <span
+                        className={isAlive ? "text-white" : "text-green-400"}
+                      >
                         {respawnTime}h
                       </span>
                     </p>
                     <p>
-                      <strong>Morreu às:</strong>
+                      <strong>Morreu às: </strong>
                       <br className="hidden lg:flex" />
                       {deathDate} - {deathTime}h
                     </p>
-                    <p
-                      className={`font-bold ${
-                        isAlive ? "text-white" : "text-red-300"
-                      }`}
-                    >
-                      <strong>Tempo:</strong>
+                    <p>
+                      <strong>Tempo: </strong>
                       <br className="hidden lg:flex" />
-                      {timerValue}
+                      <span
+                        className={`font-bold ${
+                          isAlive ? "text-white" : "text-green-400"
+                        }`}
+                      >
+                        {timerValue}
+                      </span>
                     </p>
                   </div>
                 </div>
 
-                <div className="flex flex-row gap-2 w-full mt-2 justify-center">
+                <div className="flex flex-row justify-center w-full gap-2 mt-2">
                   <input
                     type="datetime-local"
                     value={inputValues[monster.id] || ""}
@@ -205,12 +209,12 @@ const App = () => {
                     disabled={
                       loadingIds[monster.id] || !inputValues[monster.id]
                     }
-                    className="text-sm px-2 py-1 flex-1 rounded bg-primary text-white disabled:opacity-30"
+                    className="flex-1 px-2 py-1 text-sm text-white rounded bg-primary disabled:opacity-30"
                   >
                     {loadingIds[monster.id] ? "Carregando..." : "Atualizar"}
                   </button>
                 </div>
-                <div className="flex flex-row gap-2 w-full mt-1 justify-center">
+                <div className="flex flex-row justify-center w-full gap-2 mt-2">
                   <button
                     onClick={() => {
                       const now = new Date().toISOString();
@@ -245,7 +249,7 @@ const App = () => {
                     disabled={
                       loadingIds[monster.id] || !!inputValues[monster.id]
                     }
-                    className="text-sm px-2 py-1 flex-1 rounded bg-primary text-white disabled:opacity-50"
+                    className="flex-1 px-2 py-1 text-sm text-white rounded bg-primary disabled:opacity-50"
                   >
                     {loadingIds[monster.id] ? "Carregando..." : "Morreu agora"}
                   </button>
@@ -254,7 +258,7 @@ const App = () => {
             );
           })}
           {sortedMonsters.length === 0 && (
-            <p className="text-center mt-5">
+            <p className="mt-5 text-center">
               A pesquisa não localizou nada com os dados informados. Verifique.
             </p>
           )}
@@ -276,15 +280,15 @@ const App = () => {
 
   return (
     <div className="max-w-[1215px] mx-auto px-5 py-5 font-sans text-white">
-      <h2 className="text-center text-lg mb-1">UnderTimer</h2>
-      <p className="text-center text-sm mt-0 mb-0">
+      <h2 className="mb-1 text-lg text-center">UnderTimer</h2>
+      <p className="mt-0 mb-0 text-sm text-center">
         Sistema de Controle de Tempos para Ragnarok Online
       </p>
-      <p className="text-center text-xs text-white opacity-50 mt-0">
+      <p className="mt-0 text-xs text-center text-white opacity-50">
         Beta - v0.8
       </p>
-      <h1 className="hidden lg:block text-xl font-semibold">Buscar</h1>
-      <div className="text-left mt-5 mb-0 my-5 lg:my-5 lg:mx-0">
+      <h1 className="hidden text-xl font-semibold lg:block">Buscar</h1>
+      <div className="my-5 mt-5 mb-0 text-left lg:my-5 lg:mx-0">
         <input
           type="text"
           placeholder="Digite para buscar..."
