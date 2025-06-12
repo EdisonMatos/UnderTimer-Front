@@ -123,7 +123,7 @@ const App = () => {
 
     return (
       <>
-        <h3 className="text-center lg:text-left mt-5 text-lg font-semibold">
+        <h3 className="text-white text-center lg:text-left mt-5 text-lg font-semibold">
           {label}
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-wrap lg:justify-start gap-3">
@@ -146,17 +146,19 @@ const App = () => {
             return (
               <div
                 key={monster.id}
-                className="border border-gray-300 bg-white shadow-sm shadow-neutral-400 p-2 rounded-md text-sm flex flex-col items-center text-center lg:w-[220px]"
+                className="border border-neutral-900 text-white bg-neutral-600 shadow-sm shadow-neutral-900 p-2 rounded-md text-sm flex flex-col items-center text-center lg:w-[220px]"
               >
                 <div className="flex flex-row gap-1 mb-2 lg:flex-col lg:items-center">
                   <div className="flex flex-col items-center w-1/3 lg:w-full">
-                    <img
-                      src={monster.spriteUrl}
-                      alt={monster.name}
-                      className="max-h-[70px] w-auto"
-                    />
+                    <div className="w-[70px] h-[70px] flex justify-center items-center">
+                      <img
+                        src={monster.spriteUrl}
+                        alt={monster.name}
+                        className="max-h-[70px] w-auto"
+                      />
+                    </div>
                     <strong className="mt-1">{monster.name}</strong>
-                    <p className="mt-1 mb-0">{monster.respawn}h</p>
+                    <p className="mt-1 mb-0 opacity-60">{monster.respawn}h</p>
                   </div>
                   <div className="w-1/12 hidden lg:block" />
                   <div className="flex flex-col justify-center gap-1 w-7/12 lg:w-full">
@@ -164,7 +166,7 @@ const App = () => {
                       <strong>Vai nascer às:</strong>
                       <br />
                       {respawnDate} -{" "}
-                      <span className={isAlive ? "text-black" : "text-red-600"}>
+                      <span className={isAlive ? "text-white" : "text-red-300"}>
                         {respawnTime}h
                       </span>
                     </p>
@@ -175,7 +177,7 @@ const App = () => {
                     </p>
                     <p
                       className={`font-bold ${
-                        isAlive ? "text-black" : "text-red-700"
+                        isAlive ? "text-white" : "text-red-300"
                       }`}
                     >
                       <strong>Tempo:</strong>
@@ -273,20 +275,22 @@ const App = () => {
         );
 
   return (
-    <div className="bg-[#cfcfcf] min-h-screen max-w-[1215px] mx-auto px-5 py-5 font-sans">
+    <div className="max-w-[1215px] mx-auto px-5 py-5 font-sans text-white">
       <h2 className="text-center text-lg mb-1">UnderTimer</h2>
       <p className="text-center text-sm mt-0 mb-0">
         Sistema de Controle de Tempos para Ragnarok Online
       </p>
-      <p className="text-center text-xs text-gray-600 mt-0">Beta - v0.5</p>
+      <p className="text-center text-xs text-white opacity-50 mt-0">
+        Beta - v0.8
+      </p>
 
-      <div className="text-center mb-5">
+      <div className="text-center m-5">
         <input
           type="text"
           placeholder="Digite para buscar..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full max-w-[400px] px-3 py-2 text-sm border border-gray-300 rounded"
+          className="w-full max-w-[400px] px-3 py-2 text-sm border border-gray-300 rounded text-black"
         />
       </div>
 
