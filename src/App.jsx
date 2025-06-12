@@ -123,7 +123,7 @@ const App = () => {
 
     return (
       <>
-        <h3 className="text-white text-center lg:text-left mt-5 text-lg font-semibold">
+        <h3 className="text-white text-center lg:text-left mt-5 mb-5 text-lg font-semibold">
           {label}
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-wrap lg:justify-start gap-3">
@@ -146,10 +146,10 @@ const App = () => {
             return (
               <div
                 key={monster.id}
-                className="border border-neutral-900 text-white bg-neutral-600 shadow-sm shadow-black p-2 rounded-md text-sm flex flex-col items-center text-center lg:w-[220px]"
+                className="border border-neutral-900 text-white bg-neutral-700 shadow-sm shadow-black p-2 rounded-md text-sm flex flex-col items-center text-center lg:w-[220px]"
               >
-                <div className="flex flex-row gap-1 mb-2 lg:flex-col lg:items-center">
-                  <div className="flex flex-col items-center w-1/3 lg:w-full">
+                <div className="flex justify-between w-full flex-row gap-1 mb-2 lg:flex-col lg:items-center ">
+                  <div className="flex flex-col items-center w-1/3 lg:w-full ">
                     <div className="w-[70px] h-[70px] flex justify-center items-center">
                       <img
                         src={monster.spriteUrl}
@@ -161,10 +161,10 @@ const App = () => {
                     <p className="mt-1 mb-0 opacity-60">{monster.respawn}h</p>
                   </div>
                   <div className="w-1/12 hidden lg:block" />
-                  <div className="flex flex-col justify-center gap-1 w-7/12 lg:w-full">
+                  <div className="flex flex-col items-start lg:items-center justify-center gap-1 w-7/12 lg:w-full ">
                     <p>
-                      <strong>Vai nascer às:</strong>
-                      <br />
+                      <strong>Vai nascer às: </strong>
+                      <br className="hidden lg:flex" />
                       {respawnDate} -{" "}
                       <span className={isAlive ? "text-white" : "text-red-300"}>
                         {respawnTime}h
@@ -172,7 +172,7 @@ const App = () => {
                     </p>
                     <p>
                       <strong>Morreu às:</strong>
-                      <br />
+                      <br className="hidden lg:flex" />
                       {deathDate} - {deathTime}h
                     </p>
                     <p
@@ -181,7 +181,7 @@ const App = () => {
                       }`}
                     >
                       <strong>Tempo:</strong>
-                      <br />
+                      <br className="hidden lg:flex" />
                       {timerValue}
                     </p>
                   </div>
@@ -283,14 +283,14 @@ const App = () => {
       <p className="text-center text-xs text-white opacity-50 mt-0">
         Beta - v0.8
       </p>
-
-      <div className="text-left mx-5 my-5 lg:my-5 lg:mx-0">
+      <h1 className="hidden lg:block text-xl font-semibold">Buscar</h1>
+      <div className="text-left mt-5 mb-0 my-5 lg:my-5 lg:mx-0">
         <input
           type="text"
           placeholder="Digite para buscar..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full max-w-[400px] px-3 py-2 text-sm border border-gray-300 rounded text-black"
+          className="w-full max-w-[400px] px-3 py-2 text-sm border bg-neutral-300 border-gray-300 rounded text-black"
         />
       </div>
 
