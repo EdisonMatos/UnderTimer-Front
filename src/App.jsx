@@ -27,6 +27,18 @@ const App = () => {
     }
   };
 
+  const isElementInViewport = (el) => {
+    if (!el) return false;
+    const rect = el.getBoundingClientRect();
+    return (
+      rect.top >= 0 &&
+      rect.left >= 0 &&
+      rect.bottom <=
+        (window.innerHeight || document.documentElement.clientHeight) &&
+      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
+  };
+
   const updateCountdowns = () => {
     const updatedTimers = {};
     monsters.forEach((monster) => {
@@ -43,10 +55,13 @@ const App = () => {
       } else {
         const secondsLeft = Math.floor(diff / 1000);
         if (secondsLeft === 1) {
-          const audio = new Audio(rapaz); // <- usa o importado
-          audio
-            .play()
-            .catch((e) => console.error("Erro ao reproduzir som:", e));
+          const el = document.getElementById(monster.id);
+          if (isElementInViewport(el)) {
+            const audio = new Audio(rapaz);
+            audio
+              .play()
+              .catch((e) => console.error("Erro ao reproduzir som:", e));
+          }
         }
 
         const hours = Math.floor(diff / (1000 * 60 * 60));
@@ -154,6 +169,7 @@ const App = () => {
 
             return (
               <div
+                id={monster.id}
                 key={monster.id}
                 className="border border-neutral-900 text-white bg-neutral-700 shadow-md shadow-black p-2 rounded-md text-sm flex flex-col items-center text-center lg:w-[220px]"
               >
