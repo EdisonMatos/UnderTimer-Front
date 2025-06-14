@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import rapaz from "./rapaz.mp3"; // <- Import do áudio aqui
 
 const App = () => {
   const [monsters, setMonsters] = useState([]);
@@ -40,6 +41,14 @@ const App = () => {
       if (diff <= 0) {
         updatedTimers[monster.id] = "-";
       } else {
+        const secondsLeft = Math.floor(diff / 1000);
+        if (secondsLeft === 1) {
+          const audio = new Audio(rapaz); // <- usa o importado
+          audio
+            .play()
+            .catch((e) => console.error("Erro ao reproduzir som:", e));
+        }
+
         const hours = Math.floor(diff / (1000 * 60 * 60));
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((diff % (1000 * 60)) / 1000);
