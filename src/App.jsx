@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import rapaz from "./rapaz.mp3"; // <- Import do áudio aqui
+import rapaz from "./rapaz.mp3";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   const [monsters, setMonsters] = useState([]);
@@ -89,8 +91,8 @@ const App = () => {
     const newDate = new Date(inputValues[monster.id]);
 
     if (newDate > new Date()) {
-      alert(
-        "A data/hora que você inseriu está errada.\nInsira apenas datas no passado.\n\nExplicação: Como o sistema atualiza baseado na morte do monstro que já aconteceu, é impossível a morte ter acontecido no futuro."
+      toast.error(
+        "A data/hora que você inseriu está errada. Insira apenas datas no passado.\n\nExplicação: Como o sistema atualiza baseado na morte do monstro que já aconteceu, é impossível a morte ter acontecido no futuro."
       );
       return;
     }
@@ -109,9 +111,10 @@ const App = () => {
         )
       );
 
-      alert("Atualizado com sucesso");
+      toast.success("Atualizado com sucesso");
     } catch (error) {
       console.error("Erro ao atualizar o horário:", error);
+      toast.error("Erro ao atualizar o horário");
     } finally {
       setLoadingIds((prev) => ({ ...prev, [monster.id]: false }));
     }
@@ -119,8 +122,7 @@ const App = () => {
 
   const calculateRespawnTime = (lastDeath, hours) => {
     const deathDate = new Date(lastDeath);
-    const respawnDate = new Date(deathDate.getTime() + hours * 60 * 60 * 1000);
-    return respawnDate;
+    return new Date(deathDate.getTime() + hours * 60 * 60 * 1000);
   };
 
   const formatDate = (date) => {
@@ -257,10 +259,11 @@ const App = () => {
                               m.id === monster.id ? { ...m, lastDeath: now } : m
                             )
                           );
-                          alert("Atualizado com sucesso");
+                          toast.success("Atualizado com sucesso");
                         })
                         .catch((error) => {
                           console.error("Erro ao atualizar o horário:", error);
+                          toast.error("Erro ao atualizar o horário");
                         })
                         .finally(() => {
                           setLoadingIds((prev) => ({
@@ -303,6 +306,7 @@ const App = () => {
 
   return (
     <div className="max-w-[1215px] mx-auto px-5 py-5 font-sans text-white flex flex-col">
+      <ToastContainer />
       <h2 className="mb-1 text-lg text-center lg:text-left">UnderTimer</h2>
       <p className="mt-0 mb-0 text-sm text-center lg:text-left">
         Sistema de Controle de Tempos para Ragnarok Online
