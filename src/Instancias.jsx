@@ -368,7 +368,7 @@ export default function Instancias() {
                 )}
               </tbody>
             </table>
-            <p className="mt-8">Adicionar membro:</p>
+            <p className="mt-8 font-semibold">Adicionar membro:</p>
             <div className="flex justify-between gap-2 mt-3 ">
               <input
                 type="text"
