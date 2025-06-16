@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function Instancias() {
   const [instancias, setInstancias] = useState([]);
@@ -44,6 +45,8 @@ export default function Instancias() {
         payload
       );
 
+      toast.success("Instância adicionada com sucesso");
+
       setNovaInstancia({ name: "", spriteUrl: "", last: "" });
       buscarInstancias();
     } catch (err) {
@@ -72,6 +75,8 @@ export default function Instancias() {
         payload
       );
 
+      toast.success("Instância editada com sucesso");
+
       setEditandoInstancia((prev) => ({ ...prev, [inst.id]: false }));
       buscarInstancias();
     } catch (err) {
@@ -84,6 +89,7 @@ export default function Instancias() {
       await axios.delete(
         `https://undertimer-biel.onrender.com/instancias/${id}`
       );
+      toast.success("Instância excluída com sucesso");
       buscarInstancias();
     } catch (err) {
       console.error("Erro ao deletar instância:", err);
@@ -101,6 +107,7 @@ export default function Instancias() {
           instanciaId,
         }
       );
+      toast.success("Membro adicionado com sucesso");
       setNovosMembros((prev) => ({
         ...prev,
         [instanciaId]: { name: "", role: "" },
@@ -116,6 +123,7 @@ export default function Instancias() {
       await axios.delete(
         `https://undertimer-biel.onrender.com/membrosinstancia/${id}`
       );
+      toast.success("Membro excluído com sucesso");
       buscarInstancias();
     } catch (err) {
       console.error("Erro ao deletar membro:", err);
@@ -128,6 +136,7 @@ export default function Instancias() {
         `https://undertimer-biel.onrender.com/membrosinstancia/${membro.id}`,
         membro
       );
+      toast.success("Membro editado com sucesso");
       setEditandoMembro((prev) => ({ ...prev, [membro.id]: false }));
       buscarInstancias();
     } catch (err) {
@@ -296,7 +305,7 @@ export default function Instancias() {
                               )
                             )
                           }
-                          className="p-1 text-black rounded"
+                          className="p-1 text-black rounded w-[60%]"
                         />
                       ) : (
                         membro.name
@@ -323,7 +332,7 @@ export default function Instancias() {
                               )
                             )
                           }
-                          className="p-1 text-black rounded"
+                          className="p-1 text-black rounded w-[60%]"
                         />
                       ) : (
                         membro.role
