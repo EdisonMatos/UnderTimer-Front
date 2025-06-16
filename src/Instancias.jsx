@@ -16,9 +16,47 @@ export default function Instancias() {
   const [editandoInstancia, setEditandoInstancia] = useState({});
   const [instanciaEditada, setInstanciaEditada] = useState({});
 
+  // Estado para contagem regressiva: um objeto com id da instância e string do tempo
+  const [contagemRegressiva, setContagemRegressiva] = useState({});
+
   useEffect(() => {
     buscarInstancias();
   }, []);
+
+  // Contagem regressiva atualizada a cada segundo
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const agora = new Date().getTime();
+      const novosTempos = {};
+      instancias.forEach((inst) => {
+        const target = new Date(inst.last).getTime();
+        const distancia = target - agora;
+        if (distancia <= 0) {
+          novosTempos[inst.id] = "-";
+        } else {
+          // Cálculo da contagem regressiva
+          const dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
+          const horas = Math.floor(
+            (distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+          );
+          const minutos = Math.floor(
+            (distancia % (1000 * 60 * 60)) / (1000 * 60)
+          );
+          const segundos = Math.floor((distancia % (1000 * 60)) / 1000);
+
+          // Formatação com zeros à esquerda
+          const formatar = (n) => (n < 10 ? "0" + n : n);
+          const tempoFormatado = `${dias}d ${formatar(horas)}:${formatar(
+            minutos
+          )}:${formatar(segundos)}`;
+          novosTempos[inst.id] = tempoFormatado;
+        }
+      });
+      setContagemRegressiva(novosTempos);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [instancias]);
 
   const buscarInstancias = async () => {
     try {
@@ -250,6 +288,19 @@ export default function Instancias() {
                       </p>
                     </>
                   )}
+                  {/* Aqui está a linha nova de contagem regressiva */}
+                  <p className="text-sm opacity-70">
+                    Tempo:{" "}
+                    <span
+                      className={
+                        contagemRegressiva[inst.id] !== "-"
+                          ? "text-green-400"
+                          : ""
+                      }
+                    >
+                      {contagemRegressiva[inst.id] || "-"}
+                    </span>
+                  </p>
                 </div>
               </div>
 
