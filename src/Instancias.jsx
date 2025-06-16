@@ -353,7 +353,7 @@ export default function Instancias() {
                             onClick={() => editarMembroConfirmar(membro)}
                             className="text-green-400"
                           >
-                            Confirmar
+                            Salvar
                           </button>
                         ) : (
                           <button
