@@ -136,11 +136,12 @@ export default function Instancias() {
   };
 
   return (
-    <div className="mt-10">
+    <div className="mt-32">
+      <h1 className="mb-6 text-[24px] font-semibold">Instâncias</h1>
       <h2 className="mb-2 text-lg font-semibold text-white">
         Criar nova instância
       </h2>
-      <div className="flex flex-col gap-2 mb-6 sm:flex-row sm:items-end">
+      <div className="flex flex-col gap-2 mb-6 sm:flex-row">
         <input
           type="text"
           placeholder="Nome da instância"
@@ -148,7 +149,7 @@ export default function Instancias() {
           onChange={(e) =>
             setNovaInstancia({ ...novaInstancia, name: e.target.value })
           }
-          className="p-2 text-black border border-gray-300 rounded"
+          className="p-2 text-black border border-gray-300 rounded bg-neutral-300"
         />
         <input
           type="text"
@@ -157,7 +158,7 @@ export default function Instancias() {
           onChange={(e) =>
             setNovaInstancia({ ...novaInstancia, spriteUrl: e.target.value })
           }
-          className="p-2 text-black border border-gray-300 rounded"
+          className="p-2 text-black border border-gray-300 rounded bg-neutral-300"
         />
         <input
           type="datetime-local"
@@ -165,20 +166,23 @@ export default function Instancias() {
           onChange={(e) =>
             setNovaInstancia({ ...novaInstancia, last: e.target.value })
           }
-          className="p-2 text-black border border-gray-300 rounded"
+          className="p-2 text-black border border-gray-300 rounded bg-neutral-300"
         />
         <button
           onClick={adicionarInstancia}
-          className="px-4 py-2 text-white bg-green-600 rounded"
+          className="px-4 py-2 text-white rounded bg-primary"
         >
-          ADICIONAR
+          Adicionar
         </button>
       </div>
+      <h2 className="mb-2 text-lg font-semibold text-white">
+        Instâncias ativas
+      </h2>
       <div className="flex flex-wrap justify-between">
         {instancias.map((inst) => (
           <div
             key={inst.id}
-            className="p-4 mb-10 text-white border border-gray-700 rounded bg-neutral-800"
+            className="p-4 mb-10 text-white border border-neutral-900  bg-neutral-700 shadow-md shadow-black h-fit rounded-md w-full lg:w-[31%]"
           >
             <div className="flex items-center gap-4 mb-3">
               <img src={inst.spriteUrl} alt={inst.name} className="w-12 h-12" />
@@ -364,8 +368,8 @@ export default function Instancias() {
                 )}
               </tbody>
             </table>
-
-            <div className="flex flex-col gap-2 mt-3 sm:flex-row">
+            <p className="mt-8">Adicionar membro:</p>
+            <div className="flex justify-between gap-2 mt-3 ">
               <input
                 type="text"
                 placeholder="Nome"
@@ -379,7 +383,7 @@ export default function Instancias() {
                     },
                   }))
                 }
-                className="p-2 text-black border border-gray-300 rounded"
+                className="p-2 text-black border  rounded w-[30%] bg-neutral-300 border-gray-300"
               />
               <input
                 type="text"
@@ -394,11 +398,11 @@ export default function Instancias() {
                     },
                   }))
                 }
-                className="p-2 text-black border border-gray-300 rounded"
+                className="p-2 text-black border  rounded w-[30%] bg-neutral-300 border-gray-300"
               />
               <button
                 onClick={() => adicionarMembro(inst.id)}
-                className="px-4 py-2 text-white bg-blue-600 rounded"
+                className="px-4 py-2 text-white bg-primary rounded w-[30%]"
               >
                 Adicionar
               </button>

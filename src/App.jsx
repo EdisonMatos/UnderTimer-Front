@@ -316,8 +316,6 @@ const App = () => {
         Beta - v0.8 (em desenvolvimento)
       </p>
 
-      <Instancias />
-
       <h1 className="hidden mt-10 text-xl font-semibold lg:block">Buscar</h1>
       <div className="my-5 mt-5 mb-0 text-center lg:text-left lg:my-5 lg:mx-0">
         <input
@@ -337,6 +335,7 @@ const App = () => {
           {renderCardsOnly(minibosses, "Miniboss")}
         </>
       )}
+      <Instancias />
     </div>
   );
 };
