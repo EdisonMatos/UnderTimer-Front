@@ -11,6 +11,8 @@ export default function Instancias() {
 
   const [novosMembros, setNovosMembros] = useState({});
   const [editandoMembro, setEditandoMembro] = useState({});
+  const [editandoInstancia, setEditandoInstancia] = useState({});
+  const [instanciaEditada, setInstanciaEditada] = useState({});
 
   useEffect(() => {
     buscarInstancias();
@@ -32,7 +34,7 @@ export default function Instancias() {
       const payload = {
         name: novaInstancia.name,
         spriteUrl: novaInstancia.spriteUrl,
-        last: new Date(novaInstancia.last).toISOString(), // CONVERSÃO CORRETA AQUI
+        last: new Date(novaInstancia.last).toISOString(),
       };
 
       console.log("Payload convertido:", payload);
@@ -46,6 +48,41 @@ export default function Instancias() {
       buscarInstancias();
     } catch (err) {
       console.error("Erro ao adicionar instância:", err);
+    }
+  };
+
+  const editarInstanciaConfirmar = async (inst) => {
+    try {
+      const rawLast =
+        instanciaEditada[inst.id]?.last ||
+        new Date(inst.last).toISOString().slice(0, 16);
+
+      const payload = {
+        name: instanciaEditada[inst.id]?.name || inst.name,
+        spriteUrl: inst.spriteUrl,
+        last: new Date(rawLast).toISOString(),
+      };
+
+      await axios.put(
+        `https://undertimer-biel.onrender.com/instancias/${inst.id}`,
+        payload
+      );
+
+      setEditandoInstancia((prev) => ({ ...prev, [inst.id]: false }));
+      buscarInstancias();
+    } catch (err) {
+      console.error("Erro ao editar instância:", err);
+    }
+  };
+
+  const deletarInstancia = async (id) => {
+    try {
+      await axios.delete(
+        `https://undertimer-biel.onrender.com/instancias/${id}`
+      );
+      buscarInstancias();
+    } catch (err) {
+      console.error("Erro ao deletar instância:", err);
     }
   };
 
@@ -142,11 +179,78 @@ export default function Instancias() {
             <div className="flex items-center gap-4 mb-3">
               <img src={inst.spriteUrl} alt={inst.name} className="w-12 h-12" />
               <div>
-                <h3 className="text-lg font-semibold">{inst.name}</h3>
-                <p className="text-sm opacity-70">
-                  Data: {new Date(inst.last).toLocaleString()}
-                </p>
+                {editandoInstancia[inst.id] ? (
+                  <>
+                    <input
+                      type="text"
+                      value={instanciaEditada[inst.id]?.name || inst.name}
+                      onChange={(e) =>
+                        setInstanciaEditada((prev) => ({
+                          ...prev,
+                          [inst.id]: {
+                            ...prev[inst.id],
+                            name: e.target.value,
+                          },
+                        }))
+                      }
+                      className="p-1 text-black rounded"
+                    />
+                    <input
+                      type="datetime-local"
+                      value={
+                        instanciaEditada[inst.id]?.last ||
+                        new Date(inst.last).toISOString().slice(0, 16)
+                      }
+                      onChange={(e) =>
+                        setInstanciaEditada((prev) => ({
+                          ...prev,
+                          [inst.id]: {
+                            ...prev[inst.id],
+                            last: e.target.value,
+                          },
+                        }))
+                      }
+                      className="p-1 text-black rounded ml-2"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <h3 className="text-lg font-semibold">{inst.name}</h3>
+                    <p className="text-sm opacity-70">
+                      Data: {new Date(inst.last).toLocaleString()}
+                    </p>
+                  </>
+                )}
               </div>
+            </div>
+
+            <div className="flex gap-2 mb-3">
+              {editandoInstancia[inst.id] ? (
+                <button
+                  onClick={() => editarInstanciaConfirmar(inst)}
+                  className="text-green-400"
+                >
+                  Confirmar
+                </button>
+              ) : (
+                <button
+                  onClick={() =>
+                    setEditandoInstancia((prev) => ({
+                      ...prev,
+                      [inst.id]: true,
+                    }))
+                  }
+                  className="text-yellow-400"
+                >
+                  Editar
+                </button>
+              )}
+              <button
+                onClick={() => deletarInstancia(inst.id)}
+                className="text-red-400"
+              >
+                Deletar
+              </button>
             </div>
 
             <h4 className="mt-4 mb-2 font-semibold">Membros</h4>
