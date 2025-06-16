@@ -3,6 +3,7 @@ import axios from "axios";
 import rapaz from "./rapaz.mp3";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Instancias from "./Instancias";
 
 const App = () => {
   const [monsters, setMonsters] = useState([]);
@@ -314,6 +315,7 @@ const App = () => {
       <p className="mt-0 text-xs text-center text-white opacity-50 lg:text-left">
         Beta - v0.8 (em desenvolvimento)
       </p>
+      <Instancias />
       <h1 className="hidden mt-10 text-xl font-semibold lg:block">Buscar</h1>
       <div className="my-5 mt-5 mb-0 text-center lg:text-left lg:my-5 lg:mx-0">
         <input
@@ -324,7 +326,6 @@ const App = () => {
           className="w-full max-w-[400px] px-3 py-2 text-sm border bg-neutral-300 border-gray-300 rounded text-black"
         />
       </div>
-
       {search.trim() !== "" ? (
         renderCardsOnly(filteredSearchResults, "Resultado da busca")
       ) : (
