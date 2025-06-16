@@ -137,7 +137,7 @@ export default function Instancias() {
 
   return (
     <div className="mt-10">
-      <h2 className="text-lg font-semibold text-white mb-2">
+      <h2 className="mb-2 text-lg font-semibold text-white">
         Criar nova instância
       </h2>
       <div className="flex flex-col gap-2 mb-6 sm:flex-row sm:items-end">
@@ -148,7 +148,7 @@ export default function Instancias() {
           onChange={(e) =>
             setNovaInstancia({ ...novaInstancia, name: e.target.value })
           }
-          className="p-2 border border-gray-300 rounded text-black"
+          className="p-2 text-black border border-gray-300 rounded"
         />
         <input
           type="text"
@@ -157,7 +157,7 @@ export default function Instancias() {
           onChange={(e) =>
             setNovaInstancia({ ...novaInstancia, spriteUrl: e.target.value })
           }
-          className="p-2 border border-gray-300 rounded text-black"
+          className="p-2 text-black border border-gray-300 rounded"
         />
         <input
           type="datetime-local"
@@ -165,11 +165,11 @@ export default function Instancias() {
           onChange={(e) =>
             setNovaInstancia({ ...novaInstancia, last: e.target.value })
           }
-          className="p-2 border border-gray-300 rounded text-black"
+          className="p-2 text-black border border-gray-300 rounded"
         />
         <button
           onClick={adicionarInstancia}
-          className="bg-green-600 text-white px-4 py-2 rounded"
+          className="px-4 py-2 text-white bg-green-600 rounded"
         >
           ADICIONAR
         </button>
@@ -178,7 +178,7 @@ export default function Instancias() {
         {instancias.map((inst) => (
           <div
             key={inst.id}
-            className="mb-10 p-4 border border-gray-700 rounded bg-neutral-800 text-white"
+            className="p-4 mb-10 text-white border border-gray-700 rounded bg-neutral-800"
           >
             <div className="flex items-center gap-4 mb-3">
               <img src={inst.spriteUrl} alt={inst.name} className="w-12 h-12" />
@@ -214,7 +214,7 @@ export default function Instancias() {
                           },
                         }))
                       }
-                      className="p-1 text-black rounded ml-2"
+                      className="p-1 ml-2 text-black rounded"
                     />
                   </>
                 ) : (
@@ -258,17 +258,19 @@ export default function Instancias() {
             </div>
 
             <h4 className="mt-4 mb-2 font-semibold">Membros</h4>
-            <table className="w-full text-sm mb-4">
+            <table className="w-full mb-4 text-sm">
               <thead>
                 <tr className="text-left text-gray-400">
+                  <th>Nº</th>
                   <th>Nome</th>
                   <th>Função</th>
                   <th>Ações</th>
                 </tr>
               </thead>
               <tbody>
-                {inst.membros.map((membro) => (
+                {inst.membros.map((membro, index) => (
                   <tr key={membro.id} className="border-t border-neutral-700">
+                    <td>{index + 1}</td>
                     <td>
                       {editandoMembro[membro.id] ? (
                         <input
@@ -355,7 +357,7 @@ export default function Instancias() {
                 ))}
                 {inst.membros.length === 0 && (
                   <tr>
-                    <td colSpan={3} className="text-gray-400 italic">
+                    <td colSpan={4} className="italic text-gray-400">
                       Nenhum membro ainda
                     </td>
                   </tr>
@@ -363,7 +365,7 @@ export default function Instancias() {
               </tbody>
             </table>
 
-            <div className="flex flex-col sm:flex-row gap-2 mt-3">
+            <div className="flex flex-col gap-2 mt-3 sm:flex-row">
               <input
                 type="text"
                 placeholder="Nome"
@@ -377,7 +379,7 @@ export default function Instancias() {
                     },
                   }))
                 }
-                className="p-2 border border-gray-300 rounded text-black"
+                className="p-2 text-black border border-gray-300 rounded"
               />
               <input
                 type="text"
@@ -392,11 +394,11 @@ export default function Instancias() {
                     },
                   }))
                 }
-                className="p-2 border border-gray-300 rounded text-black"
+                className="p-2 text-black border border-gray-300 rounded"
               />
               <button
                 onClick={() => adicionarMembro(inst.id)}
-                className="bg-blue-600 text-white px-4 py-2 rounded"
+                className="px-4 py-2 text-white bg-blue-600 rounded"
               >
                 Adicionar
               </button>
