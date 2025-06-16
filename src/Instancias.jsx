@@ -182,7 +182,7 @@ export default function Instancias() {
     <div className="mt-32">
       <h1 className="mb-6 text-[24px] font-semibold">Instâncias e Eventos</h1>
       <h2 className="mb-2 text-lg font-semibold text-white">
-        Criar nova instância
+        Criar nova instância ou evento
       </h2>
       <div className="flex flex-col gap-2 mb-6 sm:flex-row">
         <input
