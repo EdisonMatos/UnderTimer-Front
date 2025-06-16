@@ -71,6 +71,7 @@ export default function Instancias() {
       toast.success("Instância editada com sucesso");
       setEditandoInstancia((prev) => ({ ...prev, [inst.id]: false }));
       buscarInstancias();
+      console.log(payload);
     } catch (err) {
       console.error("Erro ao editar instância:", err);
     }
@@ -221,7 +222,7 @@ export default function Instancias() {
                             },
                           }))
                         }
-                        className="p-1 text-black rounded"
+                        className="p-1 text-black rounded w-[30%] h-8"
                       />
                       <input
                         type="datetime-local"
@@ -238,7 +239,7 @@ export default function Instancias() {
                             },
                           }))
                         }
-                        className="p-1 ml-2 text-black rounded"
+                        className="p-1 ml-2 text-black rounded w-[30%] h-8"
                       />
                     </>
                   ) : (
@@ -269,7 +270,9 @@ export default function Instancias() {
                       }))
                     }
                     className="text-yellow-400"
-                  ></button>
+                  >
+                    Editar
+                  </button>
                 )}
                 <button
                   onClick={() => deletarInstancia(inst.id)}
