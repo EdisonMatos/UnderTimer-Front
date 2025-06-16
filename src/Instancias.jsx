@@ -57,11 +57,15 @@ export default function Instancias() {
         instanciaEditada[inst.id]?.last ||
         new Date(inst.last).toISOString().slice(0, 16);
 
+      const lastISO = new Date(rawLast).toISOString();
+
       const payload = {
         name: instanciaEditada[inst.id]?.name || inst.name,
         spriteUrl: inst.spriteUrl,
-        last: new Date(rawLast).toISOString(),
+        last: lastISO,
       };
+
+      console.log("Payload convertido:", payload);
 
       await axios.put(
         `https://undertimer-biel.onrender.com/instancias/${inst.id}`,
@@ -132,7 +136,7 @@ export default function Instancias() {
   };
 
   return (
-    <div className="mt-10 lg:w-[80%]">
+    <div className="mt-10">
       <h2 className="text-lg font-semibold text-white mb-2">
         Criar nova instância
       </h2>
@@ -170,7 +174,7 @@ export default function Instancias() {
           ADICIONAR
         </button>
       </div>
-      <div className="flex justify-between">
+      <div className="flex flex-wrap justify-between">
         {instancias.map((inst) => (
           <div
             key={inst.id}
@@ -242,7 +246,7 @@ export default function Instancias() {
                   }
                   className="text-yellow-400"
                 >
-                  Editar
+                  {/* Editar */}
                 </button>
               )}
               <button
