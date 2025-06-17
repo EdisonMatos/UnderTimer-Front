@@ -339,11 +339,11 @@ export default function Instancias() {
                 <h4 className="mt-4 mb-2 font-semibold">Membros</h4>
                 <table className="w-full mb-4 text-sm">
                   <thead>
-                    <tr className="text-left text-gray-400">
-                      <th> nº </th>
-                      <th> Nome </th>
-                      <th> Função </th>
-                      <th> Ações </th>
+                    <tr className="w-full text-left text-gray-400">
+                      <th className="w-[10%]"> nº </th>
+                      <th className="w-[50%]"> Nome </th>
+                      <th className="w-[50%]"> Função </th>
+                      <th className="w-[20%]"> Ações </th>
                     </tr>
                   </thead>
                   <tbody>
