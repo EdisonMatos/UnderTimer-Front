@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { FaTrash, FaPencilAlt, FaCheck } from "react-icons/fa";
 
 export default function Instancias() {
   const [instancias, setInstancias] = useState([]);
@@ -15,18 +16,15 @@ export default function Instancias() {
   const [editandoMembro, setEditandoMembro] = useState({});
   const [editandoInstancia, setEditandoInstancia] = useState({});
   const [instanciaEditada, setInstanciaEditada] = useState({});
-
-  // Estado para contagem regressiva: um objeto com id da instância e string do tempo
   const [contagemRegressiva, setContagemRegressiva] = useState({});
 
   useEffect(() => {
     buscarInstancias();
   }, []);
 
-  // Contagem regressiva atualizada a cada segundo
   useEffect(() => {
     const interval = setInterval(() => {
-      const agora = new Date().getTime();
+      const agora = Date.now();
       const novosTempos = {};
       instancias.forEach((inst) => {
         const target = new Date(inst.last).getTime();
@@ -34,7 +32,6 @@ export default function Instancias() {
         if (distancia <= 0) {
           novosTempos[inst.id] = "-";
         } else {
-          // Cálculo da contagem regressiva
           const dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
           const horas = Math.floor(
             (distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
@@ -43,18 +40,14 @@ export default function Instancias() {
             (distancia % (1000 * 60 * 60)) / (1000 * 60)
           );
           const segundos = Math.floor((distancia % (1000 * 60)) / 1000);
-
-          // Formatação com zeros à esquerda
-          const formatar = (n) => (n < 10 ? "0" + n : n);
-          const tempoFormatado = `${dias}d ${formatar(horas)}:${formatar(
-            minutos
-          )}:${formatar(segundos)}`;
-          novosTempos[inst.id] = tempoFormatado;
+          const f = (n) => (n < 10 ? "0" + n : n);
+          novosTempos[inst.id] = `${dias}d ${f(horas)}:${f(minutos)}:${f(
+            segundos
+          )}`;
         }
       });
       setContagemRegressiva(novosTempos);
     }, 1000);
-
     return () => clearInterval(interval);
   }, [instancias]);
 
@@ -109,7 +102,6 @@ export default function Instancias() {
       toast.success("Instância editada com sucesso");
       setEditandoInstancia((prev) => ({ ...prev, [inst.id]: false }));
       buscarInstancias();
-      console.log(payload);
     } catch (err) {
       console.error("Erro ao editar instância:", err);
     }
@@ -190,7 +182,7 @@ export default function Instancias() {
           placeholder="Nome da instância"
           value={novaInstancia.name}
           onChange={(e) =>
-            setNovaInstancia({ ...novaInstancia, name: e.target.value })
+            setNovaInstancia((prev) => ({ ...prev, name: e.target.value }))
           }
           className="p-2 text-black border border-gray-300 rounded bg-neutral-300"
         />
@@ -199,7 +191,7 @@ export default function Instancias() {
           placeholder="Sprite URL"
           value={novaInstancia.spriteUrl}
           onChange={(e) =>
-            setNovaInstancia({ ...novaInstancia, spriteUrl: e.target.value })
+            setNovaInstancia((prev) => ({ ...prev, spriteUrl: e.target.value }))
           }
           className="p-2 text-black border border-gray-300 rounded bg-neutral-300"
         />
@@ -207,7 +199,7 @@ export default function Instancias() {
           type="datetime-local"
           value={novaInstancia.last}
           onChange={(e) =>
-            setNovaInstancia({ ...novaInstancia, last: e.target.value })
+            setNovaInstancia((prev) => ({ ...prev, last: e.target.value }))
           }
           className="p-2 text-black border border-gray-300 rounded bg-neutral-300"
         />
@@ -224,6 +216,7 @@ export default function Instancias() {
           {carregandoNovaInstancia ? "..." : "Adicionar"}
         </button>
       </div>
+
       <h2 className="mb-2 text-lg font-semibold text-white">
         Instâncias ativas
       </h2>
@@ -233,21 +226,17 @@ export default function Instancias() {
             const now = Date.now();
             const timeA = new Date(a.last).getTime();
             const timeB = new Date(b.last).getTime();
-
-            const isAFuture = timeA > now;
-            const isBFuture = timeB > now;
-
-            if (isAFuture && !isBFuture) return -1; // A vem antes
-            if (!isAFuture && isBFuture) return 1; // B vem antes
-
-            // Se os dois são futuros ou os dois são passados, ordena normalmente
+            const isAFut = timeA > now,
+              isBFut = timeB > now;
+            if (isAFut && !isBFut) return -1;
+            if (!isAFut && isBFut) return 1;
             return timeA - timeB;
           })
           .map((inst) => {
             const nome = novosMembros[inst.id]?.name || "";
             const funcao = novosMembros[inst.id]?.role || "";
             const carregando = carregandoMembros[inst.id];
-            const desabilitado = carregando || !nome.trim() || !funcao.trim();
+            const desabilitado = carregando || (!nome.trim() && !funcao.trim());
 
             return (
               <div
@@ -303,7 +292,6 @@ export default function Instancias() {
                         </p>
                       </>
                     )}
-                    {/* Aqui está a linha nova de contagem regressiva */}
                     <p className="text-sm opacity-70">
                       Tempo:{" "}
                       <span
@@ -323,9 +311,9 @@ export default function Instancias() {
                   {editandoInstancia[inst.id] ? (
                     <button
                       onClick={() => editarInstanciaConfirmar(inst)}
-                      className="text-green-400"
+                      className="text-green-400 hover:text-green-200"
                     >
-                      Confirmar
+                      <FaCheck />
                     </button>
                   ) : (
                     <button
@@ -335,16 +323,16 @@ export default function Instancias() {
                           [inst.id]: true,
                         }))
                       }
-                      className="text-yellow-400"
+                      className="text-white hover:text-yellow-200"
                     >
-                      Editar
+                      <FaPencilAlt />
                     </button>
                   )}
                   <button
                     onClick={() => deletarInstancia(inst.id)}
-                    className="text-red-400"
+                    className="text-white hover:text-red-200"
                   >
-                    Deletar
+                    <FaTrash />
                   </button>
                 </div>
 
@@ -352,21 +340,21 @@ export default function Instancias() {
                 <table className="w-full mb-4 text-sm">
                   <thead>
                     <tr className="text-left text-gray-400">
-                      <th>Nº</th>
-                      <th>Nome</th>
-                      <th>Função</th>
-                      <th>Ações</th>
+                      <th> nº </th>
+                      <th> Nome </th>
+                      <th> Função </th>
+                      <th> Ações </th>
                     </tr>
                   </thead>
                   <tbody>
                     {[...inst.membros]
                       .sort((a, b) => a.role.localeCompare(b.role))
-                      .map((membro, index) => (
+                      .map((membro, i) => (
                         <tr
                           key={membro.id}
                           className="border-t border-neutral-700"
                         >
-                          <td>{index + 1}</td>
+                          <td>{i + 1}</td>
                           <td>
                             {editandoMembro[membro.id] ? (
                               <input
@@ -374,17 +362,17 @@ export default function Instancias() {
                                 value={membro.name}
                                 onChange={(e) =>
                                   setInstancias((prev) =>
-                                    prev.map((i) =>
-                                      i.id === inst.id
+                                    prev.map((instMap) =>
+                                      instMap.id === inst.id
                                         ? {
-                                            ...i,
-                                            membros: i.membros.map((m) =>
+                                            ...instMap,
+                                            membros: instMap.membros.map((m) =>
                                               m.id === membro.id
                                                 ? { ...m, name: e.target.value }
                                                 : m
                                             ),
                                           }
-                                        : i
+                                        : instMap
                                     )
                                   )
                                 }
@@ -401,17 +389,17 @@ export default function Instancias() {
                                 value={membro.role}
                                 onChange={(e) =>
                                   setInstancias((prev) =>
-                                    prev.map((i) =>
-                                      i.id === inst.id
+                                    prev.map((instMap) =>
+                                      instMap.id === inst.id
                                         ? {
-                                            ...i,
-                                            membros: i.membros.map((m) =>
+                                            ...instMap,
+                                            membros: instMap.membros.map((m) =>
                                               m.id === membro.id
                                                 ? { ...m, role: e.target.value }
                                                 : m
                                             ),
                                           }
-                                        : i
+                                        : instMap
                                     )
                                   )
                                 }
@@ -425,9 +413,9 @@ export default function Instancias() {
                             {editandoMembro[membro.id] ? (
                               <button
                                 onClick={() => editarMembroConfirmar(membro)}
-                                className="text-green-400"
+                                className="text-green-400 hover:text-green-200"
                               >
-                                Salvar
+                                <FaCheck />
                               </button>
                             ) : (
                               <button
@@ -437,16 +425,16 @@ export default function Instancias() {
                                     [membro.id]: true,
                                   }))
                                 }
-                                className="text-yellow-400"
+                                className="text-white hover:text-yellow-200"
                               >
-                                Editar
+                                <FaPencilAlt />
                               </button>
                             )}
                             <button
                               onClick={() => deletarMembro(membro.id)}
-                              className="text-red-400"
+                              className="text-white hover:text-red-200"
                             >
-                              Deletar
+                              <FaTrash />
                             </button>
                           </td>
                         </tr>
@@ -460,18 +448,19 @@ export default function Instancias() {
                     )}
                   </tbody>
                 </table>
+
                 <p className="mt-8 font-semibold">Adicionar membro:</p>
-                <div className="flex justify-between gap-2 mt-3 ">
+                <div className="flex justify-between gap-2 mt-3">
                   <input
                     type="text"
                     placeholder="Nome"
-                    value={nome}
+                    value={novosMembros[inst.id]?.name || ""}
                     onChange={(e) =>
                       setNovosMembros((prev) => ({
                         ...prev,
                         [inst.id]: {
-                          ...prev[inst.id],
                           name: e.target.value,
+                          role: prev[inst.id]?.role || "",
                         },
                       }))
                     }
@@ -480,12 +469,12 @@ export default function Instancias() {
                   <input
                     type="text"
                     placeholder="Função"
-                    value={funcao}
+                    value={novosMembros[inst.id]?.role || ""}
                     onChange={(e) =>
                       setNovosMembros((prev) => ({
                         ...prev,
                         [inst.id]: {
-                          ...prev[inst.id],
+                          name: prev[inst.id]?.name || "",
                           role: e.target.value,
                         },
                       }))
@@ -494,10 +483,14 @@ export default function Instancias() {
                   />
                   <button
                     onClick={() => adicionarMembro(inst.id)}
-                    disabled={desabilitado}
+                    disabled={
+                      carregandoMembros[inst.id] ||
+                      (!novosMembros[inst.id]?.name?.trim() &&
+                        !novosMembros[inst.id]?.role?.trim())
+                    }
                     className="px-4 py-2 text-white bg-primary rounded w-[30%] disabled:opacity-50"
                   >
-                    {carregando ? "..." : "Adicionar"}
+                    {carregandoMembros[inst.id] ? "..." : "Adicionar"}
                   </button>
                 </div>
               </div>
