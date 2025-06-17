@@ -247,7 +247,7 @@ export default function Instancias() {
             const nome = novosMembros[inst.id]?.name || "";
             const funcao = novosMembros[inst.id]?.role || "";
             const carregando = carregandoMembros[inst.id];
-            const desabilitado = carregando || !nome.trim() || !funcao.trim();
+            const desabilitado = carregando || (!nome.trim() && !funcao.trim());
 
             return (
               <div
@@ -470,8 +470,8 @@ export default function Instancias() {
                       setNovosMembros((prev) => ({
                         ...prev,
                         [inst.id]: {
-                          ...prev[inst.id],
                           name: e.target.value,
+                          role: prev[inst.id]?.role || "", // garante role vazio se ainda não definido
                         },
                       }))
                     }
@@ -485,7 +485,7 @@ export default function Instancias() {
                       setNovosMembros((prev) => ({
                         ...prev,
                         [inst.id]: {
-                          ...prev[inst.id],
+                          name: prev[inst.id]?.name || "", // garante name vazio se ainda não definido
                           role: e.target.value,
                         },
                       }))
