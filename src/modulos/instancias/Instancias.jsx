@@ -255,7 +255,7 @@ export default function Instancias() {
             return (
               <div
                 key={inst.id}
-                className="p-4 mb-10 text-white border border-neutral-900 bg-neutral-700 shadow-md shadow-black h-fit rounded-md w-full lg:w-[31%]"
+                className="p-4 mb-10 text-white border border-neutral-900 bg-cards shadow-md shadow-black h-fit rounded-md w-full lg:w-[31%]"
               >
                 <div className="flex flex-row items-center justify-between mb-3 ">
                   <div className="w-[15%]">

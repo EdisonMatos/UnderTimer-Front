@@ -4,7 +4,7 @@ import React from "react";
 export default function BuscaMvps({ search, setSearch }) {
   return (
     <>
-      <h1 className="mt-14 text-[24px] font-semibold text-center lg:text-left">
+      <h1 className=" text-[24px] font-semibold text-center lg:text-left">
         Times de MVPs e Minibosses
       </h1>
       <h1 className="hidden mt-2 text-xl font-semibold lg:block">Buscar</h1>
