@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import App from "./App";
+import Painel from "./Painel";
 
 const API_URL = "https://undertimer-biel.onrender.com";
 
-export default function LoginPage() {
+export default function LoginMembers() {
   const [apelido, setApelido] = useState("");
   const [password, setPassword] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -46,19 +46,21 @@ export default function LoginPage() {
     }
   };
 
-  if (isAuthenticated) return <App />;
+  if (isAuthenticated) return <Painel />;
 
   return (
-    <div style={styles.container}>
-      <h2 style={styles.title}>Área de Membros - UnderTimer</h2>
-      <form onSubmit={handleLogin} style={styles.form}>
+    <div className="max-w-xs p-5 mx-auto mt-24 font-sans text-center bg-gray-100 border border-gray-300 rounded-lg">
+      <h2 className="mb-5 text-lg font-semibold">
+        Área de Membros - UnderTimer
+      </h2>
+      <form onSubmit={handleLogin} className="flex flex-col gap-2.5">
         <input
           type="text"
           placeholder="Usuário"
           value={apelido}
           onChange={(e) => setApelido(e.target.value)}
           required
-          style={styles.input}
+          className="p-2.5 text-base border border-gray-300 rounded"
         />
         <input
           type="password"
@@ -66,17 +68,16 @@ export default function LoginPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          style={styles.input}
+          className="p-2.5 text-base border border-gray-300 rounded"
         />
         <button
           type="submit"
           disabled={loading}
-          style={styles.button}
-          className="bg-primary"
+          className="p-2.5 text-base text-white rounded cursor-pointer bg-primary disabled:opacity-70"
         >
           {loading ? "Entrando..." : "Entrar"}
         </button>
-        {error && <p style={styles.error}>{error}</p>}
+        {error && <p className="mt-2 text-red-600">{error}</p>}
       </form>
       <p className="mt-10 text-sm">
         Não tem um login e senha ainda?
@@ -92,40 +93,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
-const styles = {
-  container: {
-    maxWidth: 320,
-    margin: "100px auto",
-    padding: 20,
-    border: "1px solid #ccc",
-    borderRadius: 10,
-    textAlign: "center",
-    fontFamily: "sans-serif",
-    backgroundColor: "#f9f9f9",
-  },
-  title: {
-    marginBottom: 20,
-  },
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 10,
-  },
-  input: {
-    padding: 10,
-    fontSize: 16,
-  },
-  button: {
-    padding: 10,
-    fontSize: 16,
-    color: "#fff",
-    border: "none",
-    borderRadius: 5,
-    cursor: "pointer",
-  },
-  error: {
-    color: "red",
-    marginTop: 10,
-  },
-};

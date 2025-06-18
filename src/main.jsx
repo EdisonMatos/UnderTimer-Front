@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App";
 import "./index.css";
-import LoginPage from "./LoginPage.jsx";
+import LoginMembers from "./paginas/LoginMembers.jsx";
 
-ReactDOM.createRoot(document.getElementById("root")).render(<LoginPage />);
+ReactDOM.createRoot(document.getElementById("root")).render(<LoginMembers />);

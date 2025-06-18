@@ -257,13 +257,15 @@ export default function Instancias() {
                 key={inst.id}
                 className="p-4 mb-10 text-white border border-neutral-900 bg-neutral-700 shadow-md shadow-black h-fit rounded-md w-full lg:w-[31%]"
               >
-                <div className="flex items-center gap-4 mb-3">
-                  <img
-                    src={inst.spriteUrl}
-                    alt={inst.name}
-                    className="w-12 h-12"
-                  />
-                  <div>
+                <div className="flex flex-row items-center justify-between mb-3 ">
+                  <div className="w-[15%]">
+                    <img
+                      src={inst.spriteUrl}
+                      alt={inst.name}
+                      className="w-12 h-12"
+                    />
+                  </div>
+                  <div className="w-[60%]">
                     {editandoInstancia[inst.id] ? (
                       <>
                         <input
@@ -328,35 +330,39 @@ export default function Instancias() {
                       </span>
                     </p>
                   </div>
-                </div>
-
-                <div className="flex gap-2 mb-3">
-                  {editandoInstancia[inst.id] ? (
-                    <button
-                      onClick={() => editarInstanciaConfirmar(inst)}
-                      className="text-green-400 hover:text-green-200"
-                    >
-                      <FaCheck />
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() =>
-                        setEditandoInstancia((prev) => ({
-                          ...prev,
-                          [inst.id]: true,
-                        }))
-                      }
-                      className="text-white hover:text-yellow-200"
-                    >
-                      <FaPencilAlt />
-                    </button>
-                  )}
-                  <button
-                    onClick={() => deletarInstancia(inst.id)}
-                    className="text-white hover:text-red-200"
-                  >
-                    <FaTrash />
-                  </button>
+                  <div className="flex flex-col  w-[15%]">
+                    <h2 className="mb-2">Ações</h2>
+                    <div className="flex items-center justify-center h-12 ">
+                      <div className="flex gap-3">
+                        {editandoInstancia[inst.id] ? (
+                          <button
+                            onClick={() => editarInstanciaConfirmar(inst)}
+                            className="text-green-400 hover:text-green-200"
+                          >
+                            <FaCheck />
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() =>
+                              setEditandoInstancia((prev) => ({
+                                ...prev,
+                                [inst.id]: true,
+                              }))
+                            }
+                            className="text-white hover:text-yellow-200"
+                          >
+                            <FaPencilAlt />
+                          </button>
+                        )}
+                        <button
+                          onClick={() => deletarInstancia(inst.id)}
+                          className="text-white hover:text-red-200"
+                        >
+                          <FaTrash />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <h4 className="mt-4 mb-2 font-semibold">Membros</h4>
