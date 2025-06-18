@@ -110,7 +110,13 @@ const App = () => {
 
       setMonsters((prev) =>
         prev.map((m) =>
-          m.id === monster.id ? { ...m, lastDeath: newDate.toISOString() } : m
+          m.id === monster.id
+            ? {
+                ...m,
+                lastDeath: newDate.toISOString(),
+                updatedBy: localStorage.getItem("apelido") || "-", // ✅ atualização aqui
+              }
+            : m
         )
       );
 
@@ -215,7 +221,13 @@ const App = () => {
                     <p>
                       <strong>Atualizado por: </strong>
                       <br className="hidden lg:flex" />
-                      <span className="text-green-400">{apelidoFormatado}</span>
+                      <span
+                        className={
+                          timerValue !== "-" ? "text-green-400" : "text-white"
+                        }
+                      >
+                        {apelidoFormatado}
+                      </span>
                     </p>
                     <p>
                       <strong>Tempo: </strong>
@@ -269,7 +281,14 @@ const App = () => {
                         .then(() => {
                           setMonsters((prev) =>
                             prev.map((m) =>
-                              m.id === monster.id ? { ...m, lastDeath: now } : m
+                              m.id === monster.id
+                                ? {
+                                    ...m,
+                                    lastDeath: now,
+                                    updatedBy:
+                                      localStorage.getItem("apelido") || "-", // ✅ atualização aqui
+                                  }
+                                : m
                             )
                           );
                           toast.success("Atualizado com sucesso");
