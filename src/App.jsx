@@ -4,6 +4,7 @@ import rapaz from "./rapaz.mp3";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Instancias from "./Instancias";
+import LogoutButton from "./LogoutButton";
 
 const App = () => {
   const [monsters, setMonsters] = useState([]);
@@ -315,6 +316,7 @@ const App = () => {
       <p className="mt-0 text-xs text-center text-white opacity-50 lg:text-left">
         Beta - v0.8 (em desenvolvimento)
       </p>
+      <LogoutButton />
       <h1 className="mt-14 text-[24px] font-semibold text-center lg:text-left">
         Times de MVPs e Minibosses
       </h1>
