@@ -5,15 +5,19 @@ import MemberBar from "../interface/MemberBar";
 import Instancias from "../modulos/instancias/Instancias";
 import Mvps from "../modulos/mvps/Mvps";
 import Header from "../interface/Header";
+import SideNavbar from "../interface/SideNavbar";
 
 const Painel = () => {
   return (
-    <div className="max-w-[1215px] mx-auto px-5 py-5 font-sans text-white flex flex-col">
-      <ToastContainer />
-      <Header />
-      <MemberBar />
-      <Mvps />
-      <Instancias />
+    // <div className="max-w-[1215px] mx-auto px-5 py-5 font-sans text-white flex flex-col">
+    //   <ToastContainer />
+    //   <Header />
+    //   <MemberBar />
+    //   <Mvps />
+    //   <Instancias />
+    // </div>
+    <div>
+      <SideNavbar />
     </div>
   );
 };
