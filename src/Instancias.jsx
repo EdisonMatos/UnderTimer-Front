@@ -67,6 +67,7 @@ export default function Instancias() {
       setCarregandoNovaInstancia(true);
 
       const guildId = localStorage.getItem("guildId");
+      const updatedby = localStorage.getItem("apelido");
 
       if (!guildId) {
         toast.error("Guild ID não encontrado. Faça login novamente.");
@@ -79,6 +80,7 @@ export default function Instancias() {
         spriteUrl: novaInstancia.spriteUrl,
         last: new Date(novaInstancia.last).toISOString(),
         guildId,
+        updatedby,
       };
 
       await axios.post(
