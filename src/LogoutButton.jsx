@@ -15,7 +15,7 @@ export default function LogoutButton() {
     localStorage.removeItem("token");
     localStorage.removeItem("apelido");
     localStorage.removeItem("guildId");
-    window.location.reload(); // força a tela a recarregar e cair no LoginPage
+    window.location.reload(); 
   };
 
   return (
