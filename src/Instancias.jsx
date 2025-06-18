@@ -67,6 +67,7 @@ export default function Instancias() {
       setCarregandoNovaInstancia(true);
 
       const guildId = localStorage.getItem("guildId");
+      const updatedby = localStorage.getItem("apelido");
 
       if (!guildId) {
         toast.error("Guild ID não encontrado. Faça login novamente.");
@@ -79,6 +80,7 @@ export default function Instancias() {
         spriteUrl: novaInstancia.spriteUrl,
         last: new Date(novaInstancia.last).toISOString(),
         guildId,
+        updatedby,
       };
 
       await axios.post(
@@ -314,6 +316,15 @@ export default function Instancias() {
                         }
                       >
                         {contagemRegressiva[inst.id] || "-"}
+                      </span>
+                    </p>
+                    <p className="text-sm opacity-70">
+                      Criada por:{" "}
+                      <span className="text-green-400">
+                        {inst.updatedby
+                          ? inst.updatedby.charAt(0).toUpperCase() +
+                            inst.updatedby.slice(1)
+                          : "-"}
                       </span>
                     </p>
                   </div>
