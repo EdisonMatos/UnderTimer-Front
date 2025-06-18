@@ -171,6 +171,11 @@ const App = () => {
               ? formatDate(monster.lastDeath)
               : ["—", ""];
 
+            const apelidoFormatado = monster.updatedby
+              ? monster.updatedby.charAt(0).toUpperCase() +
+                monster.updatedby.slice(1)
+              : "-";
+
             return (
               <div
                 id={monster.id}
@@ -207,6 +212,11 @@ const App = () => {
                       {deathDate} - {deathTime}h
                     </p>
                     <p>
+                      <strong>Atualizado por: </strong>
+                      <br className="hidden lg:flex" />
+                      <span className="text-green-400">{apelidoFormatado}</span>
+                    </p>
+                    <p>
                       <strong>Tempo: </strong>
                       <br className="hidden lg:flex" />
                       <span
@@ -219,7 +229,6 @@ const App = () => {
                     </p>
                   </div>
                 </div>
-
                 <div className="flex flex-row justify-center w-full gap-2 mt-2 ">
                   <input
                     type="datetime-local"
