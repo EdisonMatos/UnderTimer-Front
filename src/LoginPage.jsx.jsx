@@ -69,7 +69,12 @@ export default function LoginPage() {
           required
           style={styles.input}
         />
-        <button type="submit" disabled={loading} style={styles.button}>
+        <button
+          type="submit"
+          disabled={loading}
+          style={styles.button}
+          className="bg-primary"
+        >
           {loading ? "Entrando..." : "Entrar"}
         </button>
         {error && <p style={styles.error}>{error}</p>}
@@ -104,7 +109,6 @@ const styles = {
   button: {
     padding: 10,
     fontSize: 16,
-    backgroundColor: "#4CAF50",
     color: "#fff",
     border: "none",
     borderRadius: 5,
