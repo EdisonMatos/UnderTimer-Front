@@ -221,7 +221,13 @@ const App = () => {
                     <p>
                       <strong>Atualizado por: </strong>
                       <br className="hidden lg:flex" />
-                      <span className="text-green-400">{apelidoFormatado}</span>
+                      <span
+                        className={
+                          timerValue !== "-" ? "text-green-400" : "text-white"
+                        }
+                      >
+                        {apelidoFormatado}
+                      </span>
                     </p>
                     <p>
                       <strong>Tempo: </strong>
