@@ -65,11 +65,22 @@ export default function Instancias() {
   const adicionarInstancia = async () => {
     try {
       setCarregandoNovaInstancia(true);
+
+      const guildId = localStorage.getItem("guildId");
+
+      if (!guildId) {
+        toast.error("Guild ID não encontrado. Faça login novamente.");
+        setCarregandoNovaInstancia(false);
+        return;
+      }
+
       const payload = {
         name: novaInstancia.name,
         spriteUrl: novaInstancia.spriteUrl,
         last: new Date(novaInstancia.last).toISOString(),
+        guildId,
       };
+
       await axios.post(
         "https://undertimer-biel.onrender.com/instancias",
         payload
@@ -79,6 +90,7 @@ export default function Instancias() {
       buscarInstancias();
     } catch (err) {
       console.error("Erro ao adicionar instância:", err);
+      toast.error("Erro ao adicionar instância.");
     } finally {
       setCarregandoNovaInstancia(false);
     }
