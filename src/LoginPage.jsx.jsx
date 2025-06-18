@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import App from "./App";
 
-const API_URL = "http://localhost:3001";
+const API_URL = "https://undertimer-biel.onrender.com";
 
 export default function LoginPage() {
   const [apelido, setApelido] = useState("");
