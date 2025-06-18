@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import App from "../App";
+import Painel from "./Painel";
 
 const API_URL = "https://undertimer-biel.onrender.com";
 
-export default function LoginPage() {
+export default function LoginMembers() {
   const [apelido, setApelido] = useState("");
   const [password, setPassword] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -46,7 +46,7 @@ export default function LoginPage() {
     }
   };
 
-  if (isAuthenticated) return <App />;
+  if (isAuthenticated) return <Painel />;
 
   return (
     <div className="max-w-xs p-5 mx-auto mt-24 font-sans text-center bg-gray-100 border border-gray-300 rounded-lg">
