@@ -21,7 +21,10 @@ export default function LogoutButton() {
   return (
     <div className="mt-10">
       <p>Bem vindo, {apelido}!</p>
-      <button onClick={handleLogout} className="p-2 mt-6 bg-red-500 rounded-lg">
+      <button
+        onClick={handleLogout}
+        className="p-2 mt-6 bg-red-500 rounded-lg hover:scale-110"
+      >
         Sair
       </button>
     </div>

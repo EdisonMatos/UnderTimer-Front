@@ -327,6 +327,13 @@ const App = () => {
       <p className="mt-0 text-xs text-center text-white opacity-50 lg:text-left">
         Beta - v0.8 (em desenvolvimento)
       </p>
+      <div className="flex justify-center w-full lg:justify-start">
+        <button className="p-2 mt-4 rounded-lg bg-primary w-fit hover:scale-105">
+          <a href="https://forms.gle/Nmi7WzCzwqy3qP8Z6" target="_blank">
+            Sugestões / Bugs / Reclamações
+          </a>
+        </button>
+      </div>
       <LogoutButton />
       <h1 className="mt-14 text-[24px] font-semibold text-center lg:text-left">
         Times de MVPs e Minibosses
