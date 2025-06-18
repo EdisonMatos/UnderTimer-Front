@@ -105,6 +105,7 @@ const App = () => {
       await axios.put("https://undertimer-biel.onrender.com/edit", {
         id: monster.id,
         lastDeath: newDate.toISOString(),
+        updatedby: localStorage.getItem("apelido") || "-",
       });
 
       setMonsters((prev) =>
@@ -171,9 +172,9 @@ const App = () => {
               ? formatDate(monster.lastDeath)
               : ["—", ""];
 
-            const apelidoFormatado = monster.updatedby
-              ? monster.updatedby.charAt(0).toUpperCase() +
-                monster.updatedby.slice(1)
+            const apelido = monster.updatedBy || monster.updatedby;
+            const apelidoFormatado = apelido
+              ? apelido.charAt(0).toUpperCase() + apelido.slice(1)
               : "-";
 
             return (
@@ -263,6 +264,7 @@ const App = () => {
                         .put("https://undertimer-biel.onrender.com/edit", {
                           id: monster.id,
                           lastDeath: now,
+                          updatedby: localStorage.getItem("apelido") || "-",
                         })
                         .then(() => {
                           setMonsters((prev) =>
