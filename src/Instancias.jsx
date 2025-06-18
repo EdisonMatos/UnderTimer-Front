@@ -318,6 +318,15 @@ export default function Instancias() {
                         {contagemRegressiva[inst.id] || "-"}
                       </span>
                     </p>
+                    <p className="text-sm opacity-70">
+                      Criada por:{" "}
+                      <span className="text-green-400">
+                        {inst.updatedby
+                          ? inst.updatedby.charAt(0).toUpperCase() +
+                            inst.updatedby.slice(1)
+                          : "-"}
+                      </span>
+                    </p>
                   </div>
                 </div>
 
