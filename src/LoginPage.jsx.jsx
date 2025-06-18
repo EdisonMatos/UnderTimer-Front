@@ -79,6 +79,17 @@ export default function LoginPage() {
         </button>
         {error && <p style={styles.error}>{error}</p>}
       </form>
+      <p className="mt-10 text-sm">
+        Não tem um login e senha ainda?
+        <br />
+        <a
+          href="https://wa.me/+5561992781077?text=Olá! Sou membro da guild Underdogs e gostaria de receber meu usuário e senha para acessar o UnderTimer."
+          target="_blank"
+          className="text-blue-500 hover:underline"
+        >
+          Clique aqui
+        </a>
+      </p>
     </div>
   );
 }
