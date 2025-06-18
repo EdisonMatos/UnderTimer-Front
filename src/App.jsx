@@ -105,6 +105,7 @@ const App = () => {
       await axios.put("https://undertimer-biel.onrender.com/edit", {
         id: monster.id,
         lastDeath: newDate.toISOString(),
+        updatedby: localStorage.getItem("apelido") || "-",
       });
 
       setMonsters((prev) =>
@@ -171,6 +172,11 @@ const App = () => {
               ? formatDate(monster.lastDeath)
               : ["—", ""];
 
+            const apelido = monster.updatedBy || monster.updatedby;
+            const apelidoFormatado = apelido
+              ? apelido.charAt(0).toUpperCase() + apelido.slice(1)
+              : "-";
+
             return (
               <div
                 id={monster.id}
@@ -207,6 +213,11 @@ const App = () => {
                       {deathDate} - {deathTime}h
                     </p>
                     <p>
+                      <strong>Atualizado por: </strong>
+                      <br className="hidden lg:flex" />
+                      <span className="text-green-400">{apelidoFormatado}</span>
+                    </p>
+                    <p>
                       <strong>Tempo: </strong>
                       <br className="hidden lg:flex" />
                       <span
@@ -219,7 +230,6 @@ const App = () => {
                     </p>
                   </div>
                 </div>
-
                 <div className="flex flex-row justify-center w-full gap-2 mt-2 ">
                   <input
                     type="datetime-local"
@@ -254,6 +264,7 @@ const App = () => {
                         .put("https://undertimer-biel.onrender.com/edit", {
                           id: monster.id,
                           lastDeath: now,
+                          updatedby: localStorage.getItem("apelido") || "-",
                         })
                         .then(() => {
                           setMonsters((prev) =>

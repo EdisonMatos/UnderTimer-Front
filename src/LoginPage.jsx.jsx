@@ -83,7 +83,7 @@ export default function LoginPage() {
         Não tem um login e senha ainda?
         <br />
         <a
-          href="https://wa.me/+5561992781077?text=Olá! Sou membro da guild Underdogs e gostaria de receber meu usuário e senha para acessar o UnderTimer."
+          href="https://forms.gle/Sq86uTGY5GdNFnNQ6"
           target="_blank"
           className="text-blue-500 hover:underline"
         >
