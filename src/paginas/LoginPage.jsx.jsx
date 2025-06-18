@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import App from "./App";
+import App from "../App";
 
 const API_URL = "https://undertimer-biel.onrender.com";
 

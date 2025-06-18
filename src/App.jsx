@@ -3,8 +3,8 @@ import axios from "axios";
 import rapaz from "./rapaz.mp3";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Instancias from "./Instancias";
-import MemberBar from "./MemberBar";
+import Instancias from "./modulos/instancias/Instancias";
+import MemberBar from "./interface/MemberBar";
 
 const App = () => {
   const [monsters, setMonsters] = useState([]);
