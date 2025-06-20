@@ -3,6 +3,7 @@ import Header from "./Header";
 import MemberBar from "./MemberBar";
 import Mvps from "../modulos/mvps/Mvps";
 import Instancias from "../modulos/instancias/Instancias";
+import ContasCompartilhadas from "../modulos/contasCompartilhadas/ContasCompartilhadas";
 
 export default function SideNavbar() {
   const apelidoRaw = localStorage.getItem("apelido") || "Usuário";
@@ -307,6 +308,7 @@ export default function SideNavbar() {
               <ToastContainer />
               <Header />
               {/* <MemberBar /> */}
+              <ContasCompartilhadas />
               <Mvps />
               <Instancias />
             </div>
