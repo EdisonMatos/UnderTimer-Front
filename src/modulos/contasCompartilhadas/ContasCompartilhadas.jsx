@@ -143,9 +143,9 @@ export default function ContasCompartilhadas() {
         />
         <button
           onClick={criarConta}
-          className="p-1 text-white bg-green-600 rounded hover:bg-green-700"
+          className="p-1 text-white rounded bg-primary hover:bg-green-700"
         >
-          Criar
+          Adicionar conta
         </button>
       </div>
       {/* Listagem */}
