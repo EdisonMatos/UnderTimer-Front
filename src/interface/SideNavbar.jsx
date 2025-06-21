@@ -308,9 +308,9 @@ export default function SideNavbar() {
               <ToastContainer />
               <Header />
               {/* <MemberBar /> */}
-              <ContasCompartilhadas />
               <Mvps />
               <Instancias />
+              <ContasCompartilhadas />
             </div>
           </div>
         </div>
