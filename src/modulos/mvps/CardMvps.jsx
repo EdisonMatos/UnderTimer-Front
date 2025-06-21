@@ -58,11 +58,11 @@ export default function CardMvps({
             </span>
           </p>
           <p>
-            <strong>Tempo: </strong>
+            <strong>{isAlive ? "Já nasceu: " : "Tempo: "}</strong>
             <br className="hidden lg:flex" />
             <span
               className={`font-bold ${
-                isAlive ? "text-white" : "text-green-400"
+                isAlive ? "text-red-500" : "text-green-400"
               }`}
             >
               {timerValue}
