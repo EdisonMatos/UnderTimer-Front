@@ -3,7 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import rapaz from "./rapaz.mp3";
 import BuscaMvps from "./BuscaMvps";
-import CardMvps from "./CardMvps"; // importa o componente separado
+import CardMvps from "./CardMvps";
 
 export default function Mvps() {
   const [monsters, setMonsters] = useState([]);
@@ -47,13 +47,31 @@ export default function Mvps() {
       if (!monster.lastDeath) return;
 
       const lastDeath = new Date(monster.lastDeath);
-      const respawnTime = new Date(
-        lastDeath.getTime() + monster.respawn * 60 * 60 * 1000
-      );
+      const respawnMs = monster.respawn * 60 * 60 * 1000;
+      const respawnTime = new Date(lastDeath.getTime() + respawnMs);
       const diff = respawnTime - new Date();
 
       if (diff <= 0) {
-        updatedTimers[monster.id] = "-";
+        const timeSinceSpawn = new Date() - respawnTime;
+
+        if (timeSinceSpawn < respawnMs) {
+          const seconds = Math.floor(timeSinceSpawn / 1000);
+          const hours = Math.floor(seconds / 3600);
+          const minutes = Math.floor((seconds % 3600) / 60);
+          const secs = seconds % 60;
+
+          updatedTimers[monster.id] = {
+            value: `${hours.toString().padStart(2, "0")}:${minutes
+              .toString()
+              .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`,
+            born: true,
+          };
+        } else {
+          updatedTimers[monster.id] = {
+            value: "-",
+            born: false,
+          };
+        }
       } else {
         const secondsLeft = Math.floor(diff / 1000);
         if (secondsLeft === 1) {
@@ -69,11 +87,12 @@ export default function Mvps() {
         const hours = Math.floor(diff / (1000 * 60 * 60));
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-        updatedTimers[monster.id] = `${hours
-          .toString()
-          .padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds
-          .toString()
-          .padStart(2, "0")}`;
+        updatedTimers[monster.id] = {
+          value: `${hours.toString().padStart(2, "0")}:${minutes
+            .toString()
+            .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`,
+          born: false,
+        };
       }
     });
 
@@ -164,8 +183,8 @@ export default function Mvps() {
 
   const renderCardsOnly = (filteredMonsters, label) => {
     const parseTime = (t) => {
-      if (!t || t === "-") return Infinity;
-      const [h, m, s] = t.split(":").map(Number);
+      if (!t || t.value === "-") return Infinity;
+      const [h, m, s] = t.value.split(":").map(Number);
       return h * 3600 + m * 60 + s;
     };
 
@@ -180,8 +199,12 @@ export default function Mvps() {
         </h3>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:flex lg:flex-wrap lg:justify-start">
           {sortedMonsters.map((monster) => {
-            const timerValue = timers[monster.id] || "—";
-            const isAlive = timerValue === "-";
+            const timerObj = timers[monster.id] || {
+              value: "—",
+              born: false,
+            };
+            const isAlive = timerObj.born;
+            const timerValue = timerObj.value;
             const fullRespawnDate = monster.lastDeath
               ? calculateRespawnTime(monster.lastDeath, monster.respawn)
               : null;
@@ -223,6 +246,7 @@ export default function Mvps() {
   const monstersS = monsters.filter((m) => m.tier === "S");
   const monstersA = monsters.filter((m) => m.tier === "A");
   const minibosses = monsters.filter((m) => m.type === "Miniboss");
+
   const filteredSearchResults =
     search.trim() === ""
       ? []
@@ -237,9 +261,18 @@ export default function Mvps() {
         renderCardsOnly(filteredSearchResults, "Resultado da busca")
       ) : (
         <>
-          {renderCardsOnly(monstersS, "MVPs Tier S")}
-          {renderCardsOnly(monstersA, "MVPs Tier A")}
-          {renderCardsOnly(minibosses, "Miniboss")}
+          {renderCardsOnly(
+            monstersS.filter((m) => timers[m.id]?.value !== "-"),
+            "MVPs Tier S"
+          )}
+          {renderCardsOnly(
+            monstersA.filter((m) => timers[m.id]?.value !== "-"),
+            "MVPs Tier A"
+          )}
+          {renderCardsOnly(
+            minibosses.filter((m) => timers[m.id]?.value !== "-"),
+            "Miniboss"
+          )}
         </>
       )}
     </>
