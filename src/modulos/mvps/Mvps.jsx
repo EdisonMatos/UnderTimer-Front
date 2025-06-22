@@ -268,8 +268,8 @@ export default function Mvps() {
           <div className="flex w-full">
             <div className="max-w-md p-4 mt-6 text-white rounded-md shadow-lg bg-cards">
               <p className="mb-2 text-center">
-                Não encontramos o monstro que você procurou. <br />
-                Porém, você pode adicionar:
+                O monstro que você procurou não está adicionado ainda. <br />
+                Preencha os campos abaixo para adicionar:
               </p>
               <AdicionarMvp
                 onCreated={() => {
@@ -277,6 +277,24 @@ export default function Mvps() {
                   setSearch(""); // limpa o campo de busca
                 }}
               />
+              <p className="mb-2 text-left text-[12px] opacity-70 mt-8">
+                Sobre o ID: Para encontrar o ID do monstro que quer adicionar,
+                basta procurar por ele em qualquer database de ragnarok, como
+                por exemplo o{" "}
+                <a
+                  href="https://ratemyserver.net/"
+                  target="_blank"
+                  className="underline"
+                >
+                  ratemyserver
+                </a>
+                .
+              </p>
+              <p className="mb-2 text-left text-[12px] opacity-70">
+                Sobre o Tier: Nosso sistema usar o Tier para separar os monstros
+                por grau de dificuldade ou necessidade de grupo. Escolha o tier
+                conforme fizer mais sentido.
+              </p>
             </div>
           </div>
         )
