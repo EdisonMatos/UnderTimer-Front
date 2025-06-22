@@ -1,4 +1,3 @@
-// CardMvps.jsx
 import React from "react";
 
 export default function CardMvps({
@@ -16,6 +15,8 @@ export default function CardMvps({
   onQuickUpdate,
   loading,
 }) {
+  const mostrarContagem = timerValue !== "-";
+
   return (
     <div
       id={monster.id}
@@ -35,14 +36,16 @@ export default function CardMvps({
         </div>
         <div className="hidden w-1/12 lg:block" />
         <div className="flex flex-col items-start justify-center w-7/12 gap-1 lg:items-center lg:w-full ">
-          <p>
-            <strong>Vai nascer às: </strong>
-            <br className="hidden lg:flex" />
-            {respawnDate} -{" "}
-            <span className={isAlive ? "text-white" : "text-green-400"}>
-              {respawnTime}h
-            </span>
-          </p>
+          {mostrarContagem && (
+            <p>
+              <strong>Vai nascer às: </strong>
+              <br className="hidden lg:flex" />
+              {respawnDate} -{" "}
+              <span className={isAlive ? "text-white" : "text-green-400"}>
+                {respawnTime}h
+              </span>
+            </p>
+          )}
           <p>
             <strong>Morreu às: </strong>
             <br className="hidden lg:flex" />
@@ -57,17 +60,19 @@ export default function CardMvps({
               {apelidoFormatado}
             </span>
           </p>
-          <p>
-            <strong>{isAlive ? "Já nasceu: " : "Tempo: "}</strong>
-            <br className="hidden lg:flex" />
-            <span
-              className={`font-bold ${
-                isAlive ? "text-red-500" : "text-green-400"
-              }`}
-            >
-              {timerValue}
-            </span>
-          </p>
+          {mostrarContagem && (
+            <p>
+              <strong>{isAlive ? "Já nasceu: " : "Tempo: "}</strong>
+              <br className="hidden lg:flex" />
+              <span
+                className={`font-bold ${
+                  isAlive ? "text-red-500" : "text-green-400"
+                }`}
+              >
+                {timerValue}
+              </span>
+            </p>
+          )}
         </div>
       </div>
       <div className="flex flex-row justify-center w-full gap-2 mt-2 ">
