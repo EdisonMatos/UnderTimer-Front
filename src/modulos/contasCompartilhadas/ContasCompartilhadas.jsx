@@ -153,8 +153,8 @@ export default function ContasCompartilhadas() {
             </button>
           </div>
         </div>
-        {/* Listagem */}
 
+        {/* Listagem */}
         <div className="flex flex-wrap gap-4 ">
           <h1 className=" text-[16px] font-semibold text-center lg:text-left lg:hidden mt-10">
             Contas existentes
@@ -245,39 +245,48 @@ export default function ContasCompartilhadas() {
                 </div>
 
                 {/* Situação Especial */}
-                <input
-                  name="situacaoespecial"
-                  disabled={!emEdicao}
-                  value={conta.situacaoespecial}
-                  onChange={(e) => {
-                    const { value } = e.target;
-                    setContas((prev) =>
-                      prev.map((c) =>
-                        c.id === conta.id
-                          ? { ...c, situacaoespecial: value }
-                          : c
-                      )
-                    );
-                  }}
-                  className="p-1 text-green-400 border rounded bg-neutral-800 border-neutral-700 disabled:opacity-70"
-                />
+                {emEdicao ? (
+                  <input
+                    name="situacaoespecial"
+                    placeholder="Situação Especial"
+                    disabled={!emEdicao}
+                    value={conta.situacaoespecial}
+                    onChange={(e) => {
+                      const { value } = e.target;
+                      setContas((prev) =>
+                        prev.map((c) =>
+                          c.id === conta.id
+                            ? { ...c, situacaoespecial: value }
+                            : c
+                        )
+                      );
+                    }}
+                    className="p-1 text-green-400 border rounded bg-neutral-800 border-neutral-700 disabled:opacity-70"
+                  />
+                ) : conta.situacaoespecial ? (
+                  <p className="text-green-400">{conta.situacaoespecial}</p>
+                ) : null}
 
                 {/* Observação */}
-                <textarea
-                  name="observacao"
-                  type=""
-                  disabled={!emEdicao}
-                  value={conta.observacao}
-                  onChange={(e) => {
-                    const { value } = e.target;
-                    setContas((prev) =>
-                      prev.map((c) =>
-                        c.id === conta.id ? { ...c, observacao: value } : c
-                      )
-                    );
-                  }}
-                  className="p-1 h-8 border rounded bg-neutral-800 border-neutral-700 disabled:opacity-70 text-[12px]"
-                />
+                {emEdicao ? (
+                  <textarea
+                    name="observacao"
+                    placeholder="Observação"
+                    disabled={!emEdicao}
+                    value={conta.observacao}
+                    onChange={(e) => {
+                      const { value } = e.target;
+                      setContas((prev) =>
+                        prev.map((c) =>
+                          c.id === conta.id ? { ...c, observacao: value } : c
+                        )
+                      );
+                    }}
+                    className="p-1 h-12 border rounded bg-neutral-800 border-neutral-700 disabled:opacity-70 text-[12px]"
+                  />
+                ) : conta.observacao ? (
+                  <p className="text-[12px]">{conta.observacao}</p>
+                ) : null}
 
                 <div className="flex justify-end gap-2 mt-1">
                   {emEdicao ? (
