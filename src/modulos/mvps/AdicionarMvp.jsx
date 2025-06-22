@@ -41,7 +41,7 @@ export default function AdicionarMvp({ onCreated }) {
       } else if (modes.includes("boss")) {
         type = "miniboss";
       } else {
-        toast.error("Tipo inválido no retorno da API.");
+        toast.error("ID inválido ou não pertence a um MVP/Miniboss. Verifique");
         return;
       }
 

@@ -271,7 +271,12 @@ export default function Mvps() {
                 Não encontramos o monstro que você procurou. <br />
                 Porém, você pode adicionar:
               </p>
-              <AdicionarMvp onCreated={fetchMonsters} />
+              <AdicionarMvp
+                onCreated={() => {
+                  fetchMonsters();
+                  setSearch(""); // limpa o campo de busca
+                }}
+              />
             </div>
           </div>
         )
