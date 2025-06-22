@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-export default function AdicionarMvp() {
+export default function AdicionarMvp({ onCreated }) {
   const [monsterId, setMonsterId] = useState("");
   const [tier, setTier] = useState("");
+  const [loading, setLoading] = useState(false); // <-- novo estado
 
   const formatName = (rawName) => {
     return rawName
@@ -25,13 +26,14 @@ export default function AdicionarMvp() {
     }
 
     try {
+      setLoading(true); // inicia carregamento
+
       const response = await axios.get(
         `https://undertimer-biel.onrender.com/proxy/monster/${monsterId}`
       );
 
       const data = response.data;
 
-      // Determinar type
       let type = "";
       const modes = data.skills?.mode || [];
       if (modes.includes("mvp") && modes.includes("boss")) {
@@ -43,44 +45,44 @@ export default function AdicionarMvp() {
         return;
       }
 
-      // Extrair respawn (só o número)
       const rawFrequency = data.maps?.[0]?.frequency || "";
-
-      // Extrai horas e minutos usando regex
       const hoursMatch = rawFrequency.match(/(\d+)_hour/);
       const minsMatch = rawFrequency.match(/(\d+)_min/);
-
       const hours = hoursMatch ? parseInt(hoursMatch[1], 10) : 0;
       const minutes = minsMatch ? parseInt(minsMatch[1], 10) : 0;
-
-      // Converte para decimal (ex: 1h31min => 1.52h)
       const respawn = +(hours + minutes / 60).toFixed(2);
 
-      // Dados do localStorage
       const guildId = localStorage.getItem("guildId") || "-";
       const updatedby = localStorage.getItem("apelido") || "-";
 
       const payload = {
         type,
-        tier: tier.toUpperCase() || undefined,
-        name: formatName(data.monster_info), // <-- aqui
+        tier: tier.toUpperCase(),
+        name: formatName(data.monster_info),
         respawn,
         spriteUrl: data.gif,
         updatedby,
         guildId,
-        lastDeath: new Date().toISOString(), // <-- adiciona esta linha
+        lastDeath: new Date().toISOString(),
       };
 
       await axios.post(
         "https://undertimer-biel.onrender.com/creatures",
         payload
       );
+
       toast.success("MVP adicionado com sucesso!");
       setMonsterId("");
       setTier("");
+
+      if (onCreated) {
+        onCreated();
+      }
     } catch (error) {
       console.error(error);
       toast.error("Erro ao adicionar MVP. Verifique o ID e tente novamente.");
+    } finally {
+      setLoading(false); // encerra carregamento
     }
   };
 
@@ -115,6 +117,7 @@ export default function AdicionarMvp() {
           onChange={(e) => setTier(e.target.value)}
           className="p-2 text-white border rounded bg-zinc-700 border-zinc-600"
         >
+          <option value="">Selecione</option>
           <option value="A">A</option>
           <option value="S">S</option>
         </select>
@@ -122,9 +125,14 @@ export default function AdicionarMvp() {
 
       <button
         onClick={handleSubmit}
-        className="w-full py-2 font-semibold transition bg-green-600 rounded hover:bg-green-700"
+        disabled={loading}
+        className={`w-full py-2 font-semibold rounded transition ${
+          loading
+            ? "bg-gray-500 cursor-not-allowed"
+            : "bg-green-600 hover:bg-green-700"
+        }`}
       >
-        Adicionar
+        {loading ? "Carregando..." : "Adicionar"}
       </button>
     </div>
   );

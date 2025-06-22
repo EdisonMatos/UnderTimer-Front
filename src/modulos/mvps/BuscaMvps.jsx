@@ -18,7 +18,6 @@ export default function BuscaMvps({ search, setSearch }) {
           className="w-full max-w-[400px] px-3 py-2 text-sm border bg-neutral-300 border-gray-300 rounded text-black"
         />
       </div>
-      <AdicionarMvp />
     </>
   );
 }
