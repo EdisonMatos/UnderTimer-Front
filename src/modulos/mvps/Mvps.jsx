@@ -284,11 +284,11 @@ export default function Mvps() {
         <>
           {renderCardsOnly(
             monstersS.filter((m) => timers[m.id]?.value !== "-"),
-            "MVPs Tier S"
+            "MVPs e Minibosses Tier S"
           )}
           {renderCardsOnly(
             monstersA.filter((m) => timers[m.id]?.value !== "-"),
-            "MVPs Tier A"
+            "MVPs e Minibosses Tier A"
           )}
           {renderCardsOnly(
             minibosses.filter((m) => timers[m.id]?.value !== "-"),
