@@ -1,5 +1,6 @@
 // BuscaMvps.jsx
 import React from "react";
+import AdicionarMvp from "./AdicionarMvp";
 
 export default function BuscaMvps({ search, setSearch }) {
   return (

@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import rapaz from "./rapaz.mp3";
 import BuscaMvps from "./BuscaMvps";
 import CardMvps from "./CardMvps";
+import AdicionarMvp from "./AdicionarMvp";
 
 export default function Mvps() {
   const [monsters, setMonsters] = useState([]);
@@ -259,8 +260,26 @@ export default function Mvps() {
   return (
     <>
       <BuscaMvps search={search} setSearch={setSearch} />
+
       {search.trim() !== "" ? (
-        renderCardsOnly(filteredSearchResults, "Resultado da busca")
+        filteredSearchResults.length > 0 ? (
+          renderCardsOnly(filteredSearchResults, "Resultado da busca")
+        ) : (
+          <div className="flex w-full">
+            <div className="max-w-md p-4 mt-6 text-white rounded-md shadow-lg bg-cards">
+              <p className="mb-2 text-center">
+                Não encontramos o monstro que você procurou. <br />
+                Porém, você pode adicionar:
+              </p>
+              <AdicionarMvp
+                onCreated={() => {
+                  fetchMonsters();
+                  setSearch(""); // limpa o campo de busca
+                }}
+              />
+            </div>
+          </div>
+        )
       ) : (
         <>
           {renderCardsOnly(
