@@ -5,10 +5,21 @@ import { toast } from "react-toastify";
 export default function AdicionarMvp({ onCreated }) {
   const [monsterId, setMonsterId] = useState("");
   const [tier, setTier] = useState("");
-  const [loading, setLoading] = useState(false); // <-- novo estado
+  const [loading, setLoading] = useState(false);
+  const [availableMaps, setAvailableMaps] = useState([]);
+  const [selectedMapIndex, setSelectedMapIndex] = useState(null);
+  const [manualRespawn, setManualRespawn] = useState("");
+  const [requireManualRespawn, setRequireManualRespawn] = useState(false); // novo controle
 
   const formatName = (rawName) => {
     return rawName
+      .split("_")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
+  const formatMapName = (mapRaw) => {
+    return mapRaw
       .split("_")
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
@@ -25,8 +36,13 @@ export default function AdicionarMvp({ onCreated }) {
       return;
     }
 
+    if (availableMaps.length > 1 && selectedMapIndex === null) {
+      toast.error("Selecione o mapa.");
+      return;
+    }
+
     try {
-      setLoading(true); // inicia carregamento
+      setLoading(true);
 
       const response = await axios.get(
         `https://undertimer-biel.onrender.com/proxy/monster/${monsterId}`
@@ -45,20 +61,64 @@ export default function AdicionarMvp({ onCreated }) {
         return;
       }
 
-      const rawFrequency = data.maps?.[0]?.frequency || "";
-      const hoursMatch = rawFrequency.match(/(\d+)_hour/);
-      const minsMatch = rawFrequency.match(/(\d+)_min/);
-      const hours = hoursMatch ? parseInt(hoursMatch[1], 10) : 0;
-      const minutes = minsMatch ? parseInt(minsMatch[1], 10) : 0;
-      const respawn = +(hours + minutes / 60).toFixed(2);
+      const maps = data.maps || [];
+
+      if (maps.length > 1 && availableMaps.length === 0) {
+        setAvailableMaps(maps);
+        toast.info("Selecione o mapa antes de prosseguir.");
+        return;
+      }
+
+      if (maps.length === 0 && !requireManualRespawn) {
+        setRequireManualRespawn(true);
+        toast.info(
+          "Esse monstro é de instância, depende de quest ou não tem tempo predefinido. Informe o tempo de respawn manualmente."
+        );
+        return;
+      }
+
+      let respawn = 0;
+
+      if (maps.length === 0) {
+        if (!manualRespawn || isNaN(manualRespawn)) {
+          toast.error("Informe o tempo de respawn manualmente.");
+          return;
+        }
+        respawn = parseFloat(manualRespawn);
+      } else {
+        const selectedMap =
+          maps.length > 1 ? maps[selectedMapIndex] : maps[0] || {};
+        const rawFrequency = selectedMap.frequency || "";
+
+        const hoursMatch = rawFrequency.match(/(\d+)_hour/);
+        const minsMatch = rawFrequency.match(/(\d+)_min/);
+        const hours = hoursMatch ? parseInt(hoursMatch[1], 10) : 0;
+        const minutes = minsMatch ? parseInt(minsMatch[1], 10) : 0;
+        respawn = +(hours + minutes / 60).toFixed(2);
+      }
 
       const guildId = localStorage.getItem("guildId") || "-";
       const updatedby = localStorage.getItem("apelido") || "-";
 
+      let name = formatName(data.monster_info);
+      if (maps.length > 1) {
+        const formattedMapName = formatMapName(
+          maps[selectedMapIndex]?.name || ""
+        );
+        name += ` (${formattedMapName})`;
+      }
+
+      const existing = await axios.get("https://undertimer-biel.onrender.com");
+      const nameExists = existing.data.some((m) => m.name === name);
+      if (nameExists) {
+        toast.error("Já existe um monstro com esse nome.");
+        return;
+      }
+
       const payload = {
         type,
         tier: tier.toUpperCase(),
-        name: formatName(data.monster_info),
+        name,
         respawn,
         spriteUrl: data.gif,
         updatedby,
@@ -74,15 +134,21 @@ export default function AdicionarMvp({ onCreated }) {
       toast.success("MVP adicionado com sucesso!");
       setMonsterId("");
       setTier("");
+      setAvailableMaps([]);
+      setSelectedMapIndex(null);
+      setManualRespawn("");
+      setRequireManualRespawn(false);
 
       if (onCreated) {
         onCreated();
       }
     } catch (error) {
       console.error(error);
-      toast.error("Erro ao adicionar MVP. Verifique o ID e tente novamente.");
+      toast.error(
+        "Erro ao adicionar MVP. O MVP já existe ou o ID digitado é inválido. Verifique"
+      );
     } finally {
-      setLoading(false); // encerra carregamento
+      setLoading(false);
     }
   };
 
@@ -118,10 +184,54 @@ export default function AdicionarMvp({ onCreated }) {
           className="p-2 text-white border rounded bg-zinc-700 border-zinc-600"
         >
           <option value="">Selecione</option>
-          <option value="A">A</option>
-          <option value="S">S</option>
+          <option value="S">Tier S - Mais fortes, precisa de grupo</option>
+          <option value="A">Tier A - Todos os demais</option>
         </select>
       </div>
+
+      {availableMaps.length > 1 && (
+        <div className="flex flex-col">
+          <label htmlFor="mapSelect" className="mb-1">
+            Selecione o mapa
+          </label>
+          <select
+            id="mapSelect"
+            value={selectedMapIndex ?? ""}
+            onChange={(e) =>
+              setSelectedMapIndex(
+                e.target.value !== "" ? parseInt(e.target.value) : null
+              )
+            }
+            className="p-2 text-white border rounded bg-zinc-700 border-zinc-600"
+          >
+            <option value="">Selecione</option>
+            {availableMaps.map((map, index) => (
+              <option key={index} value={index}>
+                {map.name.replace(/_/g, " ")} (
+                {map.frequency.replace(/_/g, " ")})
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+
+      {requireManualRespawn && (
+        <div className="flex flex-col">
+          <label htmlFor="manualRespawn" className="mb-1">
+            Respawn em horas
+          </label>
+          <input
+            id="manualRespawn"
+            type="number"
+            step="0.1"
+            min="0"
+            value={manualRespawn}
+            onChange={(e) => setManualRespawn(e.target.value)}
+            className="p-2 text-white border rounded bg-zinc-700 border-zinc-600"
+            placeholder="Ex: 2"
+          />
+        </div>
+      )}
 
       <button
         onClick={handleSubmit}

@@ -31,8 +31,14 @@ export default function CardMvps({
               className="max-h-[45px] lg:max-h-[70px] w-auto"
             />
           </div>
-          <strong className="mt-1">{monster.name}</strong>
-          <p className="mt-1 mb-0 opacity-60">{monster.respawn}h</p>
+          <strong className="mt-1 text-center">
+            {monster.name.replace(/\s*\(.*?\)/, "")}
+          </strong>
+          <span className="mt-1 text-[12px] opacity-60 block">
+            {monster.name.match(/\(.*?\)/)
+              ? `${monster.name.match(/\(.*?\)/)[0]} - ${monster.respawn}h`
+              : `${monster.respawn}h`}
+          </span>
         </div>
         <div className="hidden w-1/12 lg:block" />
         <div className="flex flex-col items-start justify-center w-7/12 gap-1 lg:items-center lg:w-full ">
