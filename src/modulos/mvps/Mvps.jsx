@@ -182,6 +182,8 @@ export default function Mvps() {
   };
 
   const renderCardsOnly = (filteredMonsters, label) => {
+    if (filteredMonsters.length === 0) return null;
+
     const parseTime = (t) => {
       if (!t || t.value === "-") return Infinity;
       const [h, m, s] = t.value.split(":").map(Number);
