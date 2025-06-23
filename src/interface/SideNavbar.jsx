@@ -65,10 +65,16 @@ export default function SideNavbar() {
                 </div>
                 <div class="flex items-center">
                   <div class="flex items-center ms-3">
-                    <div className="flex">
+                    <div className="flex items-center">
+                      <p
+                        class="text-sm text-gray-900 dark:text-white"
+                        role="none"
+                      >
+                        Bem vindo, {apelido}
+                      </p>
                       <a
                         href="#"
-                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                        class="block ml-4 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                         role="menuitem"
                         onClick={handleLogout}
                       >
@@ -83,7 +89,7 @@ export default function SideNavbar() {
                         <span class="sr-only">Open user menu</span>
                         <img
                           class="w-8 h-8 rounded-full"
-                          src="https://scontent.fcgh3-1.fna.fbcdn.net/v/t39.30808-6/327386113_3253406568256355_1448561912016516193_n.png?_nc_cat=108&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=k1fPLIyOPTgQ7kNvwHNiVa8&_nc_oc=AdmNVDSISrcG1667gjUg8oOIhTididYIpXtM5gTD-fTgZVHMvj7o9lptTWl3bsOkUX0rBL_5dF5VWP9UMXqcaStl&_nc_zt=23&_nc_ht=scontent.fcgh3-1.fna&_nc_gid=AVy6XPuLOU_G3qfbgPgPdQ&oh=00_AfOGHWj6vKdH2O20xRLaKZEL4XkhYDFBxLeEIx3qasfuXQ&oe=6858F932"
+                          src="https://img.tapimg.net/market/images/88ab5b91377674ad0cb9cfe6064d5858.png"
                           alt="user photo"
                         />
                       </button>
@@ -93,12 +99,6 @@ export default function SideNavbar() {
                       id="dropdown-user"
                     >
                       <div class="px-4 py-3" role="none">
-                        <p
-                          class="text-sm text-gray-900 dark:text-white"
-                          role="none"
-                        >
-                          {apelido}
-                        </p>
                         <p
                           class="text-sm font-medium text-gray-900 truncate dark:text-gray-300"
                           role="none"

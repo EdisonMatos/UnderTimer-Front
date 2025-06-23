@@ -40,6 +40,8 @@ export default function Mvps() {
       setMonsters(filteredMonsters);
     } catch (error) {
       console.error("Erro ao buscar monstros:", error);
+    } finally {
+      setReady(true); // <- garante renderização mesmo com lista vazia
     }
   };
 
@@ -272,19 +274,18 @@ export default function Mvps() {
 
   return (
     <>
-      <BuscaMvps search={search} setSearch={setSearch} />
+      <>
+        <BuscaMvps search={search} setSearch={setSearch} />
 
-      {!ready ? null : search.trim() !== "" ? (
-        filteredSearchResults.length > 0 ? (
-          renderCardsOnly(filteredSearchResults, "Resultado da busca")
-        ) : (
+        {!ready ? null : monsters.length === 0 ? (
           <div className="flex w-full">
             <div className="max-w-md p-4 mt-6 text-white rounded-md shadow-lg bg-cards">
               <p className="mb-2 text-center">
-                O monstro que você procurou não está adicionado ainda. <br />
-                Preencha os campos abaixo para adicionar:
+                Nenhum monstro foi adicionado ainda para sua guilda. <br />
+                Preencha os campos abaixo para adicionar o primeiro:
               </p>
               <AdicionarMvp
+                existingMonsters={monsters}
                 onCreated={() => {
                   fetchMonsters();
                   setSearch("");
@@ -292,8 +293,7 @@ export default function Mvps() {
               />
               <p className="mb-2 text-left text-[12px] opacity-70 mt-8">
                 Sobre o ID: Para encontrar o ID do monstro que quer adicionar,
-                basta procurar por ele em qualquer database de ragnarok, como
-                por exemplo o{" "}
+                basta procurar por ele em qualquer database de Ragnarok, como o{" "}
                 <a
                   href="https://ratemyserver.net/"
                   target="_blank"
@@ -310,23 +310,60 @@ export default function Mvps() {
               </p>
             </div>
           </div>
-        )
-      ) : (
-        <>
-          {renderCardsOnly(
-            monstersS.filter((m) => timers[m.id]?.value !== "-"),
-            "MVPs e Minibosses Tier S"
-          )}
-          {renderCardsOnly(
-            monstersA.filter((m) => timers[m.id]?.value !== "-"),
-            "MVPs e Minibosses Tier A"
-          )}
-          {renderCardsOnly(
-            minibosses.filter((m) => timers[m.id]?.value !== "-"),
-            "Miniboss"
-          )}
-        </>
-      )}
+        ) : search.trim() !== "" ? (
+          filteredSearchResults.length > 0 ? (
+            renderCardsOnly(filteredSearchResults, "Resultado da busca")
+          ) : (
+            <div className="flex w-full">
+              <div className="max-w-md p-4 mt-6 text-white rounded-md shadow-lg bg-cards">
+                <p className="mb-2 text-center">
+                  O monstro que você procurou não está adicionado ainda. <br />
+                  Preencha os campos abaixo para adicionar:
+                </p>
+                <AdicionarMvp
+                  onCreated={() => {
+                    fetchMonsters();
+                    setSearch("");
+                  }}
+                />
+                <p className="mb-2 text-left text-[12px] opacity-70 mt-8">
+                  Sobre o ID: Para encontrar o ID do monstro que quer adicionar,
+                  basta procurar por ele em qualquer database de Ragnarok, como
+                  o{" "}
+                  <a
+                    href="https://ratemyserver.net/"
+                    target="_blank"
+                    className="underline"
+                  >
+                    ratemyserver
+                  </a>
+                  .
+                </p>
+                <p className="mb-2 text-left text-[12px] opacity-70">
+                  Sobre o Tier: Nosso sistema usa o Tier para separar os
+                  monstros por grau de dificuldade ou necessidade de grupo.
+                  Escolha o tier conforme fizer mais sentido.
+                </p>
+              </div>
+            </div>
+          )
+        ) : (
+          <>
+            {renderCardsOnly(
+              monstersS.filter((m) => timers[m.id]?.value !== "-"),
+              "MVPs e Minibosses Tier S"
+            )}
+            {renderCardsOnly(
+              monstersA.filter((m) => timers[m.id]?.value !== "-"),
+              "MVPs e Minibosses Tier A"
+            )}
+            {renderCardsOnly(
+              minibosses.filter((m) => timers[m.id]?.value !== "-"),
+              "Miniboss"
+            )}
+          </>
+        )}
+      </>
     </>
   );
 }
