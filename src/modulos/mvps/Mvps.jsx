@@ -25,7 +25,14 @@ export default function Mvps() {
   const fetchMonsters = async () => {
     try {
       const response = await axios.get("https://undertimer-biel.onrender.com/");
-      setMonsters(response.data);
+      const allMonsters = response.data;
+      const guildId = localStorage.getItem("guildId");
+
+      const filteredMonsters = allMonsters.filter(
+        (monster) => monster.guildId === guildId
+      );
+
+      setMonsters(filteredMonsters);
     } catch (error) {
       console.error("Erro ao buscar monstros:", error);
     }
