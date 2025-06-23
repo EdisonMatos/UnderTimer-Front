@@ -82,7 +82,9 @@ export default function LoginMembers() {
 
       localStorage.setItem("token", data.token);
       localStorage.setItem("adminEmail", data.admin.email);
-      localStorage.setItem("userType", "admin"); // <- NOVO
+      localStorage.setItem("userType", "admin");
+      localStorage.setItem("userId", data.admin.id); // ✅ ESSA LINHA FAZ FALTA
+
       setAdminIsAuthenticated(true);
     } catch (err) {
       setAdminError(err.message);

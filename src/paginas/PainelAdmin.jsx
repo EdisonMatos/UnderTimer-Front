@@ -3,26 +3,21 @@ import React, { useState, useEffect } from "react";
 const API_URL = "https://undertimer-biel.onrender.com";
 
 export default function PainelAdmin() {
-  // Estados guilds
+  const loggedInUserId = localStorage.getItem("userId");
+
   const [guilds, setGuilds] = useState([]);
   const [guildLoading, setGuildLoading] = useState(false);
   const [guildError, setGuildError] = useState("");
 
-  // Form guild (criar/editar)
   const [editingGuild, setEditingGuild] = useState(null);
   const [guildSpriteUrl, setGuildSpriteUrl] = useState("");
-  const [guildAdminId, setGuildAdminId] = useState("");
 
-  // Para controlar membros de cada guild: objeto { [guildId]: membros[] }
   const [guildMembros, setGuildMembros] = useState({});
   const [guildMembrosLoading, setGuildMembrosLoading] = useState({});
   const [guildMembrosError, setGuildMembrosError] = useState({});
 
-  // Estados para formulário membros: para cada guildId, armazenamos estado de edição e inputs
-  // Vai ser um objeto: { [guildId]: { editingMembro, apelido, password, role } }
   const [guildMembrosForms, setGuildMembrosForms] = useState({});
 
-  // --- BUSCAR guilds ---
   async function fetchGuilds() {
     setGuildLoading(true);
     setGuildError("");
@@ -30,10 +25,11 @@ export default function PainelAdmin() {
       const res = await fetch(`${API_URL}/guilds`);
       if (!res.ok) throw new Error("Erro ao buscar guilds");
       const data = await res.json();
-      setGuilds(data);
 
-      // Após receber guilds, buscar membros de todas elas
-      data.forEach((g) => fetchMembros(g.id));
+      const userGuilds = data.filter((g) => g.admin?.id === loggedInUserId);
+      setGuilds(userGuilds);
+
+      userGuilds.forEach((g) => fetchMembros(g.id));
     } catch (err) {
       setGuildError(err.message);
     } finally {
@@ -41,9 +37,7 @@ export default function PainelAdmin() {
     }
   }
 
-  // --- BUSCAR membros por guildId ---
   async function fetchMembros(guildId) {
-    // Atualiza loading individual da guild
     setGuildMembrosLoading((prev) => ({ ...prev, [guildId]: true }));
     setGuildMembrosError((prev) => ({ ...prev, [guildId]: "" }));
 
@@ -60,16 +54,14 @@ export default function PainelAdmin() {
     }
   }
 
-  // Ao montar
   useEffect(() => {
     fetchGuilds();
   }, []);
 
-  // --- CRUD Guilds ---
   async function handleGuildSubmit(e) {
     e.preventDefault();
-    if (!guildSpriteUrl || !guildAdminId) {
-      alert("Preencha o spriteUrl e adminId da guild");
+    if (!guildSpriteUrl) {
+      alert("Preencha o spriteUrl da guild");
       return;
     }
 
@@ -84,17 +76,14 @@ export default function PainelAdmin() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           spriteUrl: guildSpriteUrl,
-          adminId: guildAdminId,
+          adminId: loggedInUserId,
         }),
       });
       if (!res.ok) throw new Error("Erro ao salvar guild");
 
-      // Refresh
       fetchGuilds();
-      // Reset form
       setEditingGuild(null);
       setGuildSpriteUrl("");
-      setGuildAdminId("");
     } catch (err) {
       alert(err.message);
     }
@@ -103,7 +92,6 @@ export default function PainelAdmin() {
   function startEditGuild(guild) {
     setEditingGuild(guild);
     setGuildSpriteUrl(guild.spriteUrl || "");
-    setGuildAdminId(guild.admin?.id || "");
   }
 
   async function deleteGuild(id) {
@@ -112,7 +100,6 @@ export default function PainelAdmin() {
       const res = await fetch(`${API_URL}/guilds/${id}`, { method: "DELETE" });
       if (!res.ok) throw new Error("Erro ao deletar guild");
       fetchGuilds();
-      // Remove membros e formulário da guild deletada
       setGuildMembros((prev) => {
         const copy = { ...prev };
         delete copy[id];
@@ -128,9 +115,6 @@ export default function PainelAdmin() {
     }
   }
 
-  // --- CRUD Membros por guildId ---
-
-  // Para controlar inputs do form membro de uma guild
   function startEditMembro(guildId, membro) {
     setGuildMembrosForms((prev) => ({
       ...prev,
@@ -201,7 +185,6 @@ export default function PainelAdmin() {
     }
   }
 
-  // Para inputs form membros que mudam (controlados por guild)
   function handleMembroInputChange(guildId, field, value) {
     setGuildMembrosForms((prev) => ({
       ...prev,
@@ -230,7 +213,6 @@ export default function PainelAdmin() {
         </button>
       </div>
 
-      {/* Form criação/edição guild */}
       <section className="max-w-md p-4 mx-auto mb-12 border border-gray-300 rounded">
         <h2 className="mb-4 text-xl font-semibold text-center">
           {editingGuild ? "Editar Guild" : "Criar Guild"}
@@ -248,14 +230,6 @@ export default function PainelAdmin() {
             className="p-2 border border-gray-300 rounded"
             required
           />
-          <input
-            type="text"
-            placeholder="Admin ID"
-            value={guildAdminId}
-            onChange={(e) => setGuildAdminId(e.target.value)}
-            className="p-2 border border-gray-300 rounded"
-            required
-          />
           <button
             type="submit"
             className="py-2 text-white bg-blue-600 rounded hover:bg-blue-700"
@@ -268,7 +242,6 @@ export default function PainelAdmin() {
               onClick={() => {
                 setEditingGuild(null);
                 setGuildSpriteUrl("");
-                setGuildAdminId("");
               }}
               className="mt-1 text-gray-600 underline"
             >
@@ -278,7 +251,6 @@ export default function PainelAdmin() {
         </form>
       </section>
 
-      {/* Lista de Guilds em Cards */}
       <section className="">
         {guildLoading ? (
           <p>Carregando guilds...</p>
@@ -386,7 +358,6 @@ export default function PainelAdmin() {
                     </ul>
                   )}
 
-                  {/* Form membro (criar/editar) */}
                   <form
                     onSubmit={(e) => handleMembroSubmit(e, guild.id)}
                     className="flex flex-col max-w-md gap-3"
