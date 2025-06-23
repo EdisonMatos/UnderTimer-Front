@@ -120,7 +120,7 @@ export default function AdicionarMvp({ onCreated }) {
         tier: tier.toUpperCase(),
         name,
         respawn,
-        spriteUrl: data.gif,
+        spriteUrl: `https://game.ragnaplace.com/ro/job/${monsterId}/0.png`,
         updatedby,
         guildId,
         lastDeath: new Date().toISOString(),
