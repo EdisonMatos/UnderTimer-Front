@@ -108,10 +108,14 @@ export default function AdicionarMvp({ onCreated }) {
         name += ` (${formattedMapName})`;
       }
 
-      const existing = await axios.get("https://undertimer-biel.onrender.com");
+      const existing = await axios.get("https://undertimer-biel.onrender.com", {
+        params: {
+          guildId,
+        },
+      });
       const nameExists = existing.data.some((m) => m.name === name);
       if (nameExists) {
-        toast.error("Já existe um monstro com esse nome.");
+        toast.error("Já existe um monstro com esse nome nessa guild.");
         return;
       }
 
