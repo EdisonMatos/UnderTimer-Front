@@ -65,7 +65,15 @@ export default function SideNavbar() {
                 </div>
                 <div class="flex items-center">
                   <div class="flex items-center ms-3">
-                    <div>
+                    <div className="flex">
+                      <a
+                        href="#"
+                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                        role="menuitem"
+                        onClick={handleLogout}
+                      >
+                        Sair
+                      </a>
                       <button
                         type="button"
                         class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
@@ -126,16 +134,7 @@ export default function SideNavbar() {
                             Earnings
                           </a>
                         </li> */}
-                        <li>
-                          <a
-                            href="#"
-                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                            role="menuitem"
-                            onClick={handleLogout}
-                          >
-                            Sair
-                          </a>
-                        </li>
+                        <li></li>
                       </ul>
                     </div>
                   </div>
