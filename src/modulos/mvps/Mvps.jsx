@@ -12,20 +12,32 @@ export default function Mvps() {
   const [timers, setTimers] = useState({});
   const [loadingIds, setLoadingIds] = useState({});
   const [search, setSearch] = useState("");
+  const [ready, setReady] = useState(false); // controla renderização final
 
   useEffect(() => {
     fetchMonsters();
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(updateCountdowns, 1000);
-    return () => clearInterval(interval);
+    if (monsters.length > 0) {
+      const interval = setInterval(updateCountdowns, 1000);
+      updateCountdowns(); // força contagem logo de início
+      return () => clearInterval(interval);
+    }
   }, [monsters]);
 
   const fetchMonsters = async () => {
     try {
+      setReady(false);
       const response = await axios.get("https://undertimer-biel.onrender.com/");
-      setMonsters(response.data);
+      const allMonsters = response.data;
+      const guildId = localStorage.getItem("guildId");
+
+      const filteredMonsters = allMonsters.filter(
+        (monster) => monster.guildId === guildId
+      );
+
+      setMonsters(filteredMonsters);
     } catch (error) {
       console.error("Erro ao buscar monstros:", error);
     }
@@ -98,6 +110,7 @@ export default function Mvps() {
     });
 
     setTimers(updatedTimers);
+    setReady(true); // libera a renderização após cálculo
   };
 
   const handleInputChange = (id, value) => {
@@ -261,7 +274,7 @@ export default function Mvps() {
     <>
       <BuscaMvps search={search} setSearch={setSearch} />
 
-      {search.trim() !== "" ? (
+      {!ready ? null : search.trim() !== "" ? (
         filteredSearchResults.length > 0 ? (
           renderCardsOnly(filteredSearchResults, "Resultado da busca")
         ) : (
@@ -274,7 +287,7 @@ export default function Mvps() {
               <AdicionarMvp
                 onCreated={() => {
                   fetchMonsters();
-                  setSearch(""); // limpa o campo de busca
+                  setSearch("");
                 }}
               />
               <p className="mb-2 text-left text-[12px] opacity-70 mt-8">
@@ -291,7 +304,7 @@ export default function Mvps() {
                 .
               </p>
               <p className="mb-2 text-left text-[12px] opacity-70">
-                Sobre o Tier: Nosso sistema usar o Tier para separar os monstros
+                Sobre o Tier: Nosso sistema usa o Tier para separar os monstros
                 por grau de dificuldade ou necessidade de grupo. Escolha o tier
                 conforme fizer mais sentido.
               </p>
