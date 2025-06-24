@@ -108,8 +108,8 @@ export default function ContasCompartilhadas() {
         Contas da Guild
       </h1>
       <div className="flex flex-col md:gap-5 lg:flex-row">
-        <div className="p-2 rounded-lg shadow-md bg-neutral-900 shadow-black h-fit">
-          <h1 className="mt-2 text-[16px] font-semibold lg:block mb-4">
+        <div className="p-2 rounded-lg shadow-md bg-cards shadow-black h-fit">
+          <h1 className="text-[16px] font-semibold lg:block mb-4">
             Adicionar nova conta
           </h1>
           <div className="flex flex-col gap-2 w-full lg:max-w-[200px]">
@@ -150,7 +150,7 @@ export default function ContasCompartilhadas() {
             />
             <button
               onClick={criarConta}
-              className="p-1 text-white rounded bg-primary hover:bg-green-700"
+              className="p-1 text-white transition-all rounded bg-primary hover:scale-105"
             >
               Adicionar conta
             </button>

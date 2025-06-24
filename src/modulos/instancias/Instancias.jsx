@@ -7,7 +7,7 @@ export default function Instancias() {
   const [instancias, setInstancias] = useState([]);
   const [novaInstancia, setNovaInstancia] = useState({
     name: "",
-    spriteUrl: "",
+    spriteUrl: "https://game.ragnaplace.com/ro/job/1133/0.png", // padrão já aqui
     last: "",
   });
   const [carregandoNovaInstancia, setCarregandoNovaInstancia] = useState(false);
@@ -18,6 +18,7 @@ export default function Instancias() {
   const [instanciaEditada, setInstanciaEditada] = useState({});
   const [contagemRegressiva, setContagemRegressiva] = useState({});
   const [mostrarAdicionarMembro, setMostrarAdicionarMembro] = useState({});
+  const [usarImagemPersonalizada, setUsarImagemPersonalizada] = useState(false);
 
   useEffect(() => {
     buscarInstancias();
@@ -89,7 +90,12 @@ export default function Instancias() {
         payload
       );
       toast.success("Instância adicionada com sucesso");
-      setNovaInstancia({ name: "", spriteUrl: "", last: "" });
+      setNovaInstancia({
+        name: "",
+        spriteUrl: "https://game.ragnaplace.com/ro/job/1133/0.png",
+        last: "",
+      });
+      setUsarImagemPersonalizada(false);
       buscarInstancias();
     } catch (err) {
       console.error("Erro ao adicionar instância:", err);
@@ -228,6 +234,8 @@ export default function Instancias() {
     (inst) => inst.guildId === guildId
   );
 
+  const SPRITE_PADRAO = "https://game.ragnaplace.com/ro/job/1133/0.png";
+
   return (
     <div className="mt-32">
       <h1 className="mb-6 text-[24px] font-semibold">Instâncias e Eventos</h1>
@@ -244,15 +252,46 @@ export default function Instancias() {
           }
           className="p-2 text-black border border-gray-300 rounded bg-neutral-300"
         />
-        <input
-          type="text"
-          placeholder="Sprite URL"
-          value={novaInstancia.spriteUrl}
-          onChange={(e) =>
-            setNovaInstancia((prev) => ({ ...prev, spriteUrl: e.target.value }))
-          }
+
+        <select
+          value={usarImagemPersonalizada ? "personalizada" : "padrao"}
+          onChange={(e) => {
+            const valor = e.target.value;
+            if (valor === "padrao") {
+              setUsarImagemPersonalizada(false);
+              setNovaInstancia((prev) => ({
+                ...prev,
+                spriteUrl: "https://game.ragnaplace.com/ro/job/1133/0.png",
+              }));
+            } else {
+              setUsarImagemPersonalizada(true);
+              setNovaInstancia((prev) => ({
+                ...prev,
+                spriteUrl: "",
+              }));
+            }
+          }}
           className="p-2 text-black border border-gray-300 rounded bg-neutral-300"
-        />
+        >
+          <option value="padrao">Sprite padrão</option>
+          <option value="personalizada">Imagem personalizada</option>
+        </select>
+
+        {usarImagemPersonalizada && (
+          <input
+            type="text"
+            placeholder="URL da imagem personalizada"
+            value={novaInstancia.spriteUrl}
+            onChange={(e) =>
+              setNovaInstancia((prev) => ({
+                ...prev,
+                spriteUrl: e.target.value,
+              }))
+            }
+            className="p-2 text-black border border-gray-300 rounded bg-neutral-300"
+          />
+        )}
+
         <input
           type="datetime-local"
           value={novaInstancia.last}
@@ -269,13 +308,13 @@ export default function Instancias() {
             !novaInstancia.spriteUrl.trim() ||
             !novaInstancia.last.trim()
           }
-          className="px-4 py-2 text-white rounded bg-primary disabled:opacity-50"
+          className="px-4 py-2 text-white transition-all rounded bg-primary hover:scale-105 disabled:opacity-50"
         >
           {carregandoNovaInstancia ? "..." : "Adicionar"}
         </button>
       </div>
 
-      <h2 className="mb-2 text-lg font-semibold text-white">
+      <h2 className="mb-2 text-lg font-semibold text-white mt-14">
         Instâncias ativas
       </h2>
       <div className="flex flex-wrap gap-4">
@@ -625,7 +664,7 @@ export default function Instancias() {
                           (!novosMembros[inst.id]?.name?.trim() &&
                             !novosMembros[inst.id]?.role?.trim())
                         }
-                        className="px-4 py-2 text-white bg-primary rounded w-[36%] disabled:opacity-50"
+                        className="px-4 py-2 text-white bg-primary hover:scale-105 transition-all rounded w-[36%] disabled:opacity-50"
                       >
                         {carregandoMembros[inst.id] ? "..." : "Adicionar"}
                       </button>

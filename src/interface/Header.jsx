@@ -10,7 +10,7 @@ export default function Header() {
         Beta - v0.8 (em desenvolvimento)
       </p>
       <div className="flex justify-center w-full mb-10 lg:justify-start">
-        <button className="p-2 mt-4 rounded-lg bg-primary w-fit hover:scale-105">
+        <button className="p-2 mt-4 transition-all rounded-lg bg-primary w-fit hover:scale-105">
           <a href="https://forms.gle/Nmi7WzCzwqy3qP8Z6" target="_blank">
             Sugestões / Bugs / Reclamações
           </a>

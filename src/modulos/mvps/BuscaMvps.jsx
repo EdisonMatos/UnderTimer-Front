@@ -4,7 +4,7 @@ import AdicionarMvp from "./AdicionarMvp";
 
 export default function BuscaMvps({ search, setSearch }) {
   return (
-    <>
+    <div className="mb-14">
       <h1 className=" text-[24px] font-semibold text-center lg:text-left">
         Times de MVPs e Minibosses
       </h1>
@@ -18,6 +18,6 @@ export default function BuscaMvps({ search, setSearch }) {
           className="w-full max-w-[400px] px-3 py-2 text-sm border bg-neutral-300 border-gray-300 rounded text-black"
         />
       </div>
-    </>
+    </div>
   );
 }
