@@ -184,6 +184,11 @@ export default function Instancias() {
     }
   };
 
+  const guildId = localStorage.getItem("guildId");
+  const instanciasFiltradas = instancias.filter(
+    (inst) => inst.guildId === guildId
+  );
+
   return (
     <div className="mt-32">
       <h1 className="mb-6 text-[24px] font-semibold">Instâncias e Eventos</h1>
@@ -235,7 +240,7 @@ export default function Instancias() {
         Instâncias ativas
       </h2>
       <div className="flex flex-wrap justify-between">
-        {[...instancias]
+        {[...instanciasFiltradas]
           .sort((a, b) => {
             const now = Date.now();
             const timeA = new Date(a.last).getTime();
