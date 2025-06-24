@@ -12,7 +12,7 @@ export default function Mvps() {
   const [timers, setTimers] = useState({});
   const [loadingIds, setLoadingIds] = useState({});
   const [search, setSearch] = useState("");
-  const [ready, setReady] = useState(false); // controla renderização final
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     fetchMonsters();
@@ -21,27 +21,22 @@ export default function Mvps() {
   useEffect(() => {
     if (monsters.length > 0) {
       const interval = setInterval(updateCountdowns, 1000);
-      updateCountdowns(); // força contagem logo de início
+      updateCountdowns();
       return () => clearInterval(interval);
     }
   }, [monsters]);
 
   const fetchMonsters = async () => {
     try {
-      setReady(false);
       const response = await axios.get("https://undertimer-biel.onrender.com/");
       const allMonsters = response.data;
       const guildId = localStorage.getItem("guildId");
-
       const filteredMonsters = allMonsters.filter(
         (monster) => monster.guildId === guildId
       );
-
       setMonsters(filteredMonsters);
     } catch (error) {
       console.error("Erro ao buscar monstros:", error);
-    } finally {
-      setReady(true); // <- garante renderização mesmo com lista vazia
     }
   };
 
@@ -60,7 +55,6 @@ export default function Mvps() {
     const updatedTimers = {};
     monsters.forEach((monster) => {
       if (!monster.lastDeath) return;
-
       const lastDeath = new Date(monster.lastDeath);
       const respawnMs = monster.respawn * 60 * 60 * 1000;
       const respawnTime = new Date(lastDeath.getTime() + respawnMs);
@@ -68,13 +62,11 @@ export default function Mvps() {
 
       if (diff <= 0) {
         const timeSinceSpawn = new Date() - respawnTime;
-
         if (timeSinceSpawn < respawnMs) {
           const seconds = Math.floor(timeSinceSpawn / 1000);
           const hours = Math.floor(seconds / 3600);
           const minutes = Math.floor((seconds % 3600) / 60);
           const secs = seconds % 60;
-
           updatedTimers[monster.id] = {
             value: `${hours.toString().padStart(2, "0")}:${minutes
               .toString()
@@ -98,7 +90,6 @@ export default function Mvps() {
               .catch((e) => console.error("Erro ao reproduzir som:", e));
           }
         }
-
         const hours = Math.floor(diff / (1000 * 60 * 60));
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((diff % (1000 * 60)) / 1000);
@@ -110,9 +101,8 @@ export default function Mvps() {
         };
       }
     });
-
     setTimers(updatedTimers);
-    setReady(true); // libera a renderização após cálculo
+    setReady(true);
   };
 
   const handleInputChange = (id, value) => {
@@ -125,7 +115,6 @@ export default function Mvps() {
       toast.error("Data inválida. Insira uma data no passado.");
       return;
     }
-
     setLoadingIds((prev) => ({ ...prev, [monster.id]: true }));
     try {
       await axios.put("https://undertimer-biel.onrender.com/edit", {
@@ -133,7 +122,6 @@ export default function Mvps() {
         lastDeath: newDate.toISOString(),
         updatedby: localStorage.getItem("apelido") || "-",
       });
-
       setMonsters((prev) =>
         prev.map((m) =>
           m.id === monster.id
@@ -145,7 +133,6 @@ export default function Mvps() {
             : m
         )
       );
-
       toast.success("Atualizado com sucesso");
     } catch {
       toast.error("Erro ao atualizar");
@@ -199,17 +186,14 @@ export default function Mvps() {
 
   const renderCardsOnly = (filteredMonsters, label) => {
     if (filteredMonsters.length === 0) return null;
-
     const parseTime = (t) => {
       if (!t || t.value === "-") return Infinity;
       const [h, m, s] = t.value.split(":").map(Number);
       return h * 3600 + m * 60 + s;
     };
-
     const sortedMonsters = [...filteredMonsters].sort(
       (a, b) => parseTime(timers[a.id]) - parseTime(timers[b.id])
     );
-
     return (
       <>
         <h3 className="mt-5 mb-5 text-lg font-semibold text-center text-white lg:text-left">
@@ -217,10 +201,7 @@ export default function Mvps() {
         </h3>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:flex lg:flex-wrap lg:justify-start">
           {sortedMonsters.map((monster) => {
-            const timerObj = timers[monster.id] || {
-              value: "—",
-              born: false,
-            };
+            const timerObj = timers[monster.id] || { value: "—", born: false };
             const isAlive = timerObj.born;
             const timerValue = timerObj.value;
             const fullRespawnDate = monster.lastDeath
@@ -274,18 +255,18 @@ export default function Mvps() {
 
   return (
     <>
-      <>
-        <BuscaMvps search={search} setSearch={setSearch} />
-
-        {!ready ? null : monsters.length === 0 ? (
+      <BuscaMvps search={search} setSearch={setSearch} />
+      {!ready ? null : search.trim() !== "" ? (
+        filteredSearchResults.length > 0 ? (
+          renderCardsOnly(filteredSearchResults, "Resultado da busca")
+        ) : (
           <div className="flex w-full">
             <div className="max-w-md p-4 mt-6 text-white rounded-md shadow-lg bg-cards">
               <p className="mb-2 text-center">
-                Nenhum monstro foi adicionado ainda para sua guilda. <br />
-                Preencha os campos abaixo para adicionar o primeiro:
+                O monstro que você procurou não está adicionado ainda. <br />
+                Preencha os campos abaixo para adicionar:
               </p>
               <AdicionarMvp
-                existingMonsters={monsters}
                 onCreated={() => {
                   fetchMonsters();
                   setSearch("");
@@ -293,77 +274,31 @@ export default function Mvps() {
               />
               <p className="mb-2 text-left text-[12px] opacity-70 mt-8">
                 Sobre o ID: Para encontrar o ID do monstro que quer adicionar,
-                basta procurar por ele em qualquer database de Ragnarok, como o{" "}
-                <a
-                  href="https://ratemyserver.net/"
-                  target="_blank"
-                  className="underline"
-                >
-                  ratemyserver
-                </a>
-                .
+                basta procurar por ele em qualquer database de ragnarok.
               </p>
               <p className="mb-2 text-left text-[12px] opacity-70">
                 Sobre o Tier: Nosso sistema usa o Tier para separar os monstros
-                por grau de dificuldade ou necessidade de grupo. Escolha o tier
-                conforme fizer mais sentido.
+                por grau de dificuldade ou necessidade de grupo.
               </p>
             </div>
           </div>
-        ) : search.trim() !== "" ? (
-          filteredSearchResults.length > 0 ? (
-            renderCardsOnly(filteredSearchResults, "Resultado da busca")
-          ) : (
-            <div className="flex w-full">
-              <div className="max-w-md p-4 mt-6 text-white rounded-md shadow-lg bg-cards">
-                <p className="mb-2 text-center">
-                  O monstro que você procurou não está adicionado ainda. <br />
-                  Preencha os campos abaixo para adicionar:
-                </p>
-                <AdicionarMvp
-                  onCreated={() => {
-                    fetchMonsters();
-                    setSearch("");
-                  }}
-                />
-                <p className="mb-2 text-left text-[12px] opacity-70 mt-8">
-                  Sobre o ID: Para encontrar o ID do monstro que quer adicionar,
-                  basta procurar por ele em qualquer database de Ragnarok, como
-                  o{" "}
-                  <a
-                    href="https://ratemyserver.net/"
-                    target="_blank"
-                    className="underline"
-                  >
-                    ratemyserver
-                  </a>
-                  .
-                </p>
-                <p className="mb-2 text-left text-[12px] opacity-70">
-                  Sobre o Tier: Nosso sistema usa o Tier para separar os
-                  monstros por grau de dificuldade ou necessidade de grupo.
-                  Escolha o tier conforme fizer mais sentido.
-                </p>
-              </div>
-            </div>
-          )
-        ) : (
-          <>
-            {renderCardsOnly(
-              monstersS.filter((m) => timers[m.id]?.value !== "-"),
-              "MVPs e Minibosses Tier S"
-            )}
-            {renderCardsOnly(
-              monstersA.filter((m) => timers[m.id]?.value !== "-"),
-              "MVPs e Minibosses Tier A"
-            )}
-            {renderCardsOnly(
-              minibosses.filter((m) => timers[m.id]?.value !== "-"),
-              "Miniboss"
-            )}
-          </>
-        )}
-      </>
+        )
+      ) : (
+        <>
+          {renderCardsOnly(
+            monstersS.filter((m) => timers[m.id]?.value !== "-"),
+            "MVPs e Minibosses Tier S"
+          )}
+          {renderCardsOnly(
+            monstersA.filter((m) => timers[m.id]?.value !== "-"),
+            "MVPs e Minibosses Tier A"
+          )}
+          {renderCardsOnly(
+            minibosses.filter((m) => timers[m.id]?.value !== "-"),
+            "Miniboss"
+          )}
+        </>
+      )}
     </>
   );
 }
