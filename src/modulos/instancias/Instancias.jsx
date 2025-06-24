@@ -313,6 +313,14 @@ export default function Instancias() {
           {carregandoNovaInstancia ? "..." : "Adicionar"}
         </button>
       </div>
+      {usarImagemPersonalizada && (
+        <p className="mb-2 text-left text-[12px] opacity-70">
+          Sobre o Imagem Personalizada: Adicione a url (https://...) da imagem
+          desejada. Para conseguir a url de uma imagem, clique com botão direito
+          em qualquer imagem que esteja na internet e clique em "Copiar endereço
+          da imagem".
+        </p>
+      )}
 
       <h2 className="mb-2 text-lg font-semibold text-white mt-14">
         Instâncias ativas
