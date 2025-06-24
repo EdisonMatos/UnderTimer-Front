@@ -22,6 +22,11 @@ export default function SideNavbar() {
     window.location.reload();
   };
 
+  const spriteUrl =
+    localStorage.getItem("spriteUrl") || "https://via.placeholder.com/32";
+
+  console.log(spriteUrl);
+
   return (
     <>
       <div>
@@ -91,7 +96,7 @@ export default function SideNavbar() {
                         <span class="sr-only">Open user menu</span>
                         <img
                           class="w-8 h-8 rounded-full"
-                          src="https://img.tapimg.net/market/images/88ab5b91377674ad0cb9cfe6064d5858.png"
+                          src={spriteUrl}
                           alt="user photo"
                         />
                       </button>

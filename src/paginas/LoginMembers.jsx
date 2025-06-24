@@ -52,6 +52,7 @@ export default function LoginMembers() {
       localStorage.setItem("token", data.token);
       localStorage.setItem("apelido", data.membro.apelido);
       localStorage.setItem("guildId", data.membro.guildId);
+      localStorage.setItem("spriteUrl", data.membro.guild.spriteUrl);
       localStorage.setItem("userType", "member"); // <- NOVO
       setIsAuthenticated(true);
     } catch (err) {
