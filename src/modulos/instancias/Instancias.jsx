@@ -17,6 +17,7 @@ export default function Instancias() {
   const [editandoInstancia, setEditandoInstancia] = useState({});
   const [instanciaEditada, setInstanciaEditada] = useState({});
   const [contagemRegressiva, setContagemRegressiva] = useState({});
+  const [mostrarAdicionarMembro, setMostrarAdicionarMembro] = useState({});
 
   useEffect(() => {
     buscarInstancias();
@@ -239,7 +240,7 @@ export default function Instancias() {
       <h2 className="mb-2 text-lg font-semibold text-white">
         Instâncias ativas
       </h2>
-      <div className="flex flex-wrap justify-between">
+      <div className="flex flex-wrap gap-4">
         {[...instanciasFiltradas]
           .sort((a, b) => {
             const now = Date.now();
@@ -260,7 +261,7 @@ export default function Instancias() {
             return (
               <div
                 key={inst.id}
-                className="p-4 mb-10 text-white border border-neutral-900 bg-cards shadow-md shadow-black h-fit rounded-md w-full lg:w-[31%]"
+                className="p-4 mb-10 text-white border border-neutral-900 bg-cards shadow-md shadow-black h-fit rounded-md w-full lg:w-[32%] lg:max-w-[330px]"
               >
                 <div className="flex flex-row items-center justify-between mb-3 ">
                   <div className="w-[15%]">
@@ -483,50 +484,68 @@ export default function Instancias() {
                   </tbody>
                 </table>
 
-                <p className="mt-8 font-semibold">Adicionar membro:</p>
-                <div className="flex justify-between gap-2 mt-3">
-                  <input
-                    type="text"
-                    placeholder="Nome"
-                    value={novosMembros[inst.id]?.name || ""}
-                    onChange={(e) =>
-                      setNovosMembros((prev) => ({
-                        ...prev,
-                        [inst.id]: {
-                          name: e.target.value,
-                          role: prev[inst.id]?.role || "",
-                        },
-                      }))
-                    }
-                    className="p-2 text-black border rounded w-[30%] bg-neutral-300 border-gray-300"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Função"
-                    value={novosMembros[inst.id]?.role || ""}
-                    onChange={(e) =>
-                      setNovosMembros((prev) => ({
-                        ...prev,
-                        [inst.id]: {
-                          name: prev[inst.id]?.name || "",
-                          role: e.target.value,
-                        },
-                      }))
-                    }
-                    className="p-2 text-black border rounded w-[30%] bg-neutral-300 border-gray-300"
-                  />
-                  <button
-                    onClick={() => adicionarMembro(inst.id)}
-                    disabled={
-                      carregandoMembros[inst.id] ||
-                      (!novosMembros[inst.id]?.name?.trim() &&
-                        !novosMembros[inst.id]?.role?.trim())
-                    }
-                    className="px-4 py-2 text-white bg-primary rounded w-[30%] disabled:opacity-50"
-                  >
-                    {carregandoMembros[inst.id] ? "..." : "Adicionar"}
-                  </button>
-                </div>
+                <button
+                  className="mt-0 text-sm font-semibold text-blue-400 hover:underline"
+                  onClick={() =>
+                    setMostrarAdicionarMembro((prev) => ({
+                      ...prev,
+                      [inst.id]: !prev[inst.id],
+                    }))
+                  }
+                >
+                  {mostrarAdicionarMembro[inst.id]
+                    ? "Ocultar"
+                    : "Adicionar Membro +"}
+                </button>
+
+                {mostrarAdicionarMembro[inst.id] && (
+                  <>
+                    <p className="mt-4 font-semibold">Adicionar membro:</p>
+                    <div className="flex justify-between gap-2 mt-3">
+                      <input
+                        type="text"
+                        placeholder="Nome"
+                        value={novosMembros[inst.id]?.name || ""}
+                        onChange={(e) =>
+                          setNovosMembros((prev) => ({
+                            ...prev,
+                            [inst.id]: {
+                              name: e.target.value,
+                              role: prev[inst.id]?.role || "",
+                            },
+                          }))
+                        }
+                        className="p-2 text-black border rounded w-[25%] bg-neutral-300 border-gray-300"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Função"
+                        value={novosMembros[inst.id]?.role || ""}
+                        onChange={(e) =>
+                          setNovosMembros((prev) => ({
+                            ...prev,
+                            [inst.id]: {
+                              name: prev[inst.id]?.name || "",
+                              role: e.target.value,
+                            },
+                          }))
+                        }
+                        className="p-2 text-black border rounded w-[25%] bg-neutral-300 border-gray-300"
+                      />
+                      <button
+                        onClick={() => adicionarMembro(inst.id)}
+                        disabled={
+                          carregandoMembros[inst.id] ||
+                          (!novosMembros[inst.id]?.name?.trim() &&
+                            !novosMembros[inst.id]?.role?.trim())
+                        }
+                        className="px-4 py-2 text-white bg-primary rounded w-[36%] disabled:opacity-50"
+                      >
+                        {carregandoMembros[inst.id] ? "..." : "Adicionar"}
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
             );
           })}
