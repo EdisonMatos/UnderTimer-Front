@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { FaTrash, FaPencilAlt, FaCheck } from "react-icons/fa";
+import { FaTrash, FaPencilAlt, FaCheck, FaTimes } from "react-icons/fa";
 
 export default function Instancias() {
   const [instancias, setInstancias] = useState([]);
@@ -337,35 +337,50 @@ export default function Instancias() {
                     </p>
                   </div>
                   <div className="flex flex-col  w-[15%]">
-                    <h2 className="mb-2">Ações</h2>
+                    <h2 className="mb-2 opacity-50">Ações</h2>
                     <div className="flex items-center justify-center h-12 ">
                       <div className="flex gap-3">
                         {editandoInstancia[inst.id] ? (
-                          <button
-                            onClick={() => editarInstanciaConfirmar(inst)}
-                            className="text-green-400 hover:text-green-200"
-                          >
-                            <FaCheck />
-                          </button>
+                          <>
+                            <button
+                              onClick={() => editarInstanciaConfirmar(inst)}
+                              className="text-green-400 hover:text-green-200"
+                            >
+                              <FaCheck />
+                            </button>
+                            <button
+                              onClick={() =>
+                                setEditandoInstancia((prev) => ({
+                                  ...prev,
+                                  [inst.id]: false,
+                                }))
+                              }
+                              className="text-white hover:text-red-200"
+                            >
+                              <FaTimes />
+                            </button>
+                          </>
                         ) : (
-                          <button
-                            onClick={() =>
-                              setEditandoInstancia((prev) => ({
-                                ...prev,
-                                [inst.id]: true,
-                              }))
-                            }
-                            className="text-white hover:text-yellow-200"
-                          >
-                            <FaPencilAlt />
-                          </button>
+                          <>
+                            <button
+                              onClick={() =>
+                                setEditandoInstancia((prev) => ({
+                                  ...prev,
+                                  [inst.id]: true,
+                                }))
+                              }
+                              className="text-white hover:text-yellow-200"
+                            >
+                              <FaPencilAlt />
+                            </button>
+                            <button
+                              onClick={() => deletarInstancia(inst.id)}
+                              className="text-white hover:text-red-200"
+                            >
+                              <FaTrash />
+                            </button>
+                          </>
                         )}
-                        <button
-                          onClick={() => deletarInstancia(inst.id)}
-                          className="text-white hover:text-red-200"
-                        >
-                          <FaTrash />
-                        </button>
                       </div>
                     </div>
                   </div>
@@ -411,7 +426,7 @@ export default function Instancias() {
                                     )
                                   )
                                 }
-                                className="p-1 text-black rounded w-[60%]"
+                                className="p-1 h-5 text-black rounded w-[60%]"
                               />
                             ) : (
                               membro.name
@@ -438,7 +453,7 @@ export default function Instancias() {
                                     )
                                   )
                                 }
-                                className="p-1 text-black rounded w-[60%]"
+                                className="p-1 h-5 text-black rounded w-[60%]"
                               />
                             ) : (
                               membro.role
@@ -446,31 +461,46 @@ export default function Instancias() {
                           </td>
                           <td className="flex gap-2 mt-1">
                             {editandoMembro[membro.id] ? (
-                              <button
-                                onClick={() => editarMembroConfirmar(membro)}
-                                className="text-green-400 hover:text-green-200"
-                              >
-                                <FaCheck />
-                              </button>
+                              <>
+                                <button
+                                  onClick={() => editarMembroConfirmar(membro)}
+                                  className="text-green-400 hover:text-green-200"
+                                >
+                                  <FaCheck />
+                                </button>
+                                <button
+                                  onClick={() =>
+                                    setEditandoMembro((prev) => ({
+                                      ...prev,
+                                      [membro.id]: false,
+                                    }))
+                                  }
+                                  className="text-white hover:text-red-200"
+                                >
+                                  <FaTimes />
+                                </button>
+                              </>
                             ) : (
-                              <button
-                                onClick={() =>
-                                  setEditandoMembro((prev) => ({
-                                    ...prev,
-                                    [membro.id]: true,
-                                  }))
-                                }
-                                className="text-white hover:text-yellow-200"
-                              >
-                                <FaPencilAlt />
-                              </button>
+                              <>
+                                <button
+                                  onClick={() =>
+                                    setEditandoMembro((prev) => ({
+                                      ...prev,
+                                      [membro.id]: true,
+                                    }))
+                                  }
+                                  className="text-white hover:text-yellow-200"
+                                >
+                                  <FaPencilAlt />
+                                </button>
+                                <button
+                                  onClick={() => deletarMembro(membro.id)}
+                                  className="text-white hover:text-red-200"
+                                >
+                                  <FaTrash />
+                                </button>
+                              </>
                             )}
-                            <button
-                              onClick={() => deletarMembro(membro.id)}
-                              className="text-white hover:text-red-200"
-                            >
-                              <FaTrash />
-                            </button>
                           </td>
                         </tr>
                       ))}
