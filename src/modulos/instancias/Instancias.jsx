@@ -123,14 +123,52 @@ export default function Instancias() {
   };
 
   const deletarInstancia = async (id) => {
+    const confirmar = window.confirm(
+      "Tem certeza que deseja excluir esta instância e todos os seus membros?"
+    );
+    if (!confirmar) return;
+
+    // Exibe o toast de loading e guarda o ID para atualização
+    const toastId = toast.loading("Em andamento. Aguarde...");
+
     try {
+      // Primeiro, buscar os membros da instância
+      const instancia = instancias.find((inst) => inst.id === id);
+      if (instancia && instancia.membros && instancia.membros.length > 0) {
+        // Deletar cada membro individualmente
+        for (const membro of instancia.membros) {
+          await axios.delete(
+            `https://undertimer-biel.onrender.com/membrosinstancia/${membro.id}`
+          );
+        }
+      }
+
+      // Agora deletar a instância
       await axios.delete(
         `https://undertimer-biel.onrender.com/instancias/${id}`
       );
-      toast.success("Instância excluída com sucesso");
+
+      // Atualiza o toast para sucesso
+      toast.update(toastId, {
+        render: "Instância e membros excluídos com sucesso",
+        type: "success",
+        isLoading: false,
+        autoClose: 3000,
+        closeOnClick: true,
+      });
+
       buscarInstancias();
     } catch (err) {
-      console.error("Erro ao deletar instância:", err);
+      console.error("Erro ao deletar instância e membros:", err);
+
+      // Atualiza o toast para erro
+      toast.update(toastId, {
+        render: "Erro ao excluir instância ou seus membros.",
+        type: "error",
+        isLoading: false,
+        autoClose: 3000,
+        closeOnClick: true,
+      });
     }
   };
 
