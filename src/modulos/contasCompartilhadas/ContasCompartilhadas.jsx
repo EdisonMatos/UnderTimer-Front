@@ -99,6 +99,9 @@ export default function ContasCompartilhadas() {
     toast.success("Copiado para a área de transferência");
   };
 
+  // FILTRO para mostrar só as contas da guild do usuário logado
+  const contasFiltradas = contas.filter((conta) => conta.guildId === guildId);
+
   return (
     <div className="flex flex-col gap-8 text-white mb-14">
       <h1 className=" text-[24px] font-semibold text-center lg:text-left">
@@ -159,7 +162,7 @@ export default function ContasCompartilhadas() {
           <h1 className=" text-[16px] font-semibold text-center lg:text-left lg:hidden mt-10">
             Contas existentes
           </h1>
-          {contas.map((conta) => {
+          {contasFiltradas.map((conta) => {
             const emEdicao = editandoId === conta.id;
             const isSenhaVisivel = senhaVisivel[conta.id];
 
