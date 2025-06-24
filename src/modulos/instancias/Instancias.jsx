@@ -271,16 +271,16 @@ export default function Instancias() {
               }));
             }
           }}
-          className="p-2 text-black border border-gray-300 rounded bg-neutral-300"
+          className="p-2 text-black border lg:w-[230px] border-gray-300 rounded bg-neutral-300"
         >
-          <option value="padrao">Sprite padrão</option>
+          <option value="padrao">Imagem padrão</option>
           <option value="personalizada">Imagem personalizada</option>
         </select>
 
         {usarImagemPersonalizada && (
           <input
             type="text"
-            placeholder="URL da imagem personalizada"
+            placeholder="URL da imagem (https://...)"
             value={novaInstancia.spriteUrl}
             onChange={(e) =>
               setNovaInstancia((prev) => ({
@@ -288,7 +288,7 @@ export default function Instancias() {
                 spriteUrl: e.target.value,
               }))
             }
-            className="p-2 text-black border border-gray-300 rounded bg-neutral-300"
+            className="p-2 text-black border border-gray-300 rounded bg-neutral-300 lg:w-[230px]"
           />
         )}
 
