@@ -78,14 +78,16 @@ export default function SideNavbar() {
                         >
                           Bem vindo, {apelido}
                         </p>
-                        <a
-                          href="#"
-                          class="blocktext-sm text-[12px] text-white opacity-60 hover:opacity-100 w-fit underline"
-                          role="menuitem"
-                          onClick={handleLogout}
-                        >
-                          Sair
-                        </a>
+                        <p>
+                          <a
+                            href="#"
+                            class="blocktext-sm text-[12px] text-white opacity-60 hover:opacity-100 w-fit underline"
+                            role="menuitem"
+                            onClick={handleLogout}
+                          >
+                            Sair
+                          </a>
+                        </p>
                       </div>
                       <button
                         type="button"
