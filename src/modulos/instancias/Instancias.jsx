@@ -107,7 +107,7 @@ export default function Instancias() {
       const lastISO = new Date(rawLast).toISOString();
       const payload = {
         name: instanciaEditada[inst.id]?.name || inst.name,
-        spriteUrl: inst.spriteUrl,
+        spriteUrl: instanciaEditada[inst.id]?.spriteUrl || inst.spriteUrl,
         last: lastISO,
       };
       await axios.put(
@@ -286,7 +286,25 @@ export default function Instancias() {
                               },
                             }))
                           }
-                          className="p-1 text-black rounded w-[30%] h-8"
+                          className="w-full h-8 p-1 mb-1 text-black rounded"
+                        />
+                        <input
+                          type="text"
+                          placeholder="Sprite URL"
+                          value={
+                            instanciaEditada[inst.id]?.spriteUrl ||
+                            inst.spriteUrl
+                          }
+                          onChange={(e) =>
+                            setInstanciaEditada((prev) => ({
+                              ...prev,
+                              [inst.id]: {
+                                ...prev[inst.id],
+                                spriteUrl: e.target.value,
+                              },
+                            }))
+                          }
+                          className="w-full h-8 p-1 mb-1 text-black rounded"
                         />
                         <input
                           type="datetime-local"
@@ -303,7 +321,7 @@ export default function Instancias() {
                               },
                             }))
                           }
-                          className="p-1 ml-2 text-black rounded w-[30%] h-8"
+                          className="w-full h-8 p-1 text-black rounded"
                         />
                       </>
                     ) : (
