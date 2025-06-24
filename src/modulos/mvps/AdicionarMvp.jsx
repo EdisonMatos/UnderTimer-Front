@@ -9,7 +9,7 @@ export default function AdicionarMvp({ onCreated }) {
   const [availableMaps, setAvailableMaps] = useState([]);
   const [selectedMapIndex, setSelectedMapIndex] = useState(null);
   const [manualRespawn, setManualRespawn] = useState("");
-  const [requireManualRespawn, setRequireManualRespawn] = useState(false); // novo controle
+  const [requireManualRespawn, setRequireManualRespawn] = useState(false);
 
   const formatName = (rawName) => {
     return rawName
@@ -108,12 +108,14 @@ export default function AdicionarMvp({ onCreated }) {
         name += ` (${formattedMapName})`;
       }
 
-      const existing = await axios.get("https://undertimer-biel.onrender.com", {
-        params: {
-          guildId,
-        },
-      });
-      const nameExists = existing.data.some((m) => m.name === name);
+      // Verificação se o nome já existe na GUILDA do usuário
+      const existing = await axios.get("https://undertimer-biel.onrender.com");
+
+      const filtered = existing.data.filter((m) => m.guildId === guildId);
+      const nameExists = filtered.some(
+        (m) => m.name.toLowerCase() === name.toLowerCase()
+      );
+
       if (nameExists) {
         toast.error("Já existe um monstro com esse nome nessa guild.");
         return;
@@ -143,13 +145,11 @@ export default function AdicionarMvp({ onCreated }) {
       setManualRespawn("");
       setRequireManualRespawn(false);
 
-      if (onCreated) {
-        onCreated();
-      }
+      if (onCreated) onCreated();
     } catch (error) {
       console.error(error);
       toast.error(
-        "Erro ao adicionar MVP. O MVP já existe ou o ID digitado é inválido. Verifique"
+        "Erro ao adicionar MVP. O MVP já existe ou o ID digitado é inválido. Verifique."
       );
     } finally {
       setLoading(false);
