@@ -22,6 +22,11 @@ export default function SideNavbar() {
     window.location.reload();
   };
 
+  const spriteUrl =
+    localStorage.getItem("spriteUrl") || "https://via.placeholder.com/32";
+
+  console.log(spriteUrl);
+
   return (
     <>
       <div>
@@ -66,20 +71,22 @@ export default function SideNavbar() {
                 <div class="flex items-center">
                   <div class="flex items-center ms-3">
                     <div className="flex items-center">
-                      <p
-                        class="text-sm text-gray-900 dark:text-white"
-                        role="none"
-                      >
-                        Bem vindo, {apelido}
-                      </p>
-                      <a
-                        href="#"
-                        class="block ml-4 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                        role="menuitem"
-                        onClick={handleLogout}
-                      >
-                        Sair
-                      </a>
+                      <div className="flex flex-col items-end justify-end mr-4 ">
+                        <p
+                          class="text-sm text-gray-900 dark:text-white "
+                          role="none"
+                        >
+                          Bem vindo, {apelido}
+                        </p>
+                        <a
+                          href="#"
+                          class="blocktext-sm text-[12px] text-white opacity-60 hover:opacity-100 w-fit underline"
+                          role="menuitem"
+                          onClick={handleLogout}
+                        >
+                          Sair
+                        </a>
+                      </div>
                       <button
                         type="button"
                         class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
@@ -89,7 +96,7 @@ export default function SideNavbar() {
                         <span class="sr-only">Open user menu</span>
                         <img
                           class="w-8 h-8 rounded-full"
-                          src="https://img.tapimg.net/market/images/88ab5b91377674ad0cb9cfe6064d5858.png"
+                          src={spriteUrl}
                           alt="user photo"
                         />
                       </button>
