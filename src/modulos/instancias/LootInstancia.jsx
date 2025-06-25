@@ -154,14 +154,14 @@ export default function LootInstancia({ instanciaId }) {
         </form>
       )}
 
-      <table className="w-full text-sm text-left text-gray-300">
+      <table className="w-full text-left text-gray-300 text-[10px]">
         <thead>
           <tr className="border-b border-neutral-700">
-            <th>Nº</th>
-            <th>Nome</th>
-            <th>Dropou</th>
-            <th>Quer</th>
-            <th>Ações</th>
+            <th className="w-[7%]">Nº</th>
+            <th className="w-[40%]">Nome</th>
+            <th className="w-[20%]">Dropou</th>
+            <th className="w-[30%]">Quer</th>
+            <th className="w-[10%]">Ações</th>
           </tr>
         </thead>
         <tbody>
@@ -203,7 +203,7 @@ export default function LootInstancia({ instanciaId }) {
                     )}
                   </td>
                   <td className="py-1">{capitalizar(loot.updatedby)}</td>
-                  <td className="py-1 text-sm">
+                  <td className="py-1 text-[10px]">
                     {interessados.length > 0 ? (
                       interessados.map((nome, idx) => (
                         <span key={idx} className="inline-block mr-1">
