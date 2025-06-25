@@ -102,10 +102,10 @@ export default function AdicionarMvp({ onCreated }) {
 
       let name = formatName(data.monster_info);
       if (maps.length > 1) {
-        const formattedMapName = formatMapName(
-          maps[selectedMapIndex]?.name || ""
-        );
-        name += ` (${formattedMapName})`;
+        const selectedMap = maps[selectedMapIndex];
+        const formattedMapName = formatMapName(selectedMap?.name || "");
+        const mapNumber = selectedMap?.number ? ` ${selectedMap.number}` : "";
+        name += ` (${formattedMapName}${mapNumber})`;
       }
 
       // Verificação se o nome já existe na GUILDA do usuário
@@ -209,12 +209,17 @@ export default function AdicionarMvp({ onCreated }) {
             className="p-2 text-white border rounded bg-zinc-700 border-zinc-600"
           >
             <option value="">Selecione</option>
-            {availableMaps.map((map, index) => (
-              <option key={index} value={index}>
-                {map.name.replace(/_/g, " ")} (
-                {map.frequency.replace(/_/g, " ")})
-              </option>
-            ))}
+            {availableMaps.map((map, index) => {
+              const mapName = formatMapName(map.name); // Ex: Rachel Field
+              const mapNumber = map.number ? ` ${map.number}` : ""; // Ex: 2
+              const frequency = map.frequency.replace(/_/g, " "); // Ex: after 4 hours
+              return (
+                <option key={index} value={index}>
+                  {mapName}
+                  {mapNumber} ({frequency})
+                </option>
+              );
+            })}
           </select>
         </div>
       )}
