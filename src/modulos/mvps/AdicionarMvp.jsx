@@ -11,6 +11,21 @@ export default function AdicionarMvp({ onCreated }) {
   const [manualRespawn, setManualRespawn] = useState("");
   const [requireManualRespawn, setRequireManualRespawn] = useState(false);
 
+  const formatFrequency = (raw) => {
+    const hoursMatch = raw.match(/(\d+)_hour/);
+    const minsMatch = raw.match(/(\d+)_min/);
+
+    if (hoursMatch) {
+      return `${hoursMatch[1]} hora${hoursMatch[1] === "1" ? "" : "s"}`;
+    }
+
+    if (minsMatch) {
+      return `${minsMatch[1]} minuto${minsMatch[1] === "1" ? "" : "s"}`;
+    }
+
+    return raw.replace(/_/g, " ");
+  };
+
   const formatName = (rawName) => {
     return rawName
       .split("_")
@@ -212,7 +227,7 @@ export default function AdicionarMvp({ onCreated }) {
             {availableMaps.map((map, index) => {
               const mapName = formatMapName(map.name); // Ex: Rachel Field
               const mapNumber = map.number ? ` ${map.number}` : ""; // Ex: 2
-              const frequency = map.frequency.replace(/_/g, " "); // Ex: after 4 hours
+              const frequency = formatFrequency(map.frequency);
               return (
                 <option key={index} value={index}>
                   {mapName}
