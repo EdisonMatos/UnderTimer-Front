@@ -201,19 +201,19 @@ export default function PainelAdmin() {
   }
 
   return (
-    <div className="max-w-5xl p-5 mx-auto font-sans bg-white">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-center">Painel Admin</h1>
+    <div className="max-w-5xl p-5 mx-auto mt-32 font-sans text-white">
+      <div className="flex items-center justify-between mb-10">
+        <h1 className="text-3xl font-bold">Painel Admin</h1>
         <button
           onClick={handleLogout}
-          className="px-4 py-2 text-white bg-red-600 rounded hover:bg-red-700"
+          className="px-4 py-2 text-white transition-all bg-red-600 rounded hover:bg-red-700"
           type="button"
         >
           Logout
         </button>
       </div>
 
-      <section className="max-w-md p-4 mx-auto mb-12 border border-gray-300 rounded">
+      <section className="max-w-md p-6 mx-auto mb-12 border rounded-md shadow-md border-neutral-700 bg-cards shadow-black">
         <h2 className="mb-4 text-xl font-semibold text-center">
           {editingGuild ? "Editar Guild" : "Criar Guild"}
         </h2>
@@ -227,12 +227,12 @@ export default function PainelAdmin() {
             placeholder="Sprite URL"
             value={guildSpriteUrl}
             onChange={(e) => setGuildSpriteUrl(e.target.value)}
-            className="p-2 border border-gray-300 rounded"
+            className="p-2 text-black border border-gray-300 rounded bg-neutral-300"
             required
           />
           <button
             type="submit"
-            className="py-2 text-white bg-blue-600 rounded hover:bg-blue-700"
+            className="py-2 text-white transition-all rounded bg-primary hover:scale-105"
           >
             {editingGuild ? "Atualizar Guild" : "Criar Guild"}
           </button>
@@ -243,7 +243,7 @@ export default function PainelAdmin() {
                 setEditingGuild(null);
                 setGuildSpriteUrl("");
               }}
-              className="mt-1 text-gray-600 underline"
+              className="mt-1 text-sm underline text-neutral-300"
             >
               Cancelar edição
             </button>
@@ -251,13 +251,13 @@ export default function PainelAdmin() {
         </form>
       </section>
 
-      <section className="">
+      <section>
         {guildLoading ? (
           <p>Carregando guilds...</p>
         ) : guildError ? (
-          <p className="text-red-600">{guildError}</p>
+          <p className="text-red-500">{guildError}</p>
         ) : guilds.length === 0 ? (
-          <p className="text-center text-gray-600">Nenhuma guild encontrada.</p>
+          <p className="text-center text-gray-400">Nenhuma guild encontrada.</p>
         ) : (
           guilds.map((guild) => {
             const membros = guildMembros[guild.id] || [];
@@ -273,9 +273,9 @@ export default function PainelAdmin() {
             return (
               <div
                 key={guild.id}
-                className="flex flex-col p-5 mb-8 border rounded shadow-sm"
+                className="p-6 mb-10 border rounded-md shadow-md bg-cards border-neutral-700 shadow-black"
               >
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex items-start justify-between mb-4">
                   <div>
                     <h3 className="mb-1 text-lg font-semibold">
                       Guild ID: {guild.id}
@@ -286,7 +286,7 @@ export default function PainelAdmin() {
                         href={guild.spriteUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-blue-600 underline"
+                        className="text-blue-400 underline"
                       >
                         {guild.spriteUrl}
                       </a>
@@ -298,14 +298,14 @@ export default function PainelAdmin() {
                   <div className="flex gap-2">
                     <button
                       onClick={() => startEditGuild(guild)}
-                      className="px-3 py-1 text-yellow-800 bg-yellow-300 rounded hover:bg-yellow-400"
+                      className="px-3 py-1 text-yellow-900 transition-all bg-yellow-300 rounded hover:scale-105"
                       type="button"
                     >
                       Editar Guild
                     </button>
                     <button
                       onClick={() => deleteGuild(guild.id)}
-                      className="px-3 py-1 text-white bg-red-600 rounded hover:bg-red-700"
+                      className="px-3 py-1 text-white transition-all bg-red-600 rounded hover:scale-105"
                       type="button"
                     >
                       Apagar Guild
@@ -313,21 +313,21 @@ export default function PainelAdmin() {
                   </div>
                 </div>
 
-                <div className="pt-4 mb-4 border-t border-gray-300">
-                  <h4 className="mb-3 font-semibold text-md">Membros</h4>
+                <div className="pt-4 mt-4 border-t border-neutral-700">
+                  <h4 className="mb-3 text-base font-semibold">Membros</h4>
 
                   {loading ? (
                     <p>Carregando membros...</p>
                   ) : error ? (
-                    <p className="text-red-600">{error}</p>
+                    <p className="text-red-500">{error}</p>
                   ) : membros.length === 0 ? (
-                    <p className="text-gray-600">Nenhum membro encontrado.</p>
+                    <p className="text-gray-400">Nenhum membro encontrado.</p>
                   ) : (
-                    <ul className="mb-4 bg-white border border-gray-300 rounded">
+                    <ul className="mb-4 border rounded border-neutral-700 bg-neutral-800">
                       {membros.map((m) => (
                         <li
                           key={m.id}
-                          className="flex items-center justify-between p-2 border-b border-gray-200"
+                          className="flex items-center justify-between p-2 border-b border-neutral-700"
                         >
                           <div>
                             <p>
@@ -340,14 +340,14 @@ export default function PainelAdmin() {
                           <div className="flex gap-2">
                             <button
                               onClick={() => startEditMembro(guild.id, m)}
-                              className="px-2 py-1 text-yellow-800 bg-yellow-300 rounded hover:bg-yellow-400"
+                              className="px-2 py-1 text-yellow-900 transition-all bg-yellow-300 rounded hover:scale-105"
                               type="button"
                             >
                               Editar
                             </button>
                             <button
                               onClick={() => deleteMembro(guild.id, m.id)}
-                              className="px-2 py-1 text-white bg-red-600 rounded hover:bg-red-700"
+                              className="px-2 py-1 text-white transition-all bg-red-600 rounded hover:scale-105"
                               type="button"
                             >
                               Apagar
@@ -375,7 +375,7 @@ export default function PainelAdmin() {
                         )
                       }
                       required
-                      className="p-2 border border-gray-300 rounded"
+                      className="p-2 text-black border border-gray-300 rounded bg-neutral-300"
                     />
                     <input
                       type="password"
@@ -389,7 +389,7 @@ export default function PainelAdmin() {
                         )
                       }
                       required
-                      className="p-2 border border-gray-300 rounded"
+                      className="p-2 text-black border border-gray-300 rounded bg-neutral-300"
                     />
                     <select
                       value={form.role || ""}
@@ -401,7 +401,7 @@ export default function PainelAdmin() {
                         )
                       }
                       required
-                      className="p-2 border border-gray-300 rounded"
+                      className="p-2 text-black border border-gray-300 rounded bg-neutral-300"
                     >
                       <option value="">Selecione Role</option>
                       <option value="admin">admin</option>
@@ -410,7 +410,7 @@ export default function PainelAdmin() {
                     </select>
                     <button
                       type="submit"
-                      className="py-2 text-white bg-green-600 rounded hover:bg-green-700"
+                      className="py-2 text-white transition-all rounded bg-primary hover:scale-105"
                     >
                       {form.editingMembro ? "Atualizar Membro" : "Criar Membro"}
                     </button>
@@ -418,7 +418,7 @@ export default function PainelAdmin() {
                       <button
                         type="button"
                         onClick={() => resetMembroForm(guild.id)}
-                        className="mt-1 text-gray-600 underline"
+                        className="mt-1 text-sm underline text-neutral-300"
                       >
                         Cancelar edição
                       </button>
