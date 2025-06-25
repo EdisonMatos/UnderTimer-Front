@@ -111,7 +111,7 @@ export default function LootInstancia({ instanciaId }) {
         className="mb-3 text-sm font-semibold text-blue-400 hover:underline"
         type="button"
       >
-        {mostrarAdicionarLoot ? "Ocultar" : "Adicionar loot +"}
+        {mostrarAdicionarLoot ? "Ocultar" : "Adicionar Loot +"}
       </button>
 
       {mostrarAdicionarLoot && (
