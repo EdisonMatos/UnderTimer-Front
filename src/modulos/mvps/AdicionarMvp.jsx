@@ -11,6 +11,11 @@ export default function AdicionarMvp({ onCreated }) {
   const [manualRespawn, setManualRespawn] = useState("");
   const [requireManualRespawn, setRequireManualRespawn] = useState(false);
 
+  const WHITELIST = [
+    { id: 2018, max: 2 }, // Duneyr
+    { id: 1765, max: 2 }, // Valks
+  ];
+
   const formatFrequency = (raw) => {
     const hoursMatch = raw.match(/(\d+)_hour/);
     const minsMatch = raw.match(/(\d+)_min/);
@@ -64,6 +69,10 @@ export default function AdicionarMvp({ onCreated }) {
       );
 
       const data = response.data;
+      const monsterIdInt = parseInt(monsterId);
+      const whitelistItem = WHITELIST.find(
+        (entry) => entry.id === monsterIdInt
+      );
 
       let type = "";
       const modes = data.skills?.mode || [];
@@ -72,8 +81,13 @@ export default function AdicionarMvp({ onCreated }) {
       } else if (modes.includes("boss")) {
         type = "miniboss";
       } else {
-        toast.error("ID inválido ou não pertence a um MVP/Miniboss. Verifique");
-        return;
+        if (!whitelistItem) {
+          toast.error(
+            "ID inválido ou não pertence a um MVP/Miniboss. Verifique"
+          );
+          return;
+        }
+        type = "whitelisted";
       }
 
       const maps = data.maps || [];
@@ -123,7 +137,6 @@ export default function AdicionarMvp({ onCreated }) {
         name += ` (${formattedMapName}${mapNumber})`;
       }
 
-      // Verificação se o nome já existe na GUILDA do usuário
       const existing = await axios.get("https://undertimer-biel.onrender.com");
 
       const filtered = existing.data.filter((m) => m.guildId === guildId);
@@ -132,8 +145,23 @@ export default function AdicionarMvp({ onCreated }) {
       );
 
       if (nameExists) {
-        toast.error("Já existe um monstro com esse nome nessa guild.");
-        return;
+        if (!whitelistItem) {
+          toast.error("Já existe um monstro com esse nome nessa guild.");
+          return;
+        }
+
+        const countSameId = filtered.filter((m) =>
+          m.name.toLowerCase().startsWith(name.toLowerCase())
+        ).length;
+
+        if (countSameId >= whitelistItem.max) {
+          toast.error(
+            `Este monstro já foi adicionado ${countSameId}x e atingiu o limite permitido.`
+          );
+          return;
+        }
+
+        name += ` ${countSameId + 1}`;
       }
 
       const payload = {
@@ -225,8 +253,8 @@ export default function AdicionarMvp({ onCreated }) {
           >
             <option value="">Selecione</option>
             {availableMaps.map((map, index) => {
-              const mapName = formatMapName(map.name); // Ex: Rachel Field
-              const mapNumber = map.number ? ` ${map.number}` : ""; // Ex: 2
+              const mapName = formatMapName(map.name);
+              const mapNumber = map.number ? ` ${map.number}` : "";
               const frequency = formatFrequency(map.frequency);
               return (
                 <option key={index} value={index}>
