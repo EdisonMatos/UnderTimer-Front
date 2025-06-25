@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { FaTrash, FaPencilAlt, FaCheck, FaTimes } from "react-icons/fa";
+import LootInstancia from "./LootInstancia";
 
 export default function Instancias() {
   const [instancias, setInstancias] = useState([]);
@@ -19,6 +20,7 @@ export default function Instancias() {
   const [contagemRegressiva, setContagemRegressiva] = useState({});
   const [mostrarAdicionarMembro, setMostrarAdicionarMembro] = useState({});
   const [usarImagemPersonalizada, setUsarImagemPersonalizada] = useState(false);
+  const [mostrarLoot, setMostrarLoot] = useState({});
 
   useEffect(() => {
     buscarInstancias();
@@ -493,7 +495,7 @@ export default function Instancias() {
                 <table className="w-full mb-4 text-sm">
                   <thead>
                     <tr className="w-full text-left text-gray-400">
-                      <th className="w-[10%]"> nº </th>
+                      <th className="w-[10%]"> Nº </th>
                       <th className="w-[50%]"> Nome </th>
                       <th className="w-[50%]"> Função </th>
                       <th className="w-[20%]"> Ações </th>
@@ -616,20 +618,39 @@ export default function Instancias() {
                     )}
                   </tbody>
                 </table>
+                <div className="flex justify-between">
+                  <button
+                    className="mt-0 text-sm font-semibold text-blue-400 hover:underline"
+                    onClick={() =>
+                      setMostrarAdicionarMembro((prev) => ({
+                        ...prev,
+                        [inst.id]: !prev[inst.id],
+                      }))
+                    }
+                  >
+                    {mostrarAdicionarMembro[inst.id]
+                      ? "Ocultar"
+                      : "Adicionar Membro +"}
+                  </button>
 
-                <button
-                  className="mt-0 text-sm font-semibold text-blue-400 hover:underline"
-                  onClick={() =>
-                    setMostrarAdicionarMembro((prev) => ({
-                      ...prev,
-                      [inst.id]: !prev[inst.id],
-                    }))
-                  }
-                >
-                  {mostrarAdicionarMembro[inst.id]
-                    ? "Ocultar"
-                    : "Adicionar Membro +"}
-                </button>
+                  <button
+                    className="mt-0 text-sm font-semibold text-blue-400 hover:underline"
+                    onClick={() =>
+                      setMostrarLoot((prev) => ({
+                        ...prev,
+                        [inst.id]: !prev[inst.id],
+                      }))
+                    }
+                  >
+                    {mostrarLoot?.[inst.id] ? "Ocultar" : "Loot da instância +"}
+                  </button>
+                </div>
+
+                {mostrarLoot?.[inst.id] && (
+                  <div className="p-2 mt-4 text-sm text-gray-300 border rounded border-neutral-700 bg-neutral-800">
+                    <LootInstancia instanciaId={inst.id} />
+                  </div>
+                )}
 
                 {mostrarAdicionarMembro[inst.id] && (
                   <>
