@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { FaPencilAlt, FaTrash, FaCheck, FaTimes } from "react-icons/fa";
+import {
+  FaPencilAlt,
+  FaTrash,
+  FaCheck,
+  FaTimes,
+  FaEye,
+  FaEyeSlash,
+} from "react-icons/fa";
 
 const API_URL = "https://undertimer-biel.onrender.com";
 
@@ -17,6 +24,7 @@ export default function PainelAdmin() {
   const [guildMembrosLoading, setGuildMembrosLoading] = useState({});
   const [guildMembrosError, setGuildMembrosError] = useState({});
   const [guildMembrosForms, setGuildMembrosForms] = useState({});
+  const [senhaVisivel, setSenhaVisivel] = useState({});
 
   const [guildCounts, setGuildCounts] = useState({});
 
@@ -50,6 +58,16 @@ export default function PainelAdmin() {
     } finally {
       setGuildLoading(false);
     }
+  }
+
+  function toggleSenha(guildId, membroId) {
+    setSenhaVisivel((prev) => ({
+      ...prev,
+      [guildId]: {
+        ...prev[guildId],
+        [membroId]: !prev[guildId]?.[membroId],
+      },
+    }));
   }
 
   async function fetchGuildCounts(guildId) {
@@ -520,7 +538,28 @@ export default function PainelAdmin() {
                                   className="w-full p-1 text-black rounded bg-neutral-200"
                                 />
                               ) : (
-                                "••••••"
+                                <div className="flex items-center gap-2">
+                                  <span>
+                                    {senhaVisivel[guild.id]?.[m.id]
+                                      ? m.password
+                                      : "••••••"}
+                                  </span>
+                                  <button
+                                    onClick={() => toggleSenha(guild.id, m.id)}
+                                    className="text-blue-400 hover:text-blue-200"
+                                    title={
+                                      senhaVisivel[guild.id]?.[m.id]
+                                        ? "Ocultar senha"
+                                        : "Mostrar senha"
+                                    }
+                                  >
+                                    {senhaVisivel[guild.id]?.[m.id] ? (
+                                      <FaEyeSlash />
+                                    ) : (
+                                      <FaEye />
+                                    )}
+                                  </button>
+                                </div>
                               )}
                             </td>
                             <td className="py-1 pr-4">
