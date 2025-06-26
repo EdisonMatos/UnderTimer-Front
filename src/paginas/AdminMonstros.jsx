@@ -108,11 +108,11 @@ export default function AdminMonstros({ guildId }) {
             <tbody>
               {monstros.map((m) => (
                 <tr key={m.id} className="border-t border-neutral-700">
-                  <td className="py-1 pr-4">
+                  <td className="flex justify-center py-1 pr-4">
                     <img
                       src={m.spriteUrl}
                       alt="sprite"
-                      className="w-10 h-10 rounded"
+                      className="h-auto rounded max-w-10 max-h-10"
                     />
                   </td>
                   <td className="py-1 pr-4">
