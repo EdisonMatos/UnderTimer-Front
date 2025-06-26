@@ -154,7 +154,7 @@ export default function LootInstancia({ instanciaId }) {
         </form>
       )}
 
-      <table className="w-full text-left text-gray-300 text-[10px]">
+      <table className="w-full text-left text-gray-300 text-[10px] lg:text-[12px] ">
         <thead>
           <tr className="border-b border-neutral-700">
             <th className="w-[7%]">Nº</th>

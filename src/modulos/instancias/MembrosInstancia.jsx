@@ -13,7 +13,7 @@ export default function MembrosInstancia({
   return (
     <div className="p-2 mt-4 mb-4 rounded-md bg-neutral-900">
       <h4 className="mb-2 font-semibold ">Membros</h4>
-      <table className="w-full text-sm ">
+      <table className="w-full text-[10px] md:text-sm ">
         <thead>
           <tr className="w-full text-left text-gray-400">
             <th className="w-[10%]"> Nº </th>
