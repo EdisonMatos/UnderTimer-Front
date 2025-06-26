@@ -5,6 +5,7 @@ import { FaTrash, FaPencilAlt, FaCheck, FaTimes } from "react-icons/fa";
 import LootInstancia from "./LootInstancia";
 import CriarInstancia from "./CriarInstancia";
 import HeaderInstancia from "./HeaderInstancia";
+import AddMembroInstancia from "./AddMembroInstancia";
 
 export default function Instancias() {
   const [instancias, setInstancias] = useState([]);
@@ -279,7 +280,7 @@ export default function Instancias() {
                 key={inst.id}
                 className="p-4 mb-10 text-white border border-neutral-900 bg-cards shadow-md shadow-black h-fit rounded-md w-full lg:w-[32%] lg:max-w-[330px]"
               >
-                {/* Usando o novo componente do cabeçalho */}
+                {/* Usando o componente HeaderInstancia */}
                 <HeaderInstancia
                   inst={inst}
                   editandoInstancia={editandoInstancia}
@@ -453,52 +454,13 @@ export default function Instancias() {
                 )}
 
                 {mostrarAdicionarMembro[inst.id] && (
-                  <>
-                    <p className="mt-4 font-semibold">Adicionar membro:</p>
-                    <div className="flex justify-between gap-2 mt-3">
-                      <input
-                        type="text"
-                        placeholder="Nome"
-                        value={novosMembros[inst.id]?.name || ""}
-                        onChange={(e) =>
-                          setNovosMembros((prev) => ({
-                            ...prev,
-                            [inst.id]: {
-                              name: e.target.value,
-                              role: prev[inst.id]?.role || "",
-                            },
-                          }))
-                        }
-                        className="p-2 text-black border rounded w-[25%] bg-neutral-300 border-gray-300"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Função"
-                        value={novosMembros[inst.id]?.role || ""}
-                        onChange={(e) =>
-                          setNovosMembros((prev) => ({
-                            ...prev,
-                            [inst.id]: {
-                              name: prev[inst.id]?.name || "",
-                              role: e.target.value,
-                            },
-                          }))
-                        }
-                        className="p-2 text-black border rounded w-[25%] bg-neutral-300 border-gray-300"
-                      />
-                      <button
-                        onClick={() => adicionarMembro(inst.id)}
-                        disabled={
-                          carregandoMembros[inst.id] ||
-                          (!novosMembros[inst.id]?.name?.trim() &&
-                            !novosMembros[inst.id]?.role?.trim())
-                        }
-                        className="px-4 py-2 text-white bg-primary hover:scale-105 transition-all rounded w-[36%] disabled:opacity-50"
-                      >
-                        {carregandoMembros[inst.id] ? "..." : "Adicionar"}
-                      </button>
-                    </div>
-                  </>
+                  <AddMembroInstancia
+                    instanciaId={inst.id}
+                    novosMembros={novosMembros}
+                    setNovosMembros={setNovosMembros}
+                    adicionarMembro={adicionarMembro}
+                    carregandoMembros={carregandoMembros}
+                  />
                 )}
               </div>
             );
