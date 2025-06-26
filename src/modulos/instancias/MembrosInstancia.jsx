@@ -11,9 +11,9 @@ export default function MembrosInstancia({
   editarMembroConfirmar,
 }) {
   return (
-    <>
-      <h4 className="mt-4 mb-2 font-semibold">Membros</h4>
-      <table className="w-full mb-4 text-sm">
+    <div className="p-2 mt-4 mb-4 rounded-md bg-neutral-900">
+      <h4 className="mb-2 font-semibold ">Membros</h4>
+      <table className="w-full text-sm ">
         <thead>
           <tr className="w-full text-left text-gray-400">
             <th className="w-[10%]"> Nº </th>
@@ -110,7 +110,7 @@ export default function MembrosInstancia({
                     membro.observacoes || ""
                   )}
                 </td>
-                <td className="flex gap-2 mt-1">
+                <td className="flex gap-4 mt-1">
                   {editandoMembro[membro.id] ? (
                     <>
                       <button
@@ -164,6 +164,6 @@ export default function MembrosInstancia({
           )}
         </tbody>
       </table>
-    </>
+    </div>
   );
 }
