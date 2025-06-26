@@ -17,9 +17,10 @@ export default function MembrosInstancia({
         <thead>
           <tr className="w-full text-left text-gray-400">
             <th className="w-[10%]"> Nº </th>
-            <th className="w-[50%]"> Nome </th>
-            <th className="w-[50%]"> Função </th>
-            <th className="w-[20%]"> Ações </th>
+            <th className="w-[25%]"> Nome </th>
+            <th className="w-[20%]"> Função </th>
+            <th className="w-[40%]"> Observação </th>
+            <th className="w-[10%]"> Ações </th>
           </tr>
         </thead>
         <tbody>
@@ -49,7 +50,7 @@ export default function MembrosInstancia({
                           )
                         )
                       }
-                      className="p-1 h-5 text-black rounded w-[60%]"
+                      className="p-1 h-5 text-black rounded w-[90%]"
                     />
                   ) : (
                     membro.name
@@ -76,10 +77,37 @@ export default function MembrosInstancia({
                           )
                         )
                       }
-                      className="p-1 h-5 text-black rounded w-[60%]"
+                      className="p-1 h-5 text-black rounded w-[90%]"
                     />
                   ) : (
                     membro.role
+                  )}
+                </td>
+                <td>
+                  {editandoMembro[membro.id] ? (
+                    <input
+                      type="text"
+                      value={membro.observacoes || ""}
+                      onChange={(e) =>
+                        setInstancias((prev) =>
+                          prev.map((instMap) =>
+                            instMap.id === instId
+                              ? {
+                                  ...instMap,
+                                  membros: instMap.membros.map((m) =>
+                                    m.id === membro.id
+                                      ? { ...m, observacoes: e.target.value }
+                                      : m
+                                  ),
+                                }
+                              : instMap
+                          )
+                        )
+                      }
+                      className="p-1 h-5 text-black rounded w-[90%]"
+                    />
+                  ) : (
+                    membro.observacoes || ""
                   )}
                 </td>
                 <td className="flex gap-2 mt-1">
@@ -129,7 +157,7 @@ export default function MembrosInstancia({
             ))}
           {membros.length === 0 && (
             <tr>
-              <td colSpan={4} className="italic text-gray-400">
+              <td colSpan={5} className="italic text-gray-400">
                 Nenhum membro ainda
               </td>
             </tr>
