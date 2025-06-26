@@ -65,6 +65,23 @@ export default function HeaderInstancia({
               }
               className="w-full h-8 p-1 text-black rounded"
             />
+            <input
+              type="text"
+              placeholder="Observações"
+              value={
+                instanciaEditada[inst.id]?.observacoes || inst.observacoes || ""
+              }
+              onChange={(e) =>
+                setInstanciaEditada((prev) => ({
+                  ...prev,
+                  [inst.id]: {
+                    ...prev[inst.id],
+                    observacoes: e.target.value,
+                  },
+                }))
+              }
+              className="w-full h-8 p-1 mt-1 text-black rounded"
+            />
           </>
         ) : (
           <>
@@ -92,6 +109,14 @@ export default function HeaderInstancia({
               : "-"}
           </span>
         </p>
+        {!editandoInstancia[inst.id] && (
+          <p className="text-sm opacity-70">
+            Aviso:{" "}
+            <span className="text-green-400">
+              {inst.observacoes || "Nenhum"}
+            </span>
+          </p>
+        )}
       </div>
       <div className="flex flex-col  w-[15%]">
         <h2 className="mb-2 opacity-50">Ações</h2>

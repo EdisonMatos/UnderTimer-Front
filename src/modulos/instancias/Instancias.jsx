@@ -120,6 +120,7 @@ export default function Instancias() {
         name: instanciaEditada[inst.id]?.name || inst.name,
         spriteUrl: instanciaEditada[inst.id]?.spriteUrl || inst.spriteUrl,
         last: lastISO,
+        observacoes: instanciaEditada[inst.id]?.observacoes ?? inst.observacoes,
       };
       await axios.put(
         `https://undertimer-biel.onrender.com/instancias/${inst.id}`,
