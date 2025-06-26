@@ -172,7 +172,7 @@ export default function AdminMonstros({ guildId }) {
                       m.respawn
                     )}
                   </td>
-                  <td className="flex gap-2 py-1">
+                  <td className="flex gap-2 py-1 bg-red-900">
                     {monstroForm?.id === m.id ? (
                       <>
                         <button
