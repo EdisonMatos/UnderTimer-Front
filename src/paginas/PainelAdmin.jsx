@@ -9,6 +9,9 @@ export default function PainelAdmin() {
   const [guilds, setGuilds] = useState([]);
   const [guildLoading, setGuildLoading] = useState(false);
   const [guildError, setGuildError] = useState("");
+  const [guildForm, setGuildForm] = useState({ spriteUrl: "", name: "" });
+  const [guildEditForm, setGuildEditForm] = useState({});
+  const [guildEditingId, setGuildEditingId] = useState(null);
 
   const [guildMembros, setGuildMembros] = useState({});
   const [guildMembrosLoading, setGuildMembrosLoading] = useState({});
@@ -19,8 +22,8 @@ export default function PainelAdmin() {
 
   const endpoints = [
     { key: "membros", label: "Membros" },
-    { key: "instancias", label: "Instâncias" },
     { key: "", label: "Monstros" },
+    { key: "instancias", label: "Instâncias" },
     { key: "contascompartilhadas", label: "Contas Compartilhadas" },
   ];
 
@@ -171,16 +174,106 @@ export default function PainelAdmin() {
     window.location.href = "/";
   }
 
+  async function handleGuildCreate(e) {
+    e.preventDefault();
+    if (!guildForm.spriteUrl || !guildForm.name) return alert("Preencha tudo");
+    try {
+      const res = await fetch(`${API_URL}/guilds`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          spriteUrl: guildForm.spriteUrl,
+          name: guildForm.name,
+          adminId: loggedInUserId,
+        }),
+      });
+      if (!res.ok) throw new Error("Erro ao criar guild");
+      setGuildForm({ spriteUrl: "", name: "" });
+      fetchGuilds();
+    } catch (err) {
+      alert(err.message);
+    }
+  }
+
+  async function handleGuildUpdate(guildId) {
+    const { name, spriteUrl } = guildEditForm[guildId] || {};
+    if (!name || !spriteUrl) return alert("Preencha todos os campos");
+    try {
+      const res = await fetch(`${API_URL}/guilds/${guildId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ spriteUrl, name }),
+      });
+      if (!res.ok) throw new Error("Erro ao editar guild");
+      setGuildEditingId(null);
+      fetchGuilds();
+    } catch (err) {
+      alert(err.message);
+    }
+  }
+
+  async function handleGuildDelete(id) {
+    if (!window.confirm("Deseja deletar esta guild?")) return;
+    try {
+      await fetch(`${API_URL}/guilds/${id}`, { method: "DELETE" });
+      fetchGuilds();
+    } catch (err) {
+      alert("Erro ao deletar guild");
+    }
+  }
+
+  function handleEditInputChange(guildId, field, value) {
+    setGuildEditForm((prev) => ({
+      ...prev,
+      [guildId]: {
+        ...prev[guildId],
+        [field]: value,
+      },
+    }));
+  }
+
   return (
     <div className="max-w-5xl p-5 mx-auto mt-20 font-sans text-white">
       <div className="flex items-center justify-between mb-10">
-        <h1 className="text-3xl font-bold">Painel Admin</h1>
+        <h1 className="text-3xl font-bold">Painel Admin - UnderTimer</h1>
         <button
           onClick={handleLogout}
           className="px-4 py-2 text-white bg-red-600 rounded hover:bg-red-700"
         >
           Sair
         </button>
+      </div>
+
+      <div className="p-4 mb-12 border rounded-md bg-neutral-800 border-neutral-700">
+        <div className="p-6 rounded-md bg-neutral-900 border-neutral-700">
+          <h2 className="mb-4 text-lg font-semibold">Nova Guild</h2>
+          <form onSubmit={handleGuildCreate} className="flex gap-3">
+            <input
+              type="text"
+              placeholder="Nome da guild"
+              value={guildForm.name}
+              onChange={(e) =>
+                setGuildForm((prev) => ({ ...prev, name: e.target.value }))
+              }
+              className="w-1/3 p-2 text-black rounded bg-neutral-300"
+            />
+            <input
+              type="text"
+              placeholder="URL do emblema"
+              value={guildForm.spriteUrl}
+              onChange={(e) =>
+                setGuildForm((prev) => ({ ...prev, spriteUrl: e.target.value }))
+              }
+              className="w-1/3 p-2 text-black rounded bg-neutral-300"
+            />
+            <button
+              type="submit"
+              className="px-6 py-2 text-white rounded bg-primary"
+            >
+              Criar
+            </button>
+          </form>
+        </div>
       </div>
 
       {guildLoading ? (
@@ -202,6 +295,12 @@ export default function PainelAdmin() {
             role: "",
           };
 
+          const isEditingGuild = guildEditingId === guild.id;
+          const editValues = guildEditForm[guild.id] || {
+            name: guild.name,
+            spriteUrl: guild.spriteUrl,
+          };
+
           return (
             <div
               key={guild.id}
@@ -214,32 +313,104 @@ export default function PainelAdmin() {
                     alt="Emblema"
                     className="w-16 h-16 border rounded-full"
                   />
-                  <div>
-                    <h2 className="text-lg font-semibold">
-                      {guild.name || `Guild ${guild.id}`}
-                    </h2>
-                    <div className="mt-1 space-y-1 text-sm opacity-80">
-                      {endpoints.map((ep) => (
-                        <p key={ep.key}>
-                          {ep.label}:{" "}
-                          <span className="text-green-400">
-                            {counts[ep.key] ?? 0}
-                          </span>
-                        </p>
-                      ))}
+                  {isEditingGuild ? (
+                    <div className="flex flex-col gap-2">
+                      <input
+                        type="text"
+                        value={editValues.name}
+                        onChange={(e) =>
+                          handleEditInputChange(
+                            guild.id,
+                            "name",
+                            e.target.value
+                          )
+                        }
+                        className="p-1 text-black rounded bg-neutral-200"
+                      />
+                      <input
+                        type="text"
+                        value={editValues.spriteUrl}
+                        onChange={(e) =>
+                          handleEditInputChange(
+                            guild.id,
+                            "spriteUrl",
+                            e.target.value
+                          )
+                        }
+                        className="p-1 text-black rounded bg-neutral-200"
+                      />
                     </div>
-                  </div>
+                  ) : (
+                    <div>
+                      <h2 className="text-lg font-semibold">
+                        {guild.name || `Guild ${guild.id}`}
+                      </h2>
+                      <div className="flex gap-4 text-md opacity-80">
+                        {endpoints.map((ep) => (
+                          <p key={ep.key}>
+                            {ep.label}:{" "}
+                            <span className="text-green-400">
+                              {counts[ep.key] ?? 0}
+                            </span>
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className="flex gap-3">
+                  {isEditingGuild ? (
+                    <>
+                      <button
+                        onClick={() => handleGuildUpdate(guild.id)}
+                        className="text-green-400 hover:text-green-300"
+                      >
+                        <FaCheck />
+                      </button>
+                      <button
+                        onClick={() => setGuildEditingId(null)}
+                        className="text-white hover:text-red-200"
+                      >
+                        <FaTimes />
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => {
+                          setGuildEditingId(guild.id);
+                          setGuildEditForm((prev) => ({
+                            ...prev,
+                            [guild.id]: {
+                              name: guild.name,
+                              spriteUrl: guild.spriteUrl,
+                            },
+                          }));
+                        }}
+                        className="text-white hover:text-yellow-200"
+                      >
+                        <FaPencilAlt />
+                      </button>
+                      <button
+                        onClick={() => handleGuildDelete(guild.id)}
+                        className="text-white hover:text-red-200"
+                      >
+                        <FaTrash />
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
 
-              <div className="p-4 bg-neutral-900 rounded-md mt-6 w-[100%] border-t border-neutral-700">
+              {/* Formulário de membros */}
+              <div className="w-full p-4 mt-6 border-t rounded-md bg-neutral-900 border-neutral-700">
                 <h3 className="w-full mb-3 text-base font-semibold">
                   Adicionar membro
                 </h3>
                 {!form.editingMembro && (
                   <form
                     onSubmit={(e) => handleMembroSubmit(e, guild.id)}
-                    className="flex gap-2 mt-4 "
+                    className="flex gap-2 mt-4"
                   >
                     <input
                       type="text"
@@ -290,7 +461,7 @@ export default function PainelAdmin() {
                       type="submit"
                       className="px-4 py-2 text-white bg-primary w-[20%] rounded"
                     >
-                      Criar
+                      Adicionar
                     </button>
                   </form>
                 )}
@@ -300,14 +471,14 @@ export default function PainelAdmin() {
                 ) : error ? (
                   <p className="text-red-500">{error}</p>
                 ) : (
-                  <div className="">
+                  <div>
                     <table className="w-full text-sm border-collapse">
                       <thead className="w-full ">
                         <tr className="text-left text-gray-400">
                           <th className="pr-4">Usuário</th>
                           <th className="pr-4">Senha</th>
                           <th className="pr-4">Função</th>
-                          <th className="">Ações</th>
+                          <th>Ações</th>
                         </tr>
                       </thead>
                       <tbody>
