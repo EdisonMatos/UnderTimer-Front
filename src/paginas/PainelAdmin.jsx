@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaPencilAlt, FaTrash, FaCheck, FaTimes } from "react-icons/fa";
+import AdminHeader from "./AdminHeader";
 import AdminMembros from "./AdminMembros";
 
 const API_URL = "https://undertimer-biel.onrender.com";
@@ -179,7 +179,7 @@ export default function PainelAdmin() {
       ) : (
         guilds.map((guild) => {
           const counts = guildCounts[guild.id] || {};
-          const isEditingGuild = guildEditingId === guild.id;
+          const isEditing = guildEditingId === guild.id;
           const editValues = guildEditForm[guild.id] || {
             name: guild.name,
             spriteUrl: guild.spriteUrl,
@@ -190,103 +190,30 @@ export default function PainelAdmin() {
               key={guild.id}
               className="p-6 mb-10 border rounded-md shadow bg-neutral-800 border-neutral-700"
             >
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-4">
-                  <img
-                    src={guild.spriteUrl}
-                    alt="Emblema"
-                    className="w-16 h-16 border rounded-full"
-                  />
-                  {isEditingGuild ? (
-                    <div className="flex flex-col gap-2">
-                      <input
-                        type="text"
-                        value={editValues.name}
-                        onChange={(e) =>
-                          handleEditInputChange(
-                            guild.id,
-                            "name",
-                            e.target.value
-                          )
-                        }
-                        className="p-1 text-black rounded bg-neutral-200"
-                      />
-                      <input
-                        type="text"
-                        value={editValues.spriteUrl}
-                        onChange={(e) =>
-                          handleEditInputChange(
-                            guild.id,
-                            "spriteUrl",
-                            e.target.value
-                          )
-                        }
-                        className="p-1 text-black rounded bg-neutral-200"
-                      />
-                    </div>
-                  ) : (
-                    <div>
-                      <h2 className="text-lg font-semibold">
-                        {guild.name || `Guild ${guild.id}`}
-                      </h2>
-                      <div className="flex gap-4 text-md opacity-80">
-                        {endpoints.map((ep) => (
-                          <p key={ep.key}>
-                            {ep.label}:{" "}
-                            <span className="text-green-400">
-                              {counts[ep.key] ?? 0}
-                            </span>
-                          </p>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-                <div className="flex gap-3">
-                  {isEditingGuild ? (
-                    <>
-                      <button
-                        onClick={() => handleGuildUpdate(guild.id)}
-                        className="text-green-400 hover:text-green-300"
-                      >
-                        <FaCheck />
-                      </button>
-                      <button
-                        onClick={() => setGuildEditingId(null)}
-                        className="text-white hover:text-red-200"
-                      >
-                        <FaTimes />
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <button
-                        onClick={() => {
-                          setGuildEditingId(guild.id);
-                          setGuildEditForm((prev) => ({
-                            ...prev,
-                            [guild.id]: {
-                              name: guild.name,
-                              spriteUrl: guild.spriteUrl,
-                            },
-                          }));
-                        }}
-                        className="text-white hover:text-yellow-200"
-                      >
-                        <FaPencilAlt />
-                      </button>
-                      <button
-                        onClick={() => handleGuildDelete(guild.id)}
-                        className="text-white hover:text-red-200"
-                      >
-                        <FaTrash />
-                      </button>
-                    </>
-                  )}
-                </div>
-              </div>
+              <AdminHeader
+                guild={guild}
+                counts={counts}
+                isEditingGuild={isEditing}
+                editValues={editValues}
+                endpoints={endpoints}
+                onChange={(field, value) =>
+                  handleEditInputChange(guild.id, field, value)
+                }
+                onUpdate={() => handleGuildUpdate(guild.id)}
+                onCancelEdit={() => setGuildEditingId(null)}
+                onStartEdit={() => {
+                  setGuildEditingId(guild.id);
+                  setGuildEditForm((prev) => ({
+                    ...prev,
+                    [guild.id]: {
+                      name: guild.name,
+                      spriteUrl: guild.spriteUrl,
+                    },
+                  }));
+                }}
+                onDelete={() => handleGuildDelete(guild.id)}
+              />
 
-              {/* Seção extraída para componente separado */}
               <AdminMembros guildId={guild.id} />
             </div>
           );
