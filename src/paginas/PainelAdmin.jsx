@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import AdminHeader from "./AdminHeader";
 import AdminMembros from "./AdminMembros";
+import AdminNovaGuild from "./AdminNovaGuild";
+import AdminMonstros from "./AdminMonstros";
 
 const API_URL = "https://undertimer-biel.onrender.com";
 
@@ -66,6 +68,10 @@ export default function PainelAdmin() {
   function handleLogout() {
     localStorage.clear();
     window.location.href = "/";
+  }
+
+  function handleGuildFormChange(field, value) {
+    setGuildForm((prev) => ({ ...prev, [field]: value }));
   }
 
   async function handleGuildCreate(e) {
@@ -138,37 +144,11 @@ export default function PainelAdmin() {
         </button>
       </div>
 
-      <div className="p-4 mb-12 border rounded-md bg-neutral-800 border-neutral-700">
-        <div className="p-6 rounded-md bg-neutral-900 border-neutral-700">
-          <h2 className="mb-4 text-lg font-semibold">Nova Guild</h2>
-          <form onSubmit={handleGuildCreate} className="flex gap-3">
-            <input
-              type="text"
-              placeholder="Nome da guild"
-              value={guildForm.name}
-              onChange={(e) =>
-                setGuildForm((prev) => ({ ...prev, name: e.target.value }))
-              }
-              className="w-1/3 p-2 text-black rounded bg-neutral-300"
-            />
-            <input
-              type="text"
-              placeholder="URL do emblema"
-              value={guildForm.spriteUrl}
-              onChange={(e) =>
-                setGuildForm((prev) => ({ ...prev, spriteUrl: e.target.value }))
-              }
-              className="w-1/3 p-2 text-black rounded bg-neutral-300"
-            />
-            <button
-              type="submit"
-              className="px-6 py-2 text-white rounded bg-primary"
-            >
-              Criar
-            </button>
-          </form>
-        </div>
-      </div>
+      <AdminNovaGuild
+        guildForm={guildForm}
+        onChange={handleGuildFormChange}
+        onSubmit={handleGuildCreate}
+      />
 
       {guildLoading ? (
         <p>Carregando guilds...</p>
@@ -215,6 +195,7 @@ export default function PainelAdmin() {
               />
 
               <AdminMembros guildId={guild.id} />
+              <AdminMonstros guildId={guild.id} />
             </div>
           );
         })
