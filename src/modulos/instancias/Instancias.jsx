@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { FaTrash, FaPencilAlt, FaCheck, FaTimes } from "react-icons/fa";
 import LootInstancia from "./LootInstancia";
 import CriarInstancia from "./CriarInstancia";
 import HeaderInstancia from "./HeaderInstancia";
 import AddMembroInstancia from "./AddMembroInstancia";
+import MembrosInstancia from "./MembrosInstancia";
 
 export default function Instancias() {
   const [instancias, setInstancias] = useState([]);
@@ -139,14 +139,11 @@ export default function Instancias() {
     );
     if (!confirmar) return;
 
-    // Exibe o toast de loading e guarda o ID para atualização
     const toastId = toast.loading("Em andamento. Aguarde...");
 
     try {
-      // Primeiro, buscar os membros da instância
       const instancia = instancias.find((inst) => inst.id === id);
       if (instancia && instancia.membros && instancia.membros.length > 0) {
-        // Deletar cada membro individualmente
         for (const membro of instancia.membros) {
           await axios.delete(
             `https://undertimer-biel.onrender.com/membrosinstancia/${membro.id}`
@@ -154,12 +151,10 @@ export default function Instancias() {
         }
       }
 
-      // Agora deletar a instância
       await axios.delete(
         `https://undertimer-biel.onrender.com/instancias/${id}`
       );
 
-      // Atualiza o toast para sucesso
       toast.update(toastId, {
         render: "Instância e membros excluídos com sucesso",
         type: "success",
@@ -172,7 +167,6 @@ export default function Instancias() {
     } catch (err) {
       console.error("Erro ao deletar instância e membros:", err);
 
-      // Atualiza o toast para erro
       toast.update(toastId, {
         render: "Erro ao excluir instância ou seus membros.",
         type: "error",
@@ -239,8 +233,6 @@ export default function Instancias() {
     (inst) => inst.guildId === guildId
   );
 
-  const SPRITE_PADRAO = "https://game.ragnaplace.com/ro/job/1133/0.png";
-
   return (
     <div className="mt-32">
       <h1 className="mb-6 text-[24px] font-semibold">Instâncias e Eventos</h1>
@@ -270,17 +262,11 @@ export default function Instancias() {
             return timeA - timeB;
           })
           .map((inst) => {
-            const nome = novosMembros[inst.id]?.name || "";
-            const funcao = novosMembros[inst.id]?.role || "";
-            const carregando = carregandoMembros[inst.id];
-            const desabilitado = carregando || (!nome.trim() && !funcao.trim());
-
             return (
               <div
                 key={inst.id}
                 className="p-4 mb-10 text-white border border-neutral-900 bg-cards shadow-md shadow-black h-fit rounded-md w-full lg:w-[32%] lg:max-w-[330px]"
               >
-                {/* Usando o componente HeaderInstancia */}
                 <HeaderInstancia
                   inst={inst}
                   editandoInstancia={editandoInstancia}
@@ -292,133 +278,16 @@ export default function Instancias() {
                   contagemRegressiva={contagemRegressiva}
                 />
 
-                <h4 className="mt-4 mb-2 font-semibold">Membros</h4>
-                <table className="w-full mb-4 text-sm">
-                  <thead>
-                    <tr className="w-full text-left text-gray-400">
-                      <th className="w-[10%]"> Nº </th>
-                      <th className="w-[50%]"> Nome </th>
-                      <th className="w-[50%]"> Função </th>
-                      <th className="w-[20%]"> Ações </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {[...inst.membros]
-                      .sort((a, b) => a.role.localeCompare(b.role))
-                      .map((membro, i) => (
-                        <tr
-                          key={membro.id}
-                          className="border-t border-neutral-700"
-                        >
-                          <td>{i + 1}</td>
-                          <td>
-                            {editandoMembro[membro.id] ? (
-                              <input
-                                type="text"
-                                value={membro.name}
-                                onChange={(e) =>
-                                  setInstancias((prev) =>
-                                    prev.map((instMap) =>
-                                      instMap.id === inst.id
-                                        ? {
-                                            ...instMap,
-                                            membros: instMap.membros.map((m) =>
-                                              m.id === membro.id
-                                                ? { ...m, name: e.target.value }
-                                                : m
-                                            ),
-                                          }
-                                        : instMap
-                                    )
-                                  )
-                                }
-                                className="p-1 h-5 text-black rounded w-[60%]"
-                              />
-                            ) : (
-                              membro.name
-                            )}
-                          </td>
-                          <td>
-                            {editandoMembro[membro.id] ? (
-                              <input
-                                type="text"
-                                value={membro.role}
-                                onChange={(e) =>
-                                  setInstancias((prev) =>
-                                    prev.map((instMap) =>
-                                      instMap.id === inst.id
-                                        ? {
-                                            ...instMap,
-                                            membros: instMap.membros.map((m) =>
-                                              m.id === membro.id
-                                                ? { ...m, role: e.target.value }
-                                                : m
-                                            ),
-                                          }
-                                        : instMap
-                                    )
-                                  )
-                                }
-                                className="p-1 h-5 text-black rounded w-[60%]"
-                              />
-                            ) : (
-                              membro.role
-                            )}
-                          </td>
-                          <td className="flex gap-2 mt-1">
-                            {editandoMembro[membro.id] ? (
-                              <>
-                                <button
-                                  onClick={() => editarMembroConfirmar(membro)}
-                                  className="text-green-400 hover:text-green-200"
-                                >
-                                  <FaCheck />
-                                </button>
-                                <button
-                                  onClick={() =>
-                                    setEditandoMembro((prev) => ({
-                                      ...prev,
-                                      [membro.id]: false,
-                                    }))
-                                  }
-                                  className="text-white hover:text-red-200"
-                                >
-                                  <FaTimes />
-                                </button>
-                              </>
-                            ) : (
-                              <>
-                                <button
-                                  onClick={() =>
-                                    setEditandoMembro((prev) => ({
-                                      ...prev,
-                                      [membro.id]: true,
-                                    }))
-                                  }
-                                  className="text-white hover:text-yellow-200"
-                                >
-                                  <FaPencilAlt />
-                                </button>
-                                <button
-                                  onClick={() => deletarMembro(membro.id)}
-                                  className="text-white hover:text-red-200"
-                                >
-                                  <FaTrash />
-                                </button>
-                              </>
-                            )}
-                          </td>
-                        </tr>
-                      ))}
-                    {inst.membros.length === 0 && (
-                      <tr>
-                        <td colSpan={4} className="italic text-gray-400">
-                          Nenhum membro ainda
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
+                <MembrosInstancia
+                  membros={inst.membros}
+                  instId={inst.id}
+                  editandoMembro={editandoMembro}
+                  setEditandoMembro={setEditandoMembro}
+                  setInstancias={setInstancias}
+                  deletarMembro={deletarMembro}
+                  editarMembroConfirmar={editarMembroConfirmar}
+                />
+
                 <div className="flex justify-between">
                   <button
                     className="mt-0 text-sm font-semibold text-blue-400 hover:underline"
