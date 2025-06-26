@@ -20,8 +20,8 @@ export default function AdminMonstros({ guildId }) {
       const res = await fetch(`${API_URL}/`);
       if (!res.ok) throw new Error("Erro ao buscar monstros");
       const data = await res.json();
-      const filteredMonstros = data.filter((m) => m.guildId === guildId);
-      setMonstros(filteredMonstros);
+      const filtered = data.filter((m) => m.guildId === guildId);
+      setMonstros(filtered);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -39,14 +39,21 @@ export default function AdminMonstros({ guildId }) {
 
   async function handleMonstroSubmit(e) {
     e.preventDefault();
-    const method = monstroForm.id ? "PUT" : "POST";
-    const url = monstroForm.id ? `${API_URL}/${monstroForm.id}` : `${API_URL}/`;
+
+    const body = {
+      ...monstroForm,
+      guildId,
+    };
+
+    const isEdit = !!monstroForm.id;
+    const url = isEdit ? `${API_URL}/edit` : `${API_URL}/creatures`;
+    const method = isEdit ? "PUT" : "POST";
 
     try {
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(monstroForm),
+        body: JSON.stringify(body),
       });
       if (!res.ok) throw new Error("Erro ao salvar monstro");
 
@@ -57,13 +64,13 @@ export default function AdminMonstros({ guildId }) {
     }
   }
 
-  async function deleteMonstro(monstroId) {
+  async function deleteMonstro(id) {
     if (!window.confirm("Deseja excluir este monstro?")) return;
     try {
-      const res = await fetch(`${API_URL}/${monstroId}`, {
+      const res = await fetch(`${API_URL}/creatures/${id}`, {
         method: "DELETE",
       });
-      if (!res.ok) throw new Error("Erro ao excluir monstro");
+      if (!res.ok) throw new Error("Erro ao deletar monstro");
 
       fetchMonstros();
     } catch (err) {
@@ -72,7 +79,10 @@ export default function AdminMonstros({ guildId }) {
   }
 
   function handleMonstroInputChange(field, value) {
-    setMonstroForm((prev) => ({ ...prev, [field]: value }));
+    setMonstroForm((prev) => ({
+      ...prev,
+      [field]: field === "respawn" ? parseFloat(value) : value,
+    }));
   }
 
   return (
