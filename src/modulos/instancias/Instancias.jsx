@@ -234,6 +234,89 @@ export default function Instancias() {
     (inst) => inst.guildId === guildId
   );
 
+  const agora = Date.now();
+  const instanciasAtivas = instanciasFiltradas.filter(
+    (inst) => new Date(inst.last).getTime() > agora
+  );
+  const instanciasPassadas = instanciasFiltradas.filter(
+    (inst) => new Date(inst.last).getTime() <= agora
+  );
+
+  const renderInstancias = (lista) =>
+    lista
+      .sort((a, b) => new Date(a.last).getTime() - new Date(b.last).getTime())
+      .map((inst) => (
+        <div
+          key={inst.id}
+          className="p-4 text-white border border-neutral-900 bg-cards shadow-md shadow-black h-fit rounded-md w-full lg:max-w-[820px]"
+        >
+          <HeaderInstancia
+            inst={inst}
+            editandoInstancia={editandoInstancia}
+            setEditandoInstancia={setEditandoInstancia}
+            instanciaEditada={instanciaEditada}
+            setInstanciaEditada={setInstanciaEditada}
+            editarInstanciaConfirmar={editarInstanciaConfirmar}
+            deletarInstancia={deletarInstancia}
+            contagemRegressiva={contagemRegressiva}
+          />
+
+          <MembrosInstancia
+            membros={inst.membros}
+            instId={inst.id}
+            editandoMembro={editandoMembro}
+            setEditandoMembro={setEditandoMembro}
+            setInstancias={setInstancias}
+            deletarMembro={deletarMembro}
+            editarMembroConfirmar={editarMembroConfirmar}
+          />
+
+          <div className="flex justify-between">
+            <button
+              className="mt-0 text-sm font-semibold text-blue-400 hover:underline"
+              onClick={() =>
+                setMostrarAdicionarMembro((prev) => ({
+                  ...prev,
+                  [inst.id]: !prev[inst.id],
+                }))
+              }
+            >
+              {mostrarAdicionarMembro[inst.id]
+                ? "Ocultar"
+                : "Adicionar Membro +"}
+            </button>
+
+            <button
+              className="mt-0 text-sm font-semibold text-blue-400 hover:underline"
+              onClick={() =>
+                setMostrarLoot((prev) => ({
+                  ...prev,
+                  [inst.id]: !prev[inst.id],
+                }))
+              }
+            >
+              {mostrarLoot?.[inst.id] ? "Ocultar" : "Loot da instância +"}
+            </button>
+          </div>
+
+          {mostrarLoot?.[inst.id] && (
+            <div className="p-2 mt-4 text-sm text-gray-300 rounded-md bg-neutral-900">
+              <LootInstancia instanciaId={inst.id} />
+            </div>
+          )}
+
+          {mostrarAdicionarMembro[inst.id] && (
+            <AddMembroInstancia
+              instanciaId={inst.id}
+              novosMembros={novosMembros}
+              setNovosMembros={setNovosMembros}
+              adicionarMembro={adicionarMembro}
+              carregandoMembros={carregandoMembros}
+            />
+          )}
+        </div>
+      ));
+
   return (
     <div className="mt-32">
       <h1 className="mb-6 text-[24px] font-semibold">Instâncias e Eventos</h1>
@@ -251,90 +334,12 @@ export default function Instancias() {
         Instâncias ativas
       </h2>
       <div className="flex flex-wrap gap-4">
-        {[...instanciasFiltradas]
-          .sort((a, b) => {
-            const now = Date.now();
-            const timeA = new Date(a.last).getTime();
-            const timeB = new Date(b.last).getTime();
-            const isAFut = timeA > now,
-              isBFut = timeB > now;
-            if (isAFut && !isBFut) return -1;
-            if (!isAFut && isBFut) return 1;
-            return timeA - timeB;
-          })
-          .map((inst) => {
-            return (
-              <div
-                key={inst.id}
-                className="p-4 mb-10 text-white border border-neutral-900 bg-cards shadow-md shadow-black h-fit rounded-md w-full lg:max-w-[600px]"
-              >
-                <HeaderInstancia
-                  inst={inst}
-                  editandoInstancia={editandoInstancia}
-                  setEditandoInstancia={setEditandoInstancia}
-                  instanciaEditada={instanciaEditada}
-                  setInstanciaEditada={setInstanciaEditada}
-                  editarInstanciaConfirmar={editarInstanciaConfirmar}
-                  deletarInstancia={deletarInstancia}
-                  contagemRegressiva={contagemRegressiva}
-                />
+        {renderInstancias(instanciasAtivas)}
+      </div>
 
-                <MembrosInstancia
-                  membros={inst.membros}
-                  instId={inst.id}
-                  editandoMembro={editandoMembro}
-                  setEditandoMembro={setEditandoMembro}
-                  setInstancias={setInstancias}
-                  deletarMembro={deletarMembro}
-                  editarMembroConfirmar={editarMembroConfirmar}
-                />
-
-                <div className="flex justify-between">
-                  <button
-                    className="mt-0 text-sm font-semibold text-blue-400 hover:underline"
-                    onClick={() =>
-                      setMostrarAdicionarMembro((prev) => ({
-                        ...prev,
-                        [inst.id]: !prev[inst.id],
-                      }))
-                    }
-                  >
-                    {mostrarAdicionarMembro[inst.id]
-                      ? "Ocultar"
-                      : "Adicionar Membro +"}
-                  </button>
-
-                  <button
-                    className="mt-0 text-sm font-semibold text-blue-400 hover:underline"
-                    onClick={() =>
-                      setMostrarLoot((prev) => ({
-                        ...prev,
-                        [inst.id]: !prev[inst.id],
-                      }))
-                    }
-                  >
-                    {mostrarLoot?.[inst.id] ? "Ocultar" : "Loot da instância +"}
-                  </button>
-                </div>
-
-                {mostrarLoot?.[inst.id] && (
-                  <div className="p-2 mt-4 text-sm text-gray-300 rounded-md bg-neutral-900">
-                    <LootInstancia instanciaId={inst.id} />
-                  </div>
-                )}
-
-                {mostrarAdicionarMembro[inst.id] && (
-                  <AddMembroInstancia
-                    instanciaId={inst.id}
-                    novosMembros={novosMembros}
-                    setNovosMembros={setNovosMembros}
-                    adicionarMembro={adicionarMembro}
-                    carregandoMembros={carregandoMembros}
-                  />
-                )}
-              </div>
-            );
-          })}
+      <h2 className="mb-2 text-lg font-semibold text-white mt-14">Passadas</h2>
+      <div className="flex flex-wrap gap-4">
+        {renderInstancias(instanciasPassadas)}
       </div>
     </div>
   );

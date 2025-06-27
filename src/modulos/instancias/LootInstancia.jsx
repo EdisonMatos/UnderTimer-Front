@@ -10,6 +10,7 @@ export default function LootInstancia({ instanciaId }) {
   const [editandoLoot, setEditandoLoot] = useState({});
   const [lootEditado, setLootEditado] = useState({});
   const [mostrarAdicionarLoot, setMostrarAdicionarLoot] = useState(false);
+  const [somaTotal, setSomaTotal] = useState(0);
 
   const apelido = localStorage.getItem("apelido") || "Anônimo";
 
@@ -27,9 +28,18 @@ export default function LootInstancia({ instanciaId }) {
         (l) => l.instanciaId === instanciaId
       );
       setLoots(lootsFiltrados);
+      atualizarSoma(lootsFiltrados);
     } catch (err) {
       console.error("Erro ao buscar loot:", err);
     }
+  }
+
+  function atualizarSoma(loots) {
+    const soma = loots.reduce((total, loot) => {
+      const valor = parseFloat(loot.preco);
+      return total + (isNaN(valor) ? 0 : valor);
+    }, 0);
+    setSomaTotal(soma);
   }
 
   async function adicionarLoot() {
@@ -84,7 +94,10 @@ export default function LootInstancia({ instanciaId }) {
         {
           name: editado.name ?? loot.name,
           updatedby: editado.updatedby ?? loot.updatedby,
-          preco: loot.preco,
+          preco:
+            editado.preco !== undefined
+              ? parseFloat(editado.preco)
+              : loot.preco,
           observacao: editado.observacao ?? loot.observacao,
           interesse: loot.interesse,
         }
@@ -104,13 +117,25 @@ export default function LootInstancia({ instanciaId }) {
 
   return (
     <div>
-      <button
-        onClick={() => setMostrarAdicionarLoot((prev) => !prev)}
-        className="mb-3 text-sm font-semibold text-blue-400 hover:underline"
-        type="button"
-      >
-        {mostrarAdicionarLoot ? "Ocultar" : "Adicionar Loot +"}
-      </button>
+      <div className="flex items-center justify-between">
+        <button
+          onClick={() => setMostrarAdicionarLoot((prev) => !prev)}
+          className="text-sm font-semibold text-blue-400 hover:underline"
+          type="button"
+        >
+          {mostrarAdicionarLoot ? "Ocultar" : "Adicionar Loot +"}
+        </button>
+        {loots.length > 0 && (
+          <tfoot>
+            <tr className="border-t border-neutral-700">
+              <td colSpan={7} className="py-2 pr-2 font-semibold text-right ">
+                Total:{" "}
+                <span className="text-blue-400">{somaTotal.toFixed(2)}</span>
+              </td>
+            </tr>
+          </tfoot>
+        )}
+      </div>
 
       {mostrarAdicionarLoot && (
         <form
@@ -155,18 +180,19 @@ export default function LootInstancia({ instanciaId }) {
       <table className="w-full text-left text-gray-300 text-[10px] lg:text-[12px]">
         <thead>
           <tr className="border-b border-neutral-800">
-            <th className="w-[6%]">Nº</th>
-            <th className="w-[25%]">Nome</th>
+            <th className="w-[5%]">Nº</th>
+            <th className="w-[20%]">Nome</th>
             <th className="w-[15%]">Dropou</th>
-            <th className="w-[20%]">Quer</th>
-            <th className="w-[25%]">Observações</th>
-            <th className="w-[9%]">Ações</th>
+            <th className="w-[10%]">Valor</th>
+            <th className="w-[15%]">Quer</th>
+            <th className="w-[35%]">Observações</th>
+            <th className="w-[10%]">Ações</th>
           </tr>
         </thead>
         <tbody>
           {loots.length === 0 ? (
             <tr>
-              <td colSpan={6} className="py-2 italic text-center text-gray-500">
+              <td colSpan={7} className="py-2 italic text-center text-gray-500">
                 Nenhum loot cadastrado.
               </td>
             </tr>
@@ -188,7 +214,7 @@ export default function LootInstancia({ instanciaId }) {
                           },
                         }))
                       }
-                      className="w-[80%] p-1 text-black rounded h-5"
+                      className="w-[90%] p-1 text-black rounded h-5"
                     />
                   ) : (
                     loot.name
@@ -208,13 +234,35 @@ export default function LootInstancia({ instanciaId }) {
                           },
                         }))
                       }
-                      className="w-[80%] p-1 text-black rounded h-5"
+                      className="w-[90%] p-1 text-black rounded h-5"
                     />
                   ) : (
                     capitalizar(loot.updatedby)
                   )}
                 </td>
-                <td className="py-1 text-[10px]">
+                <td className="py-1">
+                  {editandoLoot[loot.id] ? (
+                    <input
+                      type="number"
+                      value={lootEditado[loot.id]?.preco ?? loot.preco ?? ""}
+                      onChange={(e) =>
+                        setLootEditado((prev) => ({
+                          ...prev,
+                          [loot.id]: {
+                            ...(prev[loot.id] || {}),
+                            preco: e.target.value,
+                          },
+                        }))
+                      }
+                      className="w-[90%] p-1 text-black rounded h-5"
+                    />
+                  ) : loot.preco != null ? (
+                    `${parseFloat(loot.preco).toFixed(2)}`
+                  ) : (
+                    "-"
+                  )}
+                </td>
+                <td className="py-1">
                   {loot.interesse ? (
                     loot.interesse.split(",").map((nome, idx, arr) => (
                       <span key={idx} className="inline-block mr-1">
@@ -244,7 +292,7 @@ export default function LootInstancia({ instanciaId }) {
                           },
                         }))
                       }
-                      className="w-[80%] p-1 text-black rounded h-5"
+                      className="w-[90%] p-1 text-black rounded h-5"
                     />
                   ) : (
                     loot.observacao || (

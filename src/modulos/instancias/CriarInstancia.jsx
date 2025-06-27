@@ -9,12 +9,12 @@ export default function CriarInstancia({
   carregandoNovaInstancia,
 }) {
   return (
-    <div className="w-full p-4 rounded-md shadow-md bg-cards lg:w-fit shadow-black">
+    <div className="w-full p-4 rounded-md shadow-md bg-cards lg:w-fit shadow-black max-w-[820px]">
       <div className="p-4 rounded-md bg-neutral-900">
         <h2 className="mb-2 text-lg font-semibold text-white">
           Criar nova instância ou evento
         </h2>
-        <div className="flex flex-col gap-2 sm:flex-row">
+        <div className="flex flex-col gap-2 lg:flex-row">
           <input
             type="text"
             placeholder="Nome da instância"
@@ -22,7 +22,7 @@ export default function CriarInstancia({
             onChange={(e) =>
               setNovaInstancia((prev) => ({ ...prev, name: e.target.value }))
             }
-            className="p-2 text-black border border-gray-300 rounded bg-neutral-300"
+            className="p-2 text-black border border-gray-300 rounded bg-neutral-300 lg:w-[25%]"
           />
 
           <select
@@ -43,7 +43,7 @@ export default function CriarInstancia({
                 }));
               }
             }}
-            className="p-2 text-black border lg:w-[230px] border-gray-300 rounded bg-neutral-300"
+            className="p-2 text-black border lg:w-[220px] border-gray-300 rounded bg-neutral-300"
           >
             <option value="padrao">Imagem padrão</option>
             <option value="personalizada">Imagem personalizada</option>
@@ -60,7 +60,7 @@ export default function CriarInstancia({
                   spriteUrl: e.target.value,
                 }))
               }
-              className="p-2 text-black border border-gray-300 rounded bg-neutral-300 lg:w-[230px]"
+              className="p-2 text-black border border-gray-300 rounded bg-neutral-300 lg:w-[20%]"
             />
           )}
 
@@ -70,7 +70,7 @@ export default function CriarInstancia({
             onChange={(e) =>
               setNovaInstancia((prev) => ({ ...prev, last: e.target.value }))
             }
-            className="p-2 text-black border border-gray-300 rounded bg-neutral-300"
+            className="p-2 text-black border border-gray-300 rounded bg-neutral-300 lg:w-[15%]"
           />
           <button
             onClick={adicionarInstancia}

@@ -104,7 +104,7 @@ export default function ContasCompartilhadas() {
 
   return (
     <div className="flex flex-col gap-8 text-white mb-14">
-      <h1 className=" text-[24px] font-semibold text-center lg:text-left">
+      <h1 className=" text-[24px] mt-20 font-semibold text-center lg:text-left">
         Contas da Guild
       </h1>
       <div className="flex flex-col md:gap-5 lg:flex-row">
