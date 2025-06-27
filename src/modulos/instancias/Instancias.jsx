@@ -248,7 +248,7 @@ export default function Instancias() {
       .map((inst) => (
         <div
           key={inst.id}
-          className="p-4 mb-10 text-white border border-neutral-900 bg-cards shadow-md shadow-black h-fit rounded-md w-full lg:max-w-[820px]"
+          className="p-4 text-white border border-neutral-900 bg-cards shadow-md shadow-black h-fit rounded-md w-full lg:max-w-[820px]"
         >
           <HeaderInstancia
             inst={inst}
