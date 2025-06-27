@@ -133,6 +133,8 @@ export default function Mvps() {
             : m
         )
       );
+      // LIMPAR O CAMPO inputValue APÓS SUCESSO
+      setInputValues((prev) => ({ ...prev, [monster.id]: "" }));
       toast.success("Atualizado com sucesso");
     } catch {
       toast.error("Erro ao atualizar");
