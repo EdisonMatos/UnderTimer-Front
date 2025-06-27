@@ -76,19 +76,16 @@ export default function LootInstancia({ instanciaId }) {
   }
 
   async function editarLootConfirmar(loot) {
-    if (!lootEditado[loot.id]?.name?.trim()) {
-      toast.error("Nome do loot não pode ficar vazio");
-      return;
-    }
+    const editado = lootEditado[loot.id] || {};
 
     try {
       await axios.put(
         `https://undertimer-biel.onrender.com/lootinstancia/${loot.id}`,
         {
-          name: lootEditado[loot.id].name,
-          updatedby: loot.updatedby,
+          name: editado.name ?? loot.name,
+          updatedby: editado.updatedby ?? loot.updatedby,
           preco: loot.preco,
-          observacao: lootEditado[loot.id].observacao ?? loot.observacao,
+          observacao: editado.observacao ?? loot.observacao,
           interesse: loot.interesse,
         }
       );
@@ -191,13 +188,32 @@ export default function LootInstancia({ instanciaId }) {
                           },
                         }))
                       }
-                      className="w-[90%] h-5 p-1 text-black rounded"
+                      className="w-[80%] p-1 text-black rounded h-5"
                     />
                   ) : (
                     loot.name
                   )}
                 </td>
-                <td className="py-1">{capitalizar(loot.updatedby)}</td>
+                <td className="py-1">
+                  {editandoLoot[loot.id] ? (
+                    <input
+                      type="text"
+                      value={lootEditado[loot.id]?.updatedby ?? loot.updatedby}
+                      onChange={(e) =>
+                        setLootEditado((prev) => ({
+                          ...prev,
+                          [loot.id]: {
+                            ...(prev[loot.id] || {}),
+                            updatedby: e.target.value,
+                          },
+                        }))
+                      }
+                      className="w-[80%] p-1 text-black rounded h-5"
+                    />
+                  ) : (
+                    capitalizar(loot.updatedby)
+                  )}
+                </td>
                 <td className="py-1 text-[10px]">
                   {loot.interesse ? (
                     loot.interesse.split(",").map((nome, idx, arr) => (
@@ -228,7 +244,7 @@ export default function LootInstancia({ instanciaId }) {
                           },
                         }))
                       }
-                      className="w-[90%] h-5 p-1 text-black rounded"
+                      className="w-[80%] p-1 text-black rounded h-5"
                     />
                   ) : (
                     loot.observacao || (
