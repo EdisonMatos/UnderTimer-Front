@@ -27,7 +27,7 @@ export default function MembrosInstancia({
           {[...membros]
             .sort((a, b) => a.role.localeCompare(b.role))
             .map((membro, i) => (
-              <tr key={membro.id} className="border-t border-neutral-700">
+              <tr key={membro.id} className="border-t border-neutral-800">
                 <td>{i + 1}</td>
                 <td>
                   {editandoMembro[membro.id] ? (
