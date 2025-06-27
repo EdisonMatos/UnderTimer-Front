@@ -16,10 +16,10 @@ export default function MembrosInstancia({
       <table className="w-full text-[10px] md:text-sm ">
         <thead>
           <tr className="w-full text-left text-gray-400">
-            <th className="w-[10%]"> Nº </th>
-            <th className="w-[25%]"> Nome </th>
+            <th className="w-[10%] lg:w-[5%]"> Nº </th>
+            <th className="w-[25%] lg:w-[25%]"> Nome </th>
             <th className="w-[20%]"> Função </th>
-            <th className="w-[40%]"> Observação </th>
+            <th className="w-[40%] lg:w-[60%]"> Observação </th>
             <th className="w-[10%]"> Ações </th>
           </tr>
         </thead>

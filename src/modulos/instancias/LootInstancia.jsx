@@ -155,12 +155,12 @@ export default function LootInstancia({ instanciaId }) {
       <table className="w-full text-left text-gray-300 text-[10px] lg:text-[12px]">
         <thead>
           <tr className="border-b border-neutral-800">
-            <th className="w-[6%]">Nº</th>
-            <th className="w-[25%]">Nome</th>
-            <th className="w-[15%]">Dropou</th>
-            <th className="w-[20%]">Quer</th>
-            <th className="w-[25%]">Observações</th>
-            <th className="w-[9%]">Ações</th>
+            <th className="w-[6%] lg:w-[5%]">Nº</th>
+            <th className="w-[25%] lg:w-[25%]">Nome</th>
+            <th className="w-[15%] lg:w-[15%]">Dropou</th>
+            <th className="w-[20%] lg:w-[15%]">Quer</th>
+            <th className="w-[25%] lg:w-[40%]">Observações</th>
+            <th className="w-[10%]">Ações</th>
           </tr>
         </thead>
         <tbody>

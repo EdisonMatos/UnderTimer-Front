@@ -266,7 +266,7 @@ export default function Instancias() {
             return (
               <div
                 key={inst.id}
-                className="p-4 mb-10 text-white border border-neutral-900 bg-cards shadow-md shadow-black h-fit rounded-md w-full lg:max-w-[600px]"
+                className="p-4 mb-10 text-white border border-neutral-900 bg-cards shadow-md shadow-black h-fit rounded-md w-full lg:max-w-[820px]"
               >
                 <HeaderInstancia
                   inst={inst}
