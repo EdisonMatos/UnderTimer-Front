@@ -22,7 +22,7 @@ export default function CardMvps({
       id={monster.id}
       className="border border-neutral-900 h-fit text-white bg-cards shadow-md shadow-black p-2 rounded-md text-sm flex flex-col items-center text-center lg:w-[220px]"
     >
-      <div className="flex flex-row justify-between w-full gap-1 mb-2 lg:flex-col lg:items-center ">
+      <div className="flex flex-row justify-between w-full gap-1 p-2 mb-2 rounded-md bg-neutral-900 lg:flex-col lg:items-center ">
         <div className="flex flex-col items-center w-1/3 lg:w-full ">
           <div className="w-[45px] h-[45px] lg:w-[70px] lg:h-[70px] flex justify-center items-center">
             <img

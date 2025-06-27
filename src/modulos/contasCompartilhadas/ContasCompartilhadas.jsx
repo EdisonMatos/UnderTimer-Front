@@ -109,51 +109,53 @@ export default function ContasCompartilhadas() {
       </h1>
       <div className="flex flex-col md:gap-5 lg:flex-row">
         <div className="p-2 rounded-lg shadow-md bg-cards shadow-black h-fit">
-          <h1 className="text-[16px] font-semibold lg:block mb-4">
-            Adicionar nova conta
-          </h1>
-          <div className="flex flex-col gap-2 w-full lg:max-w-[200px]">
-            <input
-              name="descricao"
-              placeholder="Descrição"
-              value={novaConta.descricao}
-              onChange={(e) => handleChange(e, setNovaConta)}
-              className="p-1 border rounded bg-neutral-800 border-neutral-700"
-            />
-            <input
-              name="usuario"
-              placeholder="Usuário"
-              value={novaConta.usuario}
-              onChange={(e) => handleChange(e, setNovaConta)}
-              className="p-1 border rounded bg-neutral-800 border-neutral-700"
-            />
-            <input
-              name="senha"
-              placeholder="Senha"
-              value={novaConta.senha}
-              onChange={(e) => handleChange(e, setNovaConta)}
-              className="p-1 border rounded bg-neutral-800 border-neutral-700"
-            />
-            <input
-              name="situacaoespecial"
-              placeholder="Situação Especial"
-              value={novaConta.situacaoespecial}
-              onChange={(e) => handleChange(e, setNovaConta)}
-              className="p-1 border rounded bg-neutral-800 border-neutral-700"
-            />
-            <input
-              name="observacao"
-              placeholder="Observação"
-              value={novaConta.observacao}
-              onChange={(e) => handleChange(e, setNovaConta)}
-              className="p-1 border rounded bg-neutral-800 border-neutral-700"
-            />
-            <button
-              onClick={criarConta}
-              className="p-1 text-white transition-all rounded bg-primary hover:scale-105"
-            >
-              Adicionar conta
-            </button>
+          <div className="p-4 rounded-md bg-neutral-900">
+            <h1 className="text-[16px] font-semibold lg:block mb-4">
+              Adicionar nova conta
+            </h1>
+            <div className="flex flex-col gap-2 w-full lg:max-w-[200px]">
+              <input
+                name="descricao"
+                placeholder="Descrição"
+                value={novaConta.descricao}
+                onChange={(e) => handleChange(e, setNovaConta)}
+                className="p-1 border rounded bg-neutral-800 border-neutral-700"
+              />
+              <input
+                name="usuario"
+                placeholder="Usuário"
+                value={novaConta.usuario}
+                onChange={(e) => handleChange(e, setNovaConta)}
+                className="p-1 border rounded bg-neutral-800 border-neutral-700"
+              />
+              <input
+                name="senha"
+                placeholder="Senha"
+                value={novaConta.senha}
+                onChange={(e) => handleChange(e, setNovaConta)}
+                className="p-1 border rounded bg-neutral-800 border-neutral-700"
+              />
+              <input
+                name="situacaoespecial"
+                placeholder="Situação Especial"
+                value={novaConta.situacaoespecial}
+                onChange={(e) => handleChange(e, setNovaConta)}
+                className="p-1 border rounded bg-neutral-800 border-neutral-700"
+              />
+              <input
+                name="observacao"
+                placeholder="Observação"
+                value={novaConta.observacao}
+                onChange={(e) => handleChange(e, setNovaConta)}
+                className="p-1 border rounded bg-neutral-800 border-neutral-700"
+              />
+              <button
+                onClick={criarConta}
+                className="p-1 mt-2 text-white transition-all rounded bg-primary hover:scale-105"
+              >
+                Adicionar conta
+              </button>
+            </div>
           </div>
         </div>
 
@@ -169,7 +171,7 @@ export default function ContasCompartilhadas() {
             return (
               <div
                 key={conta.id}
-                className="bg-cards shadow-md shadow-black  p-2 rounded flex flex-col gap-2 lg:w-[200px] w-full h-fit"
+                className="bg-neutral-900 shadow-md shadow-black  p-2 rounded flex flex-col gap-2 lg:w-[200px] w-full h-fit"
               >
                 {/* Descrição */}
                 <input
@@ -186,7 +188,6 @@ export default function ContasCompartilhadas() {
                   }}
                   className="p-1 border rounded bg-neutral-800 border-neutral-700 disabled:opacity-70"
                 />
-
                 {/* Campo usuário com botão de copiar */}
                 <div className="relative">
                   <input
@@ -210,7 +211,6 @@ export default function ContasCompartilhadas() {
                     <FaCopy />
                   </button>
                 </div>
-
                 {/* Campo senha com toggle de visibilidade e copiar */}
                 <div className="relative">
                   <input
@@ -246,7 +246,6 @@ export default function ContasCompartilhadas() {
                     <FaCopy />
                   </button>
                 </div>
-
                 {/* Situação Especial */}
                 {emEdicao ? (
                   <input
@@ -269,7 +268,6 @@ export default function ContasCompartilhadas() {
                 ) : conta.situacaoespecial ? (
                   <p className="text-green-400">{conta.situacaoespecial}</p>
                 ) : null}
-
                 {/* Observação */}
                 {emEdicao ? (
                   <textarea
@@ -290,7 +288,6 @@ export default function ContasCompartilhadas() {
                 ) : conta.observacao ? (
                   <p className="text-[12px]">{conta.observacao}</p>
                 ) : null}
-
                 <div className="flex justify-end gap-2 mt-1">
                   {emEdicao ? (
                     <>
