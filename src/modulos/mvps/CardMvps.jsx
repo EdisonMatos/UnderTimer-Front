@@ -1,4 +1,5 @@
 import React from "react";
+import { toast } from "react-toastify";
 
 export default function CardMvps({
   monster,
@@ -16,6 +17,7 @@ export default function CardMvps({
   loading,
 }) {
   const mostrarContagem = timerValue !== "-";
+  const role = localStorage.getItem("role");
 
   return (
     <div
@@ -92,14 +94,26 @@ export default function CardMvps({
           }`}
         />
         <button
-          onClick={() => onConfirm(monster)}
+          onClick={() => {
+            if (role === "novato") {
+              toast.error("Novatos não podem atualizar o tempo dos mvps.");
+              return;
+            }
+            onConfirm(monster);
+          }}
           disabled={loading || !inputValue}
           className="flex-1 px-2 py-1 text-sm text-white transition-all rounded bg-primary disabled:opacity-30 hover:scale-110"
         >
           {loading ? "..." : "Atualizar"}
         </button>
         <button
-          onClick={() => onQuickUpdate(monster)}
+          onClick={() => {
+            if (role === "novato") {
+              toast.error("Novatos não podem atualizar o tempo dos mvps.");
+              return;
+            }
+            onQuickUpdate(monster);
+          }}
           disabled={loading || !!inputValue}
           className="flex-1 px-2 py-1 text-sm text-white transition-all rounded bg-primary disabled:opacity-50 hover:scale-110"
         >
