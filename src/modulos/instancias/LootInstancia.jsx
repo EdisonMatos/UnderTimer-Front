@@ -13,6 +13,7 @@ export default function LootInstancia({ instanciaId }) {
   const [somaTotal, setSomaTotal] = useState(0);
 
   const apelido = localStorage.getItem("apelido") || "Anônimo";
+  const role = localStorage.getItem("role");
 
   useEffect(() => {
     if (!instanciaId) return;
@@ -43,6 +44,11 @@ export default function LootInstancia({ instanciaId }) {
   }
 
   async function adicionarLoot() {
+    if (role === "novato") {
+      toast.error("Novatos não podem adicionar loot.");
+      return;
+    }
+
     const { name, updatedby } = novoLoot;
     if (!name.trim() || !updatedby.trim()) {
       toast.error("Preencha todos os campos.");
@@ -72,6 +78,10 @@ export default function LootInstancia({ instanciaId }) {
   }
 
   async function deletarLoot(id) {
+    if (role === "novato") {
+      toast.error("Novatos não podem excluir loot.");
+      return;
+    }
     if (!window.confirm("Tem certeza que deseja excluir este loot?")) return;
     try {
       await axios.delete(
@@ -86,6 +96,11 @@ export default function LootInstancia({ instanciaId }) {
   }
 
   async function editarLootConfirmar(loot) {
+    if (role === "novato") {
+      toast.error("Novatos não podem editar loot.");
+      return;
+    }
+
     const editado = lootEditado[loot.id] || {};
 
     try {
@@ -303,6 +318,11 @@ export default function LootInstancia({ instanciaId }) {
                 <td className="flex gap-2 py-1">
                   <button
                     onClick={() => {
+                      if (role === "novato") {
+                        toast.error("Novatos não podem demonstrar interesse.");
+                        return;
+                      }
+
                       const atuais = loot.interesse
                         ? loot.interesse.split(",").map((s) => s.trim())
                         : [];
@@ -372,12 +392,16 @@ export default function LootInstancia({ instanciaId }) {
                   ) : (
                     <>
                       <button
-                        onClick={() =>
+                        onClick={() => {
+                          if (role === "novato") {
+                            toast.error("Novatos não podem editar loot.");
+                            return;
+                          }
                           setEditandoLoot((prev) => ({
                             ...prev,
                             [loot.id]: true,
-                          }))
-                        }
+                          }));
+                        }}
                         className="text-white hover:text-yellow-200"
                         type="button"
                       >
