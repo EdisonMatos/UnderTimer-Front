@@ -34,6 +34,14 @@ export default function AdminMembros({ guildId }) {
       if (!res.ok) throw new Error("Erro ao buscar membros");
       let data = await res.json();
       data = data.filter((m) => m.guild?.id === guildId);
+      const roleOrder = {
+        guildmaster: 0,
+        staff: 1,
+        veterano: 2,
+        membro: 3,
+        novato: 4,
+      };
+      data.sort((a, b) => roleOrder[a.role] - roleOrder[b.role]);
       setMembros(data);
     } catch (err) {
       setError(err.message);
