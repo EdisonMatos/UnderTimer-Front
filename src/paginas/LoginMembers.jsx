@@ -45,12 +45,15 @@ export default function LoginMembers() {
 
       const data = await response.json();
 
+      console.log("Resposta recebida:", data);
+
       if (!response.ok) {
         throw new Error(data.error || "Erro no login");
       }
 
       localStorage.setItem("token", data.token);
       localStorage.setItem("apelido", data.membro.apelido);
+      localStorage.setItem("role", data.membro.role);
       localStorage.setItem("guildId", data.membro.guildId);
       localStorage.setItem("spriteUrl", data.membro.guild.spriteUrl);
       localStorage.setItem("userType", "member"); // <- NOVO

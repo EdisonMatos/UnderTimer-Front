@@ -1,4 +1,5 @@
 import React from "react";
+import { toast } from "react-toastify";
 
 export default function AddMembroInstancia({
   instanciaId,
@@ -7,6 +8,16 @@ export default function AddMembroInstancia({
   adicionarMembro,
   carregandoMembros,
 }) {
+  const userRole = localStorage.getItem("role");
+
+  const handleAdicionarClick = (id) => {
+    if (userRole === "novato") {
+      toast.error("Você não têm permissão para adicionar membros.");
+      return;
+    }
+    adicionarMembro(id);
+  };
+
   return (
     <>
       <p className="mt-4 font-semibold">Adicionar membro:</p>
@@ -42,7 +53,7 @@ export default function AddMembroInstancia({
           className="p-2 text-black border rounded w-[25%] bg-neutral-300 border-gray-300"
         />
         <button
-          onClick={() => adicionarMembro(instanciaId)}
+          onClick={() => handleAdicionarClick(instanciaId)}
           disabled={
             carregandoMembros[instanciaId] ||
             (!novosMembros[instanciaId]?.name?.trim() &&

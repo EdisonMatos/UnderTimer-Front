@@ -1,5 +1,6 @@
 import React from "react";
 import { FaTrash, FaPencilAlt, FaCheck, FaTimes } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 export default function MembrosInstancia({
   membros,
@@ -10,6 +11,27 @@ export default function MembrosInstancia({
   deletarMembro,
   editarMembroConfirmar,
 }) {
+  const userRole = localStorage.getItem("role");
+
+  const handleEditarClick = (membroId) => {
+    if (userRole === "novato") {
+      toast.error("Você não tem permissão para editar os membros.");
+      return;
+    }
+    setEditandoMembro((prev) => ({
+      ...prev,
+      [membroId]: true,
+    }));
+  };
+
+  const handleDeletarClick = (membroId) => {
+    if (userRole === "novato") {
+      toast.error("Você não tem permissão para editar os membros.");
+      return;
+    }
+    deletarMembro(membroId);
+  };
+
   return (
     <div className="p-2 mt-4 mb-4 rounded-md bg-neutral-900">
       <h4 className="mb-2 font-semibold ">Membros</h4>
@@ -134,18 +156,13 @@ export default function MembrosInstancia({
                   ) : (
                     <>
                       <button
-                        onClick={() =>
-                          setEditandoMembro((prev) => ({
-                            ...prev,
-                            [membro.id]: true,
-                          }))
-                        }
+                        onClick={() => handleEditarClick(membro.id)}
                         className="text-white hover:text-yellow-200"
                       >
                         <FaPencilAlt />
                       </button>
                       <button
-                        onClick={() => deletarMembro(membro.id)}
+                        onClick={() => handleDeletarClick(membro.id)}
                         className="text-white hover:text-red-200"
                       >
                         <FaTrash />

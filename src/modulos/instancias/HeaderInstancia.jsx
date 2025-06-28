@@ -1,5 +1,6 @@
 import React from "react";
 import { FaTrash, FaPencilAlt, FaCheck, FaTimes } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 export default function HeaderInstancia({
   inst,
@@ -11,6 +12,27 @@ export default function HeaderInstancia({
   deletarInstancia,
   contagemRegressiva,
 }) {
+  const userRole = localStorage.getItem("role");
+
+  const handleEditarClick = () => {
+    if (userRole === "novato") {
+      toast.error("Novatos não têm permissão para editar instâncias.");
+      return;
+    }
+    setEditandoInstancia((prev) => ({
+      ...prev,
+      [inst.id]: true,
+    }));
+  };
+
+  const handleDeletarClick = () => {
+    if (userRole === "novato") {
+      toast.error("Você não têm permissão para excluir eventos ou instâncias.");
+      return;
+    }
+    deletarInstancia(inst.id);
+  };
+
   return (
     <div className="flex flex-row items-center justify-between p-2 mb-3 rounded-md bg-neutral-900">
       <div className="w-[15%]  flex justify-center">
@@ -150,18 +172,13 @@ export default function HeaderInstancia({
             ) : (
               <>
                 <button
-                  onClick={() =>
-                    setEditandoInstancia((prev) => ({
-                      ...prev,
-                      [inst.id]: true,
-                    }))
-                  }
+                  onClick={handleEditarClick}
                   className="text-white hover:text-yellow-200"
                 >
                   <FaPencilAlt />
                 </button>
                 <button
-                  onClick={() => deletarInstancia(inst.id)}
+                  onClick={handleDeletarClick}
                   className="text-white hover:text-red-200"
                 >
                   <FaTrash />
