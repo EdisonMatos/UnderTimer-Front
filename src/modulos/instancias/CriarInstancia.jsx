@@ -1,4 +1,5 @@
 import React from "react";
+import { toast } from "react-toastify";
 
 export default function CriarInstancia({
   novaInstancia,
@@ -8,6 +9,16 @@ export default function CriarInstancia({
   adicionarInstancia,
   carregandoNovaInstancia,
 }) {
+  const userRole = localStorage.getItem("role");
+
+  const handleClick = () => {
+    if (userRole === "novato") {
+      toast.error("Você não tem permissão para criar eventos ou instâncias.");
+      return;
+    }
+    adicionarInstancia();
+  };
+
   return (
     <div className="w-full p-4 rounded-md shadow-md bg-cards lg:w-fit shadow-black max-w-[820px]">
       <div className="p-4 rounded-md bg-neutral-900">
@@ -73,7 +84,7 @@ export default function CriarInstancia({
             className="p-2 text-black border border-gray-300 rounded bg-neutral-300 lg:w-[15%]"
           />
           <button
-            onClick={adicionarInstancia}
+            onClick={handleClick}
             disabled={
               carregandoNovaInstancia ||
               !novaInstancia.name.trim() ||
