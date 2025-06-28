@@ -127,10 +127,11 @@ export default function AdminMembros({ guildId }) {
             className="p-2 text-black rounded w-[25%] bg-neutral-300"
             required
           >
-            <option value="">Role</option>
-            <option value="admin">admin</option>
-            <option value="staff">staff</option>
+            <option value="novato">novato</option>
             <option value="membro">membro</option>
+            <option value="veterano">veterano</option>
+            <option value="staff">staff</option>
+            <option value="guildmaster">guildmaster</option>
           </select>
           <button
             type="submit"
@@ -202,9 +203,11 @@ export default function AdminMembros({ guildId }) {
                       }
                       className="w-full p-1 text-black rounded bg-neutral-200"
                     >
-                      <option value="admin">admin</option>
-                      <option value="staff">staff</option>
+                      <option value="novato">novato</option>
                       <option value="membro">membro</option>
+                      <option value="veterano">veterano</option>
+                      <option value="staff">staff</option>
+                      <option value="guildmaster">guildmaster</option>
                     </select>
                   ) : (
                     m.role
