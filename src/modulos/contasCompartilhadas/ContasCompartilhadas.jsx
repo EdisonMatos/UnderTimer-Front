@@ -26,6 +26,10 @@ export default function ContasCompartilhadas() {
   const [senhaVisivel, setSenhaVisivel] = useState({});
 
   const guildId = localStorage.getItem("guildId");
+  const userRole = localStorage.getItem("role");
+
+  console.log(guildId);
+  console.log(userRole);
 
   const buscarContas = async () => {
     try {
@@ -101,6 +105,7 @@ export default function ContasCompartilhadas() {
 
   // FILTRO para mostrar só as contas da guild do usuário logado
   const contasFiltradas = contas.filter((conta) => conta.guildId === guildId);
+  const temPermissao = ["veterano", "staff", "guildmaster"].includes(userRole);
 
   return (
     <div className="flex flex-col gap-8 text-white mb-14">
@@ -164,166 +169,167 @@ export default function ContasCompartilhadas() {
           <h1 className=" text-[16px] font-semibold text-center lg:text-left lg:hidden mt-10">
             Contas existentes
           </h1>
-          {contasFiltradas.map((conta) => {
-            const emEdicao = editandoId === conta.id;
-            const isSenhaVisivel = senhaVisivel[conta.id];
+          {temPermissao ? (
+            contasFiltradas.map((conta) => {
+              const emEdicao = editandoId === conta.id;
+              const isSenhaVisivel = senhaVisivel[conta.id];
 
-            return (
-              <div
-                key={conta.id}
-                className="bg-neutral-900 shadow-md shadow-black  p-2 rounded flex flex-col gap-2 lg:w-[200px] w-full h-fit"
-              >
-                {/* Descrição */}
-                <input
-                  name="descricao"
-                  disabled={!emEdicao}
-                  value={conta.descricao}
-                  onChange={(e) => {
-                    const { value } = e.target;
-                    setContas((prev) =>
-                      prev.map((c) =>
-                        c.id === conta.id ? { ...c, descricao: value } : c
-                      )
-                    );
-                  }}
-                  className="p-1 border rounded bg-neutral-800 border-neutral-700 disabled:opacity-70"
-                />
-                {/* Campo usuário com botão de copiar */}
-                <div className="relative">
+              return (
+                <div
+                  key={conta.id}
+                  className="bg-neutral-900 shadow-md shadow-black  p-2 rounded flex flex-col gap-2 lg:w-[200px] w-full h-fit"
+                >
                   <input
-                    name="usuario"
+                    name="descricao"
                     disabled={!emEdicao}
-                    value={conta.usuario}
+                    value={conta.descricao}
                     onChange={(e) => {
                       const { value } = e.target;
                       setContas((prev) =>
                         prev.map((c) =>
-                          c.id === conta.id ? { ...c, usuario: value } : c
+                          c.id === conta.id ? { ...c, descricao: value } : c
                         )
                       );
                     }}
-                    className="w-full p-1 pr-8 border rounded bg-neutral-800 border-neutral-700 disabled:opacity-70"
+                    className="p-1 border rounded bg-neutral-800 border-neutral-700 disabled:opacity-70"
                   />
-                  <button
-                    onClick={() => copiarTexto(conta.usuario)}
-                    className="absolute text-sm text-white right-2 top-2"
-                  >
-                    <FaCopy />
-                  </button>
-                </div>
-                {/* Campo senha com toggle de visibilidade e copiar */}
-                <div className="relative">
-                  <input
-                    name="senha"
-                    type={isSenhaVisivel ? "text" : "password"}
-                    disabled={!emEdicao}
-                    value={conta.senha}
-                    onChange={(e) => {
-                      const { value } = e.target;
-                      setContas((prev) =>
-                        prev.map((c) =>
-                          c.id === conta.id ? { ...c, senha: value } : c
-                        )
-                      );
-                    }}
-                    className="w-full p-1 pr-16 border rounded bg-neutral-800 border-neutral-700 disabled:opacity-70"
-                  />
-                  <button
-                    onClick={() =>
-                      setSenhaVisivel((prev) => ({
-                        ...prev,
-                        [conta.id]: !prev[conta.id],
-                      }))
-                    }
-                    className="absolute text-sm text-white right-8 top-2"
-                  >
-                    {isSenhaVisivel ? <FaEyeSlash /> : <FaEye />}
-                  </button>
-                  <button
-                    onClick={() => copiarTexto(conta.senha)}
-                    className="absolute text-sm text-white right-2 top-2"
-                  >
-                    <FaCopy />
-                  </button>
-                </div>
-                {/* Situação Especial */}
-                {emEdicao ? (
-                  <input
-                    name="situacaoespecial"
-                    placeholder="Situação Especial"
-                    disabled={!emEdicao}
-                    value={conta.situacaoespecial}
-                    onChange={(e) => {
-                      const { value } = e.target;
-                      setContas((prev) =>
-                        prev.map((c) =>
-                          c.id === conta.id
-                            ? { ...c, situacaoespecial: value }
-                            : c
-                        )
-                      );
-                    }}
-                    className="p-1 text-green-400 border rounded bg-neutral-800 border-neutral-700 disabled:opacity-70"
-                  />
-                ) : conta.situacaoespecial ? (
-                  <p className="text-green-400">{conta.situacaoespecial}</p>
-                ) : null}
-                {/* Observação */}
-                {emEdicao ? (
-                  <textarea
-                    name="observacao"
-                    placeholder="Observação"
-                    disabled={!emEdicao}
-                    value={conta.observacao}
-                    onChange={(e) => {
-                      const { value } = e.target;
-                      setContas((prev) =>
-                        prev.map((c) =>
-                          c.id === conta.id ? { ...c, observacao: value } : c
-                        )
-                      );
-                    }}
-                    className="p-1 h-12 border rounded bg-neutral-800 border-neutral-700 disabled:opacity-70 text-[12px]"
-                  />
-                ) : conta.observacao ? (
-                  <p className="text-[12px]">{conta.observacao}</p>
-                ) : null}
-                <div className="flex justify-end gap-2 mt-1">
+                  <div className="relative">
+                    <input
+                      name="usuario"
+                      disabled={!emEdicao}
+                      value={conta.usuario}
+                      onChange={(e) => {
+                        const { value } = e.target;
+                        setContas((prev) =>
+                          prev.map((c) =>
+                            c.id === conta.id ? { ...c, usuario: value } : c
+                          )
+                        );
+                      }}
+                      className="w-full p-1 pr-8 border rounded bg-neutral-800 border-neutral-700 disabled:opacity-70"
+                    />
+                    <button
+                      onClick={() => copiarTexto(conta.usuario)}
+                      className="absolute text-sm text-white right-2 top-2"
+                    >
+                      <FaCopy />
+                    </button>
+                  </div>
+                  <div className="relative">
+                    <input
+                      name="senha"
+                      type={isSenhaVisivel ? "text" : "password"}
+                      disabled={!emEdicao}
+                      value={conta.senha}
+                      onChange={(e) => {
+                        const { value } = e.target;
+                        setContas((prev) =>
+                          prev.map((c) =>
+                            c.id === conta.id ? { ...c, senha: value } : c
+                          )
+                        );
+                      }}
+                      className="w-full p-1 pr-16 border rounded bg-neutral-800 border-neutral-700 disabled:opacity-70"
+                    />
+                    <button
+                      onClick={() =>
+                        setSenhaVisivel((prev) => ({
+                          ...prev,
+                          [conta.id]: !prev[conta.id],
+                        }))
+                      }
+                      className="absolute text-sm text-white right-8 top-2"
+                    >
+                      {isSenhaVisivel ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                    <button
+                      onClick={() => copiarTexto(conta.senha)}
+                      className="absolute text-sm text-white right-2 top-2"
+                    >
+                      <FaCopy />
+                    </button>
+                  </div>
                   {emEdicao ? (
-                    <>
-                      <button
-                        onClick={() => salvarEdicao(conta.id, conta)}
-                        className="text-green-500 hover:scale-110"
-                      >
-                        <FaCheck />
-                      </button>
-                      <button
-                        onClick={() => setEditandoId(null)}
-                        className="text-yellow-500 hover:scale-110"
-                      >
-                        <FaTimes />
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <button
-                        onClick={() => setEditandoId(conta.id)}
-                        className="text-blue-400 hover:scale-110"
-                      >
-                        <FaEdit />
-                      </button>
-                      <button
-                        onClick={() => deletarConta(conta.id)}
-                        className="text-red-500 hover:scale-110"
-                      >
-                        <FaTrash />
-                      </button>
-                    </>
-                  )}
+                    <input
+                      name="situacaoespecial"
+                      placeholder="Situação Especial"
+                      disabled={!emEdicao}
+                      value={conta.situacaoespecial}
+                      onChange={(e) => {
+                        const { value } = e.target;
+                        setContas((prev) =>
+                          prev.map((c) =>
+                            c.id === conta.id
+                              ? { ...c, situacaoespecial: value }
+                              : c
+                          )
+                        );
+                      }}
+                      className="p-1 text-green-400 border rounded bg-neutral-800 border-neutral-700 disabled:opacity-70"
+                    />
+                  ) : conta.situacaoespecial ? (
+                    <p className="text-green-400">{conta.situacaoespecial}</p>
+                  ) : null}
+                  {emEdicao ? (
+                    <textarea
+                      name="observacao"
+                      placeholder="Observação"
+                      disabled={!emEdicao}
+                      value={conta.observacao}
+                      onChange={(e) => {
+                        const { value } = e.target;
+                        setContas((prev) =>
+                          prev.map((c) =>
+                            c.id === conta.id ? { ...c, observacao: value } : c
+                          )
+                        );
+                      }}
+                      className="p-1 h-12 border rounded bg-neutral-800 border-neutral-700 disabled:opacity-70 text-[12px]"
+                    />
+                  ) : conta.observacao ? (
+                    <p className="text-[12px]">{conta.observacao}</p>
+                  ) : null}
+                  <div className="flex justify-end gap-2 mt-1">
+                    {emEdicao ? (
+                      <>
+                        <button
+                          onClick={() => salvarEdicao(conta.id, conta)}
+                          className="text-green-500 hover:scale-110"
+                        >
+                          <FaCheck />
+                        </button>
+                        <button
+                          onClick={() => setEditandoId(null)}
+                          className="text-yellow-500 hover:scale-110"
+                        >
+                          <FaTimes />
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          onClick={() => setEditandoId(conta.id)}
+                          className="text-blue-400 hover:scale-110"
+                        >
+                          <FaEdit />
+                        </button>
+                        <button
+                          onClick={() => deletarConta(conta.id)}
+                          className="text-red-500 hover:scale-110"
+                        >
+                          <FaTrash />
+                        </button>
+                      </>
+                    )}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          ) : (
+            <p className="mt-4 text-red-400">
+              Você não tem permissão para acessar esta área.
+            </p>
+          )}
         </div>
       </div>
     </div>
