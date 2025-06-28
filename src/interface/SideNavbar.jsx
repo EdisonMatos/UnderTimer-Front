@@ -7,6 +7,7 @@ import ContasCompartilhadas from "../modulos/contasCompartilhadas/ContasComparti
 
 export default function SideNavbar() {
   const apelidoRaw = localStorage.getItem("apelido") || "Usuário";
+  const roleRaw = localStorage.getItem("role");
 
   const capitalize = (str) => {
     if (!str) return "";
@@ -14,6 +15,7 @@ export default function SideNavbar() {
   };
 
   const apelido = capitalize(apelidoRaw);
+  const role = capitalize(roleRaw);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -76,7 +78,7 @@ export default function SideNavbar() {
                           class="text-sm text-gray-900 dark:text-white "
                           role="none"
                         >
-                          Bem vindo, {apelido}
+                          Bem vindo, {apelido} ({role})
                         </p>
                         <p>
                           <a
