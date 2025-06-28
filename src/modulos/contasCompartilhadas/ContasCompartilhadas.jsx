@@ -327,7 +327,7 @@ export default function ContasCompartilhadas() {
             })
           ) : (
             <p className="mt-4 text-red-400">
-              Você não tem permissão para acessar esta área.
+              Você não tem permissão para acessar as contas da guild.
             </p>
           )}
         </div>
