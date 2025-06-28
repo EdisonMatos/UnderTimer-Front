@@ -5,7 +5,11 @@ import { FaTrash, FaPencilAlt, FaCheck, FaTimes } from "react-icons/fa";
 
 export default function LootInstancia({ instanciaId }) {
   const [loots, setLoots] = useState([]);
-  const [novoLoot, setNovoLoot] = useState({ name: "", updatedby: "" });
+  const [novoLoot, setNovoLoot] = useState({
+    name: "",
+    updatedby: "",
+    preco: "",
+  });
   const [carregando, setCarregando] = useState(false);
   const [editandoLoot, setEditandoLoot] = useState({});
   const [lootEditado, setLootEditado] = useState({});
@@ -49,24 +53,26 @@ export default function LootInstancia({ instanciaId }) {
       return;
     }
 
-    const { name, updatedby } = novoLoot;
-    if (!name.trim() || !updatedby.trim()) {
-      toast.error("Preencha todos os campos.");
+    const { name, updatedby, preco } = novoLoot;
+    const algumPreenchido = name.trim() || updatedby.trim() || preco.trim();
+
+    if (!algumPreenchido) {
+      toast.error("Preencha ao menos um dos campos.");
       return;
     }
 
     setCarregando(true);
     try {
       await axios.post("https://undertimer-biel.onrender.com/lootinstancia", {
-        name,
-        updatedby,
+        name: name.trim() || null,
+        updatedby: updatedby.trim() || null,
+        preco: preco.trim() ? parseFloat(preco) : null,
         instanciaId,
-        preco: null,
         observacao: null,
         interesse: null,
       });
       toast.success("Loot adicionado");
-      setNovoLoot({ name: "", updatedby: "" });
+      setNovoLoot({ name: "", updatedby: "", preco: "" });
       setMostrarAdicionarLoot(false);
       buscarLoots();
     } catch (err) {
@@ -127,6 +133,7 @@ export default function LootInstancia({ instanciaId }) {
   }
 
   function capitalizar(texto) {
+    if (!texto) return "";
     return texto.charAt(0).toUpperCase() + texto.slice(1);
   }
 
@@ -158,34 +165,42 @@ export default function LootInstancia({ instanciaId }) {
             e.preventDefault();
             adicionarLoot();
           }}
-          className="flex flex-col gap-2 mb-4 sm:flex-row"
+          className="flex flex-col gap-2 mb-4 sm:flex-row sm:flex-wrap"
         >
           <input
             type="text"
-            placeholder="Nome do loot"
+            placeholder="Nome do loot (obrigatório)"
             value={novoLoot.name}
             onChange={(e) =>
               setNovoLoot((prev) => ({ ...prev, name: e.target.value }))
             }
-            className="w-full p-2 text-black rounded"
+            className="w-full p-2 text-black rounded sm:w-[30%]"
             disabled={carregando}
           />
           <input
             type="text"
-            placeholder="Quem dropou?"
+            placeholder="Quem dropou? (Opcional)"
             value={novoLoot.updatedby}
             onChange={(e) =>
               setNovoLoot((prev) => ({ ...prev, updatedby: e.target.value }))
             }
-            className="w-full p-2 text-black rounded"
+            className="w-full p-2 text-black rounded sm:w-[30%]"
+            disabled={carregando}
+          />
+          <input
+            type="number"
+            placeholder="Preço (opcional)"
+            value={novoLoot.preco || ""}
+            onChange={(e) =>
+              setNovoLoot((prev) => ({ ...prev, preco: e.target.value }))
+            }
+            className="w-full p-2 text-black rounded sm:w-[20%]"
             disabled={carregando}
           />
           <button
             type="submit"
-            disabled={
-              carregando || !novoLoot.name.trim() || !novoLoot.updatedby.trim()
-            }
-            className="px-4 py-2 text-white rounded bg-primary disabled:opacity-50"
+            disabled={carregando}
+            className="px-4 py-2 text-white rounded bg-primary disabled:opacity-50 sm:w-[15%]"
           >
             {carregando ? "..." : "Adicionar"}
           </button>
