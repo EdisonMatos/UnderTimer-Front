@@ -83,13 +83,30 @@ export default function CriarInstancia({
             }
             className="p-2 text-black border border-gray-300 rounded bg-neutral-300 lg:w-[15%]"
           />
+
+          <select
+            value={novaInstancia.gerenciadapor || ""}
+            onChange={(e) =>
+              setNovaInstancia((prev) => ({
+                ...prev,
+                gerenciadapor: e.target.value,
+              }))
+            }
+            className="p-2 text-black border border-gray-300 rounded bg-neutral-300 lg:w-[15%]"
+          >
+            <option value="">Selecione o gerenciamento</option>
+            <option value="organizador">Organizador</option>
+            <option value="todos">Todos</option>
+          </select>
+
           <button
             onClick={handleClick}
             disabled={
               carregandoNovaInstancia ||
               !novaInstancia.name.trim() ||
               !novaInstancia.spriteUrl.trim() ||
-              !novaInstancia.last.trim()
+              !novaInstancia.last.trim() ||
+              !novaInstancia.gerenciadapor
             }
             className="px-4 py-2 text-white transition-all rounded bg-primary hover:scale-105 disabled:opacity-50"
           >
