@@ -3,7 +3,11 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { FaTrash, FaPencilAlt, FaCheck, FaTimes } from "react-icons/fa";
 
-export default function LootInstancia({ instanciaId }) {
+export default function LootInstancia({
+  instanciaId,
+  instGerenciadaPor,
+  instUpdatedBy,
+}) {
   const [loots, setLoots] = useState([]);
   const [novoLoot, setNovoLoot] = useState({
     name: "",
@@ -52,6 +56,15 @@ export default function LootInstancia({ instanciaId }) {
       toast.error("Novatos não podem adicionar loot.");
       return;
     }
+    if (
+      instGerenciadaPor === "organizador" &&
+      apelido.toLowerCase() !== (instUpdatedBy || "").toLowerCase()
+    ) {
+      toast.error(
+        "Esta instância está configurada para ser gerenciada apenas pelo organizador dela."
+      );
+      return;
+    }
 
     const { name, updatedby, preco } = novoLoot;
     const algumPreenchido = name.trim() || updatedby.trim() || preco.trim();
@@ -88,6 +101,15 @@ export default function LootInstancia({ instanciaId }) {
       toast.error("Novatos não podem excluir loot.");
       return;
     }
+    if (
+      instGerenciadaPor === "organizador" &&
+      apelido.toLowerCase() !== (instUpdatedBy || "").toLowerCase()
+    ) {
+      toast.error(
+        "Esta instância está configurada para ser gerenciada apenas pelo organizador dela."
+      );
+      return;
+    }
     if (!window.confirm("Tem certeza que deseja excluir este loot?")) return;
     try {
       await axios.delete(
@@ -104,6 +126,15 @@ export default function LootInstancia({ instanciaId }) {
   async function editarLootConfirmar(loot) {
     if (role === "novato") {
       toast.error("Novatos não podem editar loot.");
+      return;
+    }
+    if (
+      instGerenciadaPor === "organizador" &&
+      apelido.toLowerCase() !== (instUpdatedBy || "").toLowerCase()
+    ) {
+      toast.error(
+        "Esta instância está configurada para ser gerenciada apenas pelo organizador dela."
+      );
       return;
     }
 
@@ -410,6 +441,16 @@ export default function LootInstancia({ instanciaId }) {
                         onClick={() => {
                           if (role === "novato") {
                             toast.error("Novatos não podem editar loot.");
+                            return;
+                          }
+                          if (
+                            instGerenciadaPor === "organizador" &&
+                            apelido.toLowerCase() !==
+                              (instUpdatedBy || "").toLowerCase()
+                          ) {
+                            toast.error(
+                              "Esta instância está configurada para ser gerenciada apenas pelo organizador dela."
+                            );
                             return;
                           }
                           setEditandoLoot((prev) => ({

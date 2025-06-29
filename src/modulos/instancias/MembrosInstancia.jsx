@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 export default function MembrosInstancia({
   membros,
   instId,
+  instGerenciadaPor,
+  instUpdatedBy,
   editandoMembro,
   setEditandoMembro,
   setInstancias,
@@ -12,12 +14,21 @@ export default function MembrosInstancia({
   editarMembroConfirmar,
 }) {
   const userRole = localStorage.getItem("role");
+  const username = localStorage.getItem("apelido");
 
   const handleEditarClick = (membroId) => {
     if (userRole === "novato") {
       toast.error("Você não tem permissão para editar os membros.");
       return;
     }
+
+    if (instGerenciadaPor === "organizador" && username !== instUpdatedBy) {
+      toast.error(
+        "Essa instância está configurada para ser gerenciada apenas pelo organizador dela."
+      );
+      return;
+    }
+
     setEditandoMembro((prev) => ({
       ...prev,
       [membroId]: true,
@@ -29,6 +40,14 @@ export default function MembrosInstancia({
       toast.error("Você não tem permissão para editar os membros.");
       return;
     }
+
+    if (instGerenciadaPor === "organizador" && username !== instUpdatedBy) {
+      toast.error(
+        "Essa instância está configurada para ser gerenciada apenas pelo organizador dela."
+      );
+      return;
+    }
+
     deletarMembro(membroId);
   };
 

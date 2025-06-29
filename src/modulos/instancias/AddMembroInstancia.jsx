@@ -7,14 +7,28 @@ export default function AddMembroInstancia({
   setNovosMembros,
   adicionarMembro,
   carregandoMembros,
+  instGerenciadaPor,
+  instUpdatedBy,
 }) {
   const userRole = localStorage.getItem("role");
+  const apelidoUsuario = localStorage.getItem("apelido");
 
   const handleAdicionarClick = (id) => {
     if (userRole === "novato") {
       toast.error("Você não têm permissão para adicionar membros.");
       return;
     }
+
+    if (
+      instGerenciadaPor === "organizador" &&
+      apelidoUsuario !== instUpdatedBy
+    ) {
+      toast.error(
+        "Essa instância está configurada para ser gerenciada apenas pelo organizador dela."
+      );
+      return;
+    }
+
     adicionarMembro(id);
   };
 
