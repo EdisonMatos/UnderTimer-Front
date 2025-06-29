@@ -108,32 +108,57 @@ export default function HeaderInstancia({
               }
               className="w-full h-8 p-1 mt-1 text-black rounded"
             />
+            <select
+              value={
+                instanciaEditada[inst.id]?.gerenciadapor || inst.gerenciadapor
+              }
+              onChange={(e) =>
+                setInstanciaEditada((prev) => ({
+                  ...prev,
+                  [inst.id]: {
+                    ...prev[inst.id],
+                    gerenciadapor: e.target.value,
+                  },
+                }))
+              }
+              className="w-full h-8 p-1 mt-1 text-black rounded"
+            >
+              <option value="organizador">Organizador</option>
+              <option value="todos">Todos</option>
+            </select>
           </>
         ) : (
           <>
             <h3 className="text-lg font-semibold">{inst.name}</h3>
             <p className="text-sm opacity-70">
-              Data: {new Date(inst.last).toLocaleString()}
+              Data: {new Date(inst.last).toLocaleString()} - Tempo:{" "}
+              <span
+                className={
+                  contagemRegressiva[inst.id] !== "-" ? "text-green-400" : ""
+                }
+              >
+                {contagemRegressiva[inst.id] || "-"}
+              </span>
             </p>
           </>
         )}
         <div className="flex flex-col lg:gap-2 lg:flex-row">
           <p className="text-sm opacity-70">
-            Tempo:{" "}
-            <span
-              className={
-                contagemRegressiva[inst.id] !== "-" ? "text-green-400" : ""
-              }
-            >
-              {contagemRegressiva[inst.id] || "-"}
-            </span>
-          </p>
-          <p className="text-sm opacity-70">
-            Criada por:{" "}
+            Organizada por:{" "}
             <span className="text-green-400">
               {inst.updatedby
                 ? inst.updatedby.charAt(0).toUpperCase() +
                   inst.updatedby.slice(1)
+                : "-"}
+            </span>
+          </p>
+          <p className="text-sm opacity-70">
+            Gerenciada por:{" "}
+            <span className="text-green-400">
+              {inst.gerenciadapor === "organizador"
+                ? "Organizador"
+                : inst.gerenciadapor === "todos"
+                ? "Todos"
                 : "-"}
             </span>
           </p>
