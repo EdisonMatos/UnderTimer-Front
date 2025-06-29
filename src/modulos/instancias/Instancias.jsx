@@ -308,7 +308,11 @@ export default function Instancias() {
 
           {mostrarLoot?.[inst.id] && (
             <div className="p-2 mt-4 text-sm text-gray-300 rounded-md bg-neutral-900">
-              <LootInstancia instanciaId={inst.id} />
+              <LootInstancia
+                instanciaId={inst.id}
+                instGerenciadaPor={inst.gerenciadapor}
+                instUpdatedBy={inst.updatedby}
+              />
             </div>
           )}
 
