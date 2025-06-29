@@ -13,6 +13,7 @@ export default function Instancias() {
     name: "",
     spriteUrl: "https://game.ragnaplace.com/ro/job/1133/0.png", // padrão já aqui
     last: "",
+    gerenciadapor: "",
   });
   const [carregandoNovaInstancia, setCarregandoNovaInstancia] = useState(false);
   const [carregandoMembros, setCarregandoMembros] = useState({});
@@ -85,8 +86,10 @@ export default function Instancias() {
       const payload = {
         name: novaInstancia.name,
         spriteUrl: novaInstancia.spriteUrl,
+        gerenciadapor: novaInstancia.gerenciadapor,
         last: new Date(novaInstancia.last).toISOString(),
         guildId,
+
         updatedby,
       };
 
@@ -121,6 +124,8 @@ export default function Instancias() {
         spriteUrl: instanciaEditada[inst.id]?.spriteUrl || inst.spriteUrl,
         last: lastISO,
         observacoes: instanciaEditada[inst.id]?.observacoes ?? inst.observacoes,
+        gerenciadapor:
+          instanciaEditada[inst.id]?.gerenciadapor || inst.gerenciadapor,
       };
       await axios.put(
         `https://undertimer-biel.onrender.com/instancias/${inst.id}`,

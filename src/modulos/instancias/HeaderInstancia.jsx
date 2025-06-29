@@ -13,10 +13,15 @@ export default function HeaderInstancia({
   contagemRegressiva,
 }) {
   const userRole = localStorage.getItem("role");
+  const currentUser = localStorage.getItem("apelido");
 
   const handleEditarClick = () => {
     if (userRole === "novato") {
       toast.error("Novatos não têm permissão para editar instâncias.");
+      return;
+    }
+    if (currentUser !== inst.updatedby) {
+      toast.error("Somente o criador da instância pode editá-la.");
       return;
     }
     setEditandoInstancia((prev) => ({
@@ -30,7 +35,20 @@ export default function HeaderInstancia({
       toast.error("Você não têm permissão para excluir eventos ou instâncias.");
       return;
     }
+    if (currentUser !== inst.updatedby) {
+      toast.error("Somente o criador da instância pode excluí-la.");
+      return;
+    }
     deletarInstancia(inst.id);
+  };
+
+  const handleConfirmarEdicao = () => {
+    const nome = instanciaEditada[inst.id]?.name ?? inst.name;
+    if (!nome.trim()) {
+      toast.error("O nome da instância não pode ficar em branco.");
+      return;
+    }
+    editarInstanciaConfirmar(inst);
   };
 
   return (
@@ -47,7 +65,11 @@ export default function HeaderInstancia({
           <>
             <input
               type="text"
-              value={instanciaEditada[inst.id]?.name || inst.name}
+              value={
+                instanciaEditada[inst.id]?.name !== undefined
+                  ? instanciaEditada[inst.id].name
+                  : inst.name
+              }
               onChange={(e) =>
                 setInstanciaEditada((prev) => ({
                   ...prev,
@@ -62,7 +84,11 @@ export default function HeaderInstancia({
             <input
               type="text"
               placeholder="Sprite URL"
-              value={instanciaEditada[inst.id]?.spriteUrl || inst.spriteUrl}
+              value={
+                instanciaEditada[inst.id]?.spriteUrl !== undefined
+                  ? instanciaEditada[inst.id].spriteUrl
+                  : inst.spriteUrl
+              }
               onChange={(e) =>
                 setInstanciaEditada((prev) => ({
                   ...prev,
@@ -77,8 +103,9 @@ export default function HeaderInstancia({
             <input
               type="datetime-local"
               value={
-                instanciaEditada[inst.id]?.last ||
-                new Date(inst.last).toISOString().slice(0, 16)
+                instanciaEditada[inst.id]?.last !== undefined
+                  ? instanciaEditada[inst.id].last
+                  : ""
               }
               onChange={(e) =>
                 setInstanciaEditada((prev) => ({
@@ -95,7 +122,9 @@ export default function HeaderInstancia({
               type="text"
               placeholder="Observações"
               value={
-                instanciaEditada[inst.id]?.observacoes || inst.observacoes || ""
+                instanciaEditada[inst.id]?.observacoes !== undefined
+                  ? instanciaEditada[inst.id].observacoes
+                  : inst.observacoes || ""
               }
               onChange={(e) =>
                 setInstanciaEditada((prev) => ({
@@ -108,32 +137,59 @@ export default function HeaderInstancia({
               }
               className="w-full h-8 p-1 mt-1 text-black rounded"
             />
+            <select
+              value={
+                instanciaEditada[inst.id]?.gerenciadapor !== undefined
+                  ? instanciaEditada[inst.id].gerenciadapor
+                  : inst.gerenciadapor
+              }
+              onChange={(e) =>
+                setInstanciaEditada((prev) => ({
+                  ...prev,
+                  [inst.id]: {
+                    ...prev[inst.id],
+                    gerenciadapor: e.target.value,
+                  },
+                }))
+              }
+              className="w-full h-8 p-1 mt-1 text-black rounded"
+            >
+              <option value="organizador">Organizador</option>
+              <option value="todos">Todos</option>
+            </select>
           </>
         ) : (
           <>
             <h3 className="text-lg font-semibold">{inst.name}</h3>
             <p className="text-sm opacity-70">
-              Data: {new Date(inst.last).toLocaleString()}
+              Data: {new Date(inst.last).toLocaleString()} - Tempo:{" "}
+              <span
+                className={
+                  contagemRegressiva[inst.id] !== "-" ? "text-green-400" : ""
+                }
+              >
+                {contagemRegressiva[inst.id] || "-"}
+              </span>
             </p>
           </>
         )}
         <div className="flex flex-col lg:gap-2 lg:flex-row">
           <p className="text-sm opacity-70">
-            Tempo:{" "}
-            <span
-              className={
-                contagemRegressiva[inst.id] !== "-" ? "text-green-400" : ""
-              }
-            >
-              {contagemRegressiva[inst.id] || "-"}
-            </span>
-          </p>
-          <p className="text-sm opacity-70">
-            Criada por:{" "}
+            Organizada por:{" "}
             <span className="text-green-400">
               {inst.updatedby
                 ? inst.updatedby.charAt(0).toUpperCase() +
                   inst.updatedby.slice(1)
+                : "-"}
+            </span>
+          </p>
+          <p className="text-sm opacity-70">
+            Gerenciada por:{" "}
+            <span className="text-green-400">
+              {inst.gerenciadapor === "organizador"
+                ? "Organizador"
+                : inst.gerenciadapor === "todos"
+                ? "Todos"
                 : "-"}
             </span>
           </p>
@@ -152,7 +208,7 @@ export default function HeaderInstancia({
             {editandoInstancia[inst.id] ? (
               <>
                 <button
-                  onClick={() => editarInstanciaConfirmar(inst)}
+                  onClick={handleConfirmarEdicao}
                   className="text-green-400 hover:text-green-200"
                 >
                   <FaCheck />
