@@ -33,6 +33,15 @@ export default function HeaderInstancia({
     deletarInstancia(inst.id);
   };
 
+  const handleConfirmarEdicao = () => {
+    const nome = instanciaEditada[inst.id]?.name ?? inst.name;
+    if (!nome.trim()) {
+      toast.error("O nome da instância não pode ficar em branco.");
+      return;
+    }
+    editarInstanciaConfirmar(inst);
+  };
+
   return (
     <div className="flex flex-row items-center justify-between p-2 mb-3 rounded-md bg-neutral-900">
       <div className="w-[15%]  flex justify-center">
@@ -47,7 +56,11 @@ export default function HeaderInstancia({
           <>
             <input
               type="text"
-              value={instanciaEditada[inst.id]?.name || inst.name}
+              value={
+                instanciaEditada[inst.id]?.name !== undefined
+                  ? instanciaEditada[inst.id].name
+                  : inst.name
+              }
               onChange={(e) =>
                 setInstanciaEditada((prev) => ({
                   ...prev,
@@ -62,7 +75,11 @@ export default function HeaderInstancia({
             <input
               type="text"
               placeholder="Sprite URL"
-              value={instanciaEditada[inst.id]?.spriteUrl || inst.spriteUrl}
+              value={
+                instanciaEditada[inst.id]?.spriteUrl !== undefined
+                  ? instanciaEditada[inst.id].spriteUrl
+                  : inst.spriteUrl
+              }
               onChange={(e) =>
                 setInstanciaEditada((prev) => ({
                   ...prev,
@@ -77,8 +94,9 @@ export default function HeaderInstancia({
             <input
               type="datetime-local"
               value={
-                instanciaEditada[inst.id]?.last ||
-                new Date(inst.last).toISOString().slice(0, 16)
+                instanciaEditada[inst.id]?.last !== undefined
+                  ? instanciaEditada[inst.id].last
+                  : ""
               }
               onChange={(e) =>
                 setInstanciaEditada((prev) => ({
@@ -95,7 +113,9 @@ export default function HeaderInstancia({
               type="text"
               placeholder="Observações"
               value={
-                instanciaEditada[inst.id]?.observacoes || inst.observacoes || ""
+                instanciaEditada[inst.id]?.observacoes !== undefined
+                  ? instanciaEditada[inst.id].observacoes
+                  : inst.observacoes || ""
               }
               onChange={(e) =>
                 setInstanciaEditada((prev) => ({
@@ -110,7 +130,9 @@ export default function HeaderInstancia({
             />
             <select
               value={
-                instanciaEditada[inst.id]?.gerenciadapor || inst.gerenciadapor
+                instanciaEditada[inst.id]?.gerenciadapor !== undefined
+                  ? instanciaEditada[inst.id].gerenciadapor
+                  : inst.gerenciadapor
               }
               onChange={(e) =>
                 setInstanciaEditada((prev) => ({
@@ -177,7 +199,7 @@ export default function HeaderInstancia({
             {editandoInstancia[inst.id] ? (
               <>
                 <button
-                  onClick={() => editarInstanciaConfirmar(inst)}
+                  onClick={handleConfirmarEdicao}
                   className="text-green-400 hover:text-green-200"
                 >
                   <FaCheck />
