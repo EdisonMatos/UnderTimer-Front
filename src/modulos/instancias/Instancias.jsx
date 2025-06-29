@@ -319,6 +319,8 @@ export default function Instancias() {
               setNovosMembros={setNovosMembros}
               adicionarMembro={adicionarMembro}
               carregandoMembros={carregandoMembros}
+              instGerenciadaPor={inst.gerenciadapor}
+              instUpdatedBy={inst.updatedby}
             />
           )}
         </div>
