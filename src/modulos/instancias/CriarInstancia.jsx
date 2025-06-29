@@ -33,7 +33,7 @@ export default function CriarInstancia({
             onChange={(e) =>
               setNovaInstancia((prev) => ({ ...prev, name: e.target.value }))
             }
-            className="p-2 text-black border border-gray-300 rounded bg-neutral-300 lg:w-[25%]"
+            className="p-2 text-black border border-gray-300 rounded bg-neutral-300 lg:w-[20%]"
           />
 
           <select
@@ -92,11 +92,11 @@ export default function CriarInstancia({
                 gerenciadapor: e.target.value,
               }))
             }
-            className="p-2 text-black border border-gray-300 rounded bg-neutral-300 lg:w-[15%]"
+            className="p-2 text-black border border-gray-300 rounded bg-neutral-300 lg:w-[20%]"
           >
-            <option value="">Selecione o gerenciamento</option>
-            <option value="organizador">Organizador</option>
-            <option value="todos">Todos</option>
+            <option value="">Gerenciada por</option>
+            <option value="organizador">Quem criou</option>
+            <option value="todos">Todos membros</option>
           </select>
 
           <button

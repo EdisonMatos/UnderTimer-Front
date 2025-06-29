@@ -13,10 +13,15 @@ export default function HeaderInstancia({
   contagemRegressiva,
 }) {
   const userRole = localStorage.getItem("role");
+  const currentUser = localStorage.getItem("apelido");
 
   const handleEditarClick = () => {
     if (userRole === "novato") {
       toast.error("Novatos não têm permissão para editar instâncias.");
+      return;
+    }
+    if (currentUser !== inst.updatedby) {
+      toast.error("Somente o criador da instância pode editá-la.");
       return;
     }
     setEditandoInstancia((prev) => ({
@@ -28,6 +33,10 @@ export default function HeaderInstancia({
   const handleDeletarClick = () => {
     if (userRole === "novato") {
       toast.error("Você não têm permissão para excluir eventos ou instâncias.");
+      return;
+    }
+    if (currentUser !== inst.updatedby) {
+      toast.error("Somente o criador da instância pode excluí-la.");
       return;
     }
     deletarInstancia(inst.id);
