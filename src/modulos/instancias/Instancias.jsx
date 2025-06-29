@@ -269,6 +269,8 @@ export default function Instancias() {
           <MembrosInstancia
             membros={inst.membros}
             instId={inst.id}
+            instGerenciadaPor={inst.gerenciadapor}
+            instUpdatedBy={inst.updatedby}
             editandoMembro={editandoMembro}
             setEditandoMembro={setEditandoMembro}
             setInstancias={setInstancias}
