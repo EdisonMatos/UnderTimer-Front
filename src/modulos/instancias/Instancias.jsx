@@ -6,12 +6,13 @@ import CriarInstancia from "./CriarInstancia";
 import HeaderInstancia from "./HeaderInstancia";
 import AddMembroInstancia from "./AddMembroInstancia";
 import MembrosInstancia from "./MembrosInstancia";
+import { FaPlus, FaMinus, FaChevronDown, FaChevronRight } from "react-icons/fa";
 
 export default function Instancias() {
   const [instancias, setInstancias] = useState([]);
   const [novaInstancia, setNovaInstancia] = useState({
     name: "",
-    spriteUrl: "https://game.ragnaplace.com/ro/job/1133/0.png", // padrão já aqui
+    spriteUrl: "https://game.ragnaplace.com/ro/job/1133/0.png",
     last: "",
     gerenciadapor: "",
   });
@@ -25,6 +26,7 @@ export default function Instancias() {
   const [mostrarAdicionarMembro, setMostrarAdicionarMembro] = useState({});
   const [usarImagemPersonalizada, setUsarImagemPersonalizada] = useState(false);
   const [mostrarLoot, setMostrarLoot] = useState({});
+  const [instanciaExpandida, setInstanciaExpandida] = useState({});
 
   useEffect(() => {
     buscarInstancias();
@@ -65,6 +67,13 @@ export default function Instancias() {
         "https://undertimer-biel.onrender.com/instancias"
       );
       setInstancias(res.data);
+
+      const agora = Date.now();
+      const expansaoInicial = {};
+      res.data.forEach((inst) => {
+        expansaoInicial[inst.id] = new Date(inst.last).getTime() > agora;
+      });
+      setInstanciaExpandida(expansaoInicial);
     } catch (err) {
       console.error("Erro ao buscar instâncias:", err);
     }
@@ -73,7 +82,6 @@ export default function Instancias() {
   const adicionarInstancia = async () => {
     try {
       setCarregandoNovaInstancia(true);
-
       const guildId = localStorage.getItem("guildId");
       const updatedby = localStorage.getItem("apelido");
 
@@ -89,7 +97,6 @@ export default function Instancias() {
         gerenciadapor: novaInstancia.gerenciadapor,
         last: new Date(novaInstancia.last).toISOString(),
         guildId,
-
         updatedby,
       };
 
@@ -172,7 +179,6 @@ export default function Instancias() {
       buscarInstancias();
     } catch (err) {
       console.error("Erro ao deletar instância e membros:", err);
-
       toast.update(toastId, {
         render: "Erro ao excluir instância ou seus membros.",
         type: "error",
@@ -238,7 +244,6 @@ export default function Instancias() {
   const instanciasFiltradas = instancias.filter(
     (inst) => inst.guildId === guildId
   );
-
   const agora = Date.now();
   const instanciasAtivas = instanciasFiltradas.filter(
     (inst) => new Date(inst.last).getTime() > agora
@@ -255,77 +260,108 @@ export default function Instancias() {
           key={inst.id}
           className="p-4 text-white border border-neutral-900 bg-cards shadow-md shadow-black h-fit rounded-md w-full lg:max-w-[820px]"
         >
-          <HeaderInstancia
-            inst={inst}
-            editandoInstancia={editandoInstancia}
-            setEditandoInstancia={setEditandoInstancia}
-            instanciaEditada={instanciaEditada}
-            setInstanciaEditada={setInstanciaEditada}
-            editarInstanciaConfirmar={editarInstanciaConfirmar}
-            deletarInstancia={deletarInstancia}
-            contagemRegressiva={contagemRegressiva}
-          />
-
-          <MembrosInstancia
-            membros={inst.membros}
-            instId={inst.id}
-            instGerenciadaPor={inst.gerenciadapor}
-            instUpdatedBy={inst.updatedby}
-            editandoMembro={editandoMembro}
-            setEditandoMembro={setEditandoMembro}
-            setInstancias={setInstancias}
-            deletarMembro={deletarMembro}
-            editarMembroConfirmar={editarMembroConfirmar}
-          />
-
-          <div className="flex justify-between">
-            <button
-              className="mt-0 text-sm font-semibold text-blue-400 hover:underline"
+          <div className="flex items-center justify-between cursor-pointer">
+            <div
+              className="flex-1"
               onClick={() =>
-                setMostrarAdicionarMembro((prev) => ({
+                setInstanciaExpandida((prev) => ({
                   ...prev,
                   [inst.id]: !prev[inst.id],
                 }))
               }
             >
-              {mostrarAdicionarMembro[inst.id]
-                ? "Ocultar"
-                : "Adicionar Membro +"}
-            </button>
-
+              <HeaderInstancia
+                inst={inst}
+                editandoInstancia={editandoInstancia}
+                setEditandoInstancia={setEditandoInstancia}
+                instanciaEditada={instanciaEditada}
+                setInstanciaEditada={setInstanciaEditada}
+                editarInstanciaConfirmar={editarInstanciaConfirmar}
+                deletarInstancia={deletarInstancia}
+                contagemRegressiva={contagemRegressiva}
+              />
+            </div>
             <button
-              className="mt-0 text-sm font-semibold text-blue-400 hover:underline"
+              className="p-2 ml-2 text-sm text-white rounded bg-neutral-900 hover:bg-neutral-700"
               onClick={() =>
-                setMostrarLoot((prev) => ({
+                setInstanciaExpandida((prev) => ({
                   ...prev,
                   [inst.id]: !prev[inst.id],
                 }))
               }
             >
-              {mostrarLoot?.[inst.id] ? "Ocultar" : "Loot da instância +"}
+              {instanciaExpandida[inst.id] ? (
+                <FaChevronDown />
+              ) : (
+                <FaChevronRight />
+              )}
             </button>
           </div>
 
-          {mostrarLoot?.[inst.id] && (
-            <div className="p-2 mt-4 text-sm text-gray-300 rounded-md bg-neutral-900">
-              <LootInstancia
-                instanciaId={inst.id}
+          {instanciaExpandida[inst.id] && (
+            <>
+              <MembrosInstancia
+                membros={inst.membros}
+                instId={inst.id}
                 instGerenciadaPor={inst.gerenciadapor}
                 instUpdatedBy={inst.updatedby}
+                editandoMembro={editandoMembro}
+                setEditandoMembro={setEditandoMembro}
+                setInstancias={setInstancias}
+                deletarMembro={deletarMembro}
+                editarMembroConfirmar={editarMembroConfirmar}
               />
-            </div>
-          )}
 
-          {mostrarAdicionarMembro[inst.id] && (
-            <AddMembroInstancia
-              instanciaId={inst.id}
-              novosMembros={novosMembros}
-              setNovosMembros={setNovosMembros}
-              adicionarMembro={adicionarMembro}
-              carregandoMembros={carregandoMembros}
-              instGerenciadaPor={inst.gerenciadapor}
-              instUpdatedBy={inst.updatedby}
-            />
+              <div className="flex justify-between">
+                <button
+                  className="mt-0 text-sm font-semibold text-blue-400 hover:underline"
+                  onClick={() =>
+                    setMostrarAdicionarMembro((prev) => ({
+                      ...prev,
+                      [inst.id]: !prev[inst.id],
+                    }))
+                  }
+                >
+                  {mostrarAdicionarMembro[inst.id]
+                    ? "Ocultar"
+                    : "Adicionar Membro +"}
+                </button>
+
+                <button
+                  className="mt-0 text-sm font-semibold text-blue-400 hover:underline"
+                  onClick={() =>
+                    setMostrarLoot((prev) => ({
+                      ...prev,
+                      [inst.id]: !prev[inst.id],
+                    }))
+                  }
+                >
+                  {mostrarLoot?.[inst.id] ? "Ocultar" : "Loot da instância +"}
+                </button>
+              </div>
+
+              {mostrarLoot?.[inst.id] && (
+                <div className="p-2 mt-4 text-sm text-gray-300 rounded-md bg-neutral-900">
+                  <LootInstancia
+                    instanciaId={inst.id}
+                    instGerenciadaPor={inst.gerenciadapor}
+                    instUpdatedBy={inst.updatedby}
+                  />
+                </div>
+              )}
+
+              {mostrarAdicionarMembro[inst.id] && (
+                <AddMembroInstancia
+                  instanciaId={inst.id}
+                  novosMembros={novosMembros}
+                  setNovosMembros={setNovosMembros}
+                  adicionarMembro={adicionarMembro}
+                  carregandoMembros={carregandoMembros}
+                  instGerenciadaPor={inst.gerenciadapor}
+                  instUpdatedBy={inst.updatedby}
+                />
+              )}
+            </>
           )}
         </div>
       ));
