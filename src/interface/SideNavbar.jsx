@@ -83,8 +83,8 @@ export default function SideNavbar() {
                         <p>
                           <a
                             href="#"
-                            class="blocktext-sm text-[12px] text-white opacity-60 hover:opacity-100 w-fit underline"
-                            role="menuitem"
+                            class="blocktext-sm text-[12px] text-gray-900 dark:text-white opacity-60 hover:opacity-100 w-fit underline"
+                            role="none"
                             onClick={handleLogout}
                           >
                             Sair
