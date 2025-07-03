@@ -95,7 +95,7 @@ export default function CardMvps({
         />
         <button
           onClick={() => {
-            if (role === "novato") {
+            if (role === "novato" || "visitante") {
               toast.error("Novatos não podem atualizar o tempo dos mvps.");
               return;
             }
@@ -108,7 +108,7 @@ export default function CardMvps({
         </button>
         <button
           onClick={() => {
-            if (role === "novato") {
+            if (role === "novato" || "visitante") {
               toast.error("Novatos não podem atualizar o tempo dos mvps.");
               return;
             }

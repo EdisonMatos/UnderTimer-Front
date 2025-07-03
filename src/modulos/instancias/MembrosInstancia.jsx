@@ -18,7 +18,7 @@ export default function MembrosInstancia({
   const username = localStorage.getItem("apelido");
 
   const handleEditarClick = (membroId) => {
-    if (userRole === "novato") {
+    if (userRole === "novato" || "visitante") {
       toast.error("Você não tem permissão para editar os membros.");
       return;
     }
@@ -37,7 +37,7 @@ export default function MembrosInstancia({
   };
 
   const handleDeletarClick = (membroId) => {
-    if (userRole === "novato") {
+    if (userRole === "novato" || "visitante") {
       toast.error("Você não tem permissão para editar os membros.");
       return;
     }

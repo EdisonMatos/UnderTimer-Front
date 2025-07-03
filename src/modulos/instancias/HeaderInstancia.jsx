@@ -16,7 +16,7 @@ export default function HeaderInstancia({
   const currentUser = localStorage.getItem("apelido");
 
   const handleEditarClick = () => {
-    if (userRole === "novato") {
+    if (userRole === "novato" || "visitante") {
       toast.error("Novatos não têm permissão para editar instâncias.");
       return;
     }
@@ -31,7 +31,7 @@ export default function HeaderInstancia({
   };
 
   const handleDeletarClick = () => {
-    if (userRole === "novato") {
+    if (userRole === "novato" || "visitante") {
       toast.error("Você não têm permissão para excluir eventos ou instâncias.");
       return;
     }
