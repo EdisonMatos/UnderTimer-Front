@@ -112,7 +112,7 @@ export default function MembrosInstancia({
     <div className="p-2 mt-4 mb-4 rounded-md bg-neutral-900">
       <h4 className="mb-2 font-semibold ">Membros</h4>
       <div className="w-full overflow-x-auto">
-        <table className="w-[500px] md:w-[900px] text-[9px] min-[375px]:text-[10px] md:text-sm mb-4">
+        <table className="w-[600px] md:w-[900px] text-[9px] min-[375px]:text-[10px] md:text-sm mb-4">
           <thead>
             <tr className="w-full text-left text-gray-400">
               <th className="w-[5%] lg:w-[5%]"> Nº </th>
