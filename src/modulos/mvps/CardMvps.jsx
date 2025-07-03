@@ -22,7 +22,7 @@ export default function CardMvps({
   return (
     <div
       id={monster.id}
-      className="border border-neutral-900 h-fit text-white bg-cards shadow-md shadow-black p-2 rounded-md text-sm flex flex-col items-center text-center lg:w-[220px]"
+      className="border border-neutral-900 h-fit text-white bg-cards shadow-md shadow-black p-2 rounded-md text-[9px] min-[425px]:text-[12px] sm:text-[14px] flex flex-col items-center text-center lg:w-[220px]"
     >
       <div className="flex flex-row justify-between w-full gap-1 p-2 mb-2 rounded-md bg-neutral-900 lg:flex-col lg:items-center ">
         <div className="flex flex-col items-center w-1/3 lg:w-full ">
@@ -36,7 +36,7 @@ export default function CardMvps({
           <strong className="mt-1 text-center">
             {monster.name.replace(/\s*\(.*?\)/, "")}
           </strong>
-          <span className="mt-1 text-[12px] opacity-60 block">
+          <span className="mt-1 text-[9px] min-[425px]:text-[12px] sm:text-[14px] opacity-60 block">
             {monster.name.match(/\(.*?\)/)
               ? `${monster.name.match(/\(.*?\)/)[0]} - ${monster.respawn}h`
               : `${monster.respawn}h`}

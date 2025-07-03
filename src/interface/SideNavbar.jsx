@@ -65,17 +65,17 @@ export default function SideNavbar() {
                       class="h-8 me-3"
                       alt="FlowBite Logo"
                     /> */}
-                    <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
+                    <span class="self-center text-[12px] min-[375px]:text-[16px] font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
                       UnderTimer
                     </span>
                   </a>
                 </div>
-                <div class="flex items-center">
-                  <div class="flex items-center ms-3">
+                <div class="flex items-center justify-center">
+                  <div class="flex items-center">
                     <div className="flex items-center">
                       <div className="flex flex-col items-end justify-end mr-4 ">
                         <p
-                          class="text-sm text-gray-900 dark:text-white "
+                          class="text-[10px] text-gray-900 dark:text-white "
                           role="none"
                         >
                           Bem vindo, {apelido} ({role})
@@ -83,7 +83,7 @@ export default function SideNavbar() {
                         <p>
                           <a
                             href="#"
-                            class="blocktext-sm text-[12px] text-gray-900 dark:text-white opacity-60 hover:opacity-100 w-fit underline"
+                            class="blocktext-sm text-[10px] text-gray-900 dark:text-white opacity-60 hover:opacity-100 w-fit underline"
                             role="none"
                             onClick={handleLogout}
                           >
@@ -99,7 +99,7 @@ export default function SideNavbar() {
                       >
                         <span class="sr-only">Open user menu</span>
                         <img
-                          class="w-8 h-8 rounded-full"
+                          class="max-w-6 max-h-6 min-[375px]:max-w-8 min-[375px]:max-h-8 rounded-full"
                           src={spriteUrl}
                           alt="user photo"
                         />

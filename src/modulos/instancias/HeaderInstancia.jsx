@@ -52,7 +52,7 @@ export default function HeaderInstancia({
   };
 
   return (
-    <div className="flex flex-row items-center justify-between p-2 mb-3 rounded-md bg-neutral-900">
+    <div className="flex flex-row items-center justify-between p-2 mb-3 rounded-md bg-neutral-900 text-[10px] md:text-[14px]">
       <div className="w-[15%]  flex justify-center">
         <img
           src={inst.spriteUrl}
@@ -160,9 +160,11 @@ export default function HeaderInstancia({
           </>
         ) : (
           <>
-            <h3 className="text-lg font-semibold">{inst.name}</h3>
-            <p className="text-sm opacity-70">
-              Data: {new Date(inst.last).toLocaleString()} - Tempo:{" "}
+            <h3 className="font-semibold md:text-[18px]">{inst.name}</h3>
+            <p className=" opacity-70">
+              Data: {new Date(inst.last).toLocaleString()}{" "}
+              <br className="md:hidden" />
+              Tempo:{" "}
               <span
                 className={
                   contagemRegressiva[inst.id] !== "-" ? "text-green-400" : ""
@@ -174,7 +176,7 @@ export default function HeaderInstancia({
           </>
         )}
         <div className="flex flex-col lg:gap-2 lg:flex-row">
-          <p className="text-sm opacity-70">
+          <p className=" opacity-70">
             Organizada por:{" "}
             <span className="text-green-400">
               {inst.updatedby
@@ -183,7 +185,7 @@ export default function HeaderInstancia({
                 : "-"}
             </span>
           </p>
-          <p className="text-sm opacity-70">
+          <p className=" opacity-70">
             Gerenciada por:{" "}
             <span className="text-green-400">
               {inst.gerenciadapor === "organizador"
@@ -195,7 +197,7 @@ export default function HeaderInstancia({
           </p>
         </div>
         {!editandoInstancia[inst.id] && (
-          <p className="text-sm opacity-70">
+          <p className=" opacity-70">
             Aviso:{" "}
             <span className="opacity-70">{inst.observacoes || "Nenhum"}</span>
           </p>
