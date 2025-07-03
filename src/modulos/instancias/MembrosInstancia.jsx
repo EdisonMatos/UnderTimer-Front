@@ -191,7 +191,7 @@ export default function MembrosInstancia({
                       </span>
                     ) : (
                       <button
-                        className="text-neutral-400 hover:underline text-[10px] md:text-sm"
+                        className="text-neutral-400 hover:text-blue-300 text-[10px] md:text-sm"
                         onClick={() => confirmarMembro(membro)}
                       >
                         🔘 Confirmar?
