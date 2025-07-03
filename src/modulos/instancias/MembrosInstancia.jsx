@@ -1,6 +1,7 @@
 import React from "react";
 import { FaTrash, FaPencilAlt, FaCheck, FaTimes } from "react-icons/fa";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 export default function MembrosInstancia({
   membros,
@@ -51,17 +52,74 @@ export default function MembrosInstancia({
     deletarMembro(membroId);
   };
 
+  const confirmarMembro = async (membro) => {
+    const confirmar = window.confirm(
+      "Tem certeza que deseja confirmar presença?"
+    );
+    if (!confirmar) return;
+
+    const toastId = toast.loading("Confirmando presença...");
+
+    try {
+      const agora = new Date();
+      const dia = String(agora.getDate()).padStart(2, "0");
+      const mes = String(agora.getMonth() + 1).padStart(2, "0");
+      const hora = String(agora.getHours()).padStart(2, "0");
+      const minuto = String(agora.getMinutes()).padStart(2, "0");
+      const apelidoRaw = localStorage.getItem("apelido") || "Usuário";
+      const apelido = apelidoRaw.charAt(0).toUpperCase() + apelidoRaw.slice(1);
+
+      const confirmadopor = `✅ ${apelido} - ${dia}/${mes}, ${hora}:${minuto}h`;
+
+      await axios.put(
+        `https://undertimer-biel.onrender.com/membrosinstancia/${membro.id}`,
+        { ...membro, confirmadopor }
+      );
+
+      setInstancias((prev) =>
+        prev.map((inst) =>
+          inst.id === instId
+            ? {
+                ...inst,
+                membros: inst.membros.map((m) =>
+                  m.id === membro.id ? { ...m, confirmadopor } : m
+                ),
+              }
+            : inst
+        )
+      );
+
+      toast.update(toastId, {
+        render: "Presença confirmada com sucesso",
+        type: "success",
+        isLoading: false,
+        autoClose: 3000,
+        closeOnClick: true,
+      });
+    } catch (err) {
+      console.error("Erro ao confirmar membro:", err);
+      toast.update(toastId, {
+        render: "Erro ao confirmar presença.",
+        type: "error",
+        isLoading: false,
+        autoClose: 3000,
+        closeOnClick: true,
+      });
+    }
+  };
+
   return (
     <div className="p-2 mt-4 mb-4 rounded-md bg-neutral-900">
       <h4 className="mb-2 font-semibold ">Membros</h4>
       <div className="w-full overflow-x-auto">
-        <table className="w-[500px] md:w-full text-[9px] min-[375px]:text-[10px] md:text-sm">
+        <table className="w-[500px] md:w-[900px] text-[9px] min-[375px]:text-[10px] md:text-sm md:mb-4">
           <thead>
             <tr className="w-full text-left text-gray-400">
               <th className="w-[5%] lg:w-[5%]"> Nº </th>
               <th className="w-[12%] lg:w-[10%]"> Nome </th>
-              <th className="w-[15%] lg:w-[15%]"> Função </th>
-              <th className="w-[60%] lg:w-[65%]"> Observação </th>
+              <th className="w-[15%] lg:w-[13%]"> Função </th>
+              <th className="w-[18%] lg:w-[20%]"> Confirmado </th>
+              <th className="w-[45%] lg:w-[50%]"> Observação </th>
               <th className="w-[5%] lg:w-[10%]"> Ações </th>
             </tr>
           </thead>
@@ -123,6 +181,21 @@ export default function MembrosInstancia({
                       />
                     ) : (
                       membro.role
+                    )}
+                  </td>
+                  <td>
+                    {membro.confirmadopor &&
+                    membro.confirmadopor.trim() !== "" ? (
+                      <span className="opacity-70 text-[9px] md:text-[12px]">
+                        {membro.confirmadopor}
+                      </span>
+                    ) : (
+                      <button
+                        className="text-neutral-400 hover:underline text-[10px] md:text-sm"
+                        onClick={() => confirmarMembro(membro)}
+                      >
+                        🔘 Confirmar?
+                      </button>
                     )}
                   </td>
                   <td>
@@ -194,7 +267,7 @@ export default function MembrosInstancia({
               ))}
             {membros.length === 0 && (
               <tr>
-                <td colSpan={5} className="italic text-gray-400">
+                <td colSpan={6} className="italic text-gray-400">
                   Nenhum membro ainda
                 </td>
               </tr>
