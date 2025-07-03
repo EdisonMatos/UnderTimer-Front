@@ -112,7 +112,7 @@ export default function MembrosInstancia({
     <div className="p-2 mt-4 mb-4 rounded-md bg-neutral-900">
       <h4 className="mb-2 font-semibold ">Membros</h4>
       <div className="w-full overflow-x-auto">
-        <table className="w-[500px] md:w-[900px] text-[9px] min-[375px]:text-[10px] md:text-sm md:mb-4">
+        <table className="w-[500px] md:w-[900px] text-[9px] min-[375px]:text-[10px] md:text-sm mb-4">
           <thead>
             <tr className="w-full text-left text-gray-400">
               <th className="w-[5%] lg:w-[5%]"> Nº </th>
@@ -184,8 +184,33 @@ export default function MembrosInstancia({
                     )}
                   </td>
                   <td>
-                    {membro.confirmadopor &&
-                    membro.confirmadopor.trim() !== "" ? (
+                    {editandoMembro[membro.id] ? (
+                      <input
+                        type="text"
+                        value={membro.confirmadopor || ""}
+                        onChange={(e) =>
+                          setInstancias((prev) =>
+                            prev.map((instMap) =>
+                              instMap.id === instId
+                                ? {
+                                    ...instMap,
+                                    membros: instMap.membros.map((m) =>
+                                      m.id === membro.id
+                                        ? {
+                                            ...m,
+                                            confirmadopor: e.target.value,
+                                          }
+                                        : m
+                                    ),
+                                  }
+                                : instMap
+                            )
+                          )
+                        }
+                        className="p-1 h-5 text-black rounded w-[90%]"
+                      />
+                    ) : membro.confirmadopor &&
+                      membro.confirmadopor.trim() !== "" ? (
                       <span className="opacity-70 text-[9px] md:text-[12px]">
                         {membro.confirmadopor}
                       </span>
@@ -194,7 +219,7 @@ export default function MembrosInstancia({
                         className="text-neutral-400 hover:text-blue-300 text-[10px] md:text-sm"
                         onClick={() => confirmarMembro(membro)}
                       >
-                        🔘 Confirmar?
+                        🔘 Falta confirmar
                       </button>
                     )}
                   </td>
