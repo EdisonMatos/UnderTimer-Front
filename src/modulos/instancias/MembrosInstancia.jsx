@@ -118,7 +118,10 @@ export default function MembrosInstancia({
               <th className="w-[5%] lg:w-[5%]"> Nº </th>
               <th className="w-[12%] lg:w-[10%]"> Nome </th>
               <th className="w-[15%] lg:w-[13%]"> Função </th>
-              <th className="w-[18%] lg:w-[20%]"> Confirmado </th>
+              <th className="w-[18%] min-[375px]:w-[25%] lg:w-[20%]">
+                {" "}
+                Confirmado{" "}
+              </th>
               <th className="w-[45%] lg:w-[50%]"> Observação </th>
               <th className="w-[5%] lg:w-[10%]"> Ações </th>
             </tr>
