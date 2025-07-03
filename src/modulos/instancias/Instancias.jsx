@@ -328,7 +328,7 @@ export default function Instancias() {
 
               <div className="flex justify-between">
                 <button
-                  className="mt-0 text-sm font-semibold text-blue-400 hover:underline"
+                  className="mt-0 text-[10px] md:text-sm font-semibold text-blue-400 hover:underline"
                   onClick={() =>
                     setMostrarAdicionarMembro((prev) => ({
                       ...prev,
@@ -342,7 +342,7 @@ export default function Instancias() {
                 </button>
 
                 <button
-                  className="mt-0 text-sm font-semibold text-blue-400 hover:underline"
+                  className="mt-0 text-[10px] md:text-sm font-semibold text-blue-400 hover:underline"
                   onClick={() =>
                     setMostrarLoot((prev) => ({
                       ...prev,
