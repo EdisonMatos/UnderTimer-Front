@@ -169,7 +169,7 @@ export default function LootInstancia({
   }
 
   return (
-    <div>
+    <div className="w-full overflow-x-auto">
       <div className="flex items-center justify-between">
         <button
           onClick={() => setMostrarAdicionarLoot((prev) => !prev)}
@@ -238,7 +238,7 @@ export default function LootInstancia({
         </form>
       )}
 
-      <table className="w-full text-left text-gray-300 text-[10px] lg:text-[12px]">
+      <table className="w-[500px] lg:w-full text-left text-gray-300 text-[10px] lg:text-[12px]">
         <thead>
           <tr className="border-b border-neutral-800">
             <th className="w-[5%]">Nº</th>
