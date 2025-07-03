@@ -15,6 +15,9 @@ module.exports = {
         alerts: "green",
         background: "#10151C",
       },
+      screen: {
+        phone2: "325px",
+      },
     },
   },
   plugins: [flowbiteReact],
