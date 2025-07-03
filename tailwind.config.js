@@ -16,7 +16,9 @@ module.exports = {
         background: "#10151C",
       },
       screen: {
-        phone2: "325px",
+        phone1: "320px",
+        phone2: "375px",
+        phone3: "425px",
       },
     },
   },
