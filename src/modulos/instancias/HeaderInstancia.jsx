@@ -53,11 +53,11 @@ export default function HeaderInstancia({
 
   return (
     <div className="flex flex-row items-center justify-between p-2 mb-3 rounded-md bg-neutral-900 text-[10px] md:text-[14px]">
-      <div className="w-[15%]  flex justify-center">
+      <div className="w-[18%] max-h-[80px] flex justify-center p-2 ">
         <img
           src={inst.spriteUrl}
           alt={inst.name}
-          className="max-w-16 max-h-[80px]"
+          className="max-w-[40px] min-[375px]:max-w-[60px] max-h-[60px]"
         />
       </div>
       <div className="w-[60%]">
@@ -160,7 +160,9 @@ export default function HeaderInstancia({
           </>
         ) : (
           <>
-            <h3 className="font-semibold md:text-[18px]">{inst.name}</h3>
+            <h3 className="font-semibold text-[14px] md:text-[18px]">
+              {inst.name}
+            </h3>
             <p className=" opacity-70">
               Data: {new Date(inst.last).toLocaleString()}{" "}
               <br className="md:hidden" />
