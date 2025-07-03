@@ -258,7 +258,7 @@ export default function Instancias() {
       .map((inst) => (
         <div
           key={inst.id}
-          className="p-4 text-white border border-neutral-900 bg-cards shadow-md shadow-black h-fit rounded-md w-full lg:max-w-[820px]"
+          className="p-2 min-[375px]:p-3 md:p-4 text-white border border-neutral-900 bg-cards shadow-md shadow-black h-fit rounded-md w-full lg:max-w-[820px]"
         >
           <div className="flex items-center justify-between cursor-pointer">
             <div
@@ -282,7 +282,7 @@ export default function Instancias() {
               />
             </div>
             <button
-              className="p-2 ml-2 text-sm text-white rounded bg-neutral-900 hover:bg-neutral-700"
+              className="p-2 ml-1 min-[375px]:ml-1 md:p-2 text-sm text-white rounded bg-neutral-900 hover:bg-neutral-700 hidden md:block"
               onClick={() =>
                 setInstanciaExpandida((prev) => ({
                   ...prev,
@@ -297,7 +297,21 @@ export default function Instancias() {
               )}
             </button>
           </div>
-
+          <button
+            className="p-2 text-sm text-white rounded md:p-2 bg-neutral-900 hover:bg-neutral-700 md:hidden"
+            onClick={() =>
+              setInstanciaExpandida((prev) => ({
+                ...prev,
+                [inst.id]: !prev[inst.id],
+              }))
+            }
+          >
+            {instanciaExpandida[inst.id] ? (
+              <FaChevronDown />
+            ) : (
+              <FaChevronRight />
+            )}
+          </button>
           {instanciaExpandida[inst.id] && (
             <>
               <MembrosInstancia
