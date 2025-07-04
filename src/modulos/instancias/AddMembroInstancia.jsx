@@ -14,7 +14,7 @@ export default function AddMembroInstancia({
   const apelidoUsuario = localStorage.getItem("apelido");
 
   const handleAdicionarClick = (id) => {
-    if (userRole === "novato") {
+    if (userRole === "novato" && "visitante") {
       toast.error("Você não têm permissão para adicionar membros.");
       return;
     }

@@ -9,6 +9,8 @@ export default function SideNavbar() {
   const apelidoRaw = localStorage.getItem("apelido") || "Usuário";
   const roleRaw = localStorage.getItem("role");
 
+  const temPermissao = ["veterano", "staff", "guildmaster"].includes(roleRaw);
+
   const capitalize = (str) => {
     if (!str) return "";
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
@@ -27,7 +29,7 @@ export default function SideNavbar() {
   const spriteUrl =
     localStorage.getItem("spriteUrl") || "https://via.placeholder.com/32";
 
-  console.log(spriteUrl);
+  spriteUrl;
 
   return (
     <>
@@ -318,9 +320,9 @@ export default function SideNavbar() {
               <ToastContainer />
               <Header />
               {/* <MemberBar /> */}
-              <Mvps />
+              {temPermissao && <Mvps />}
               <Instancias />
-              <ContasCompartilhadas />
+              {temPermissao && <ContasCompartilhadas />}
             </div>
           </div>
         </div>

@@ -135,6 +135,8 @@ export default function AdminMembros({ guildId }) {
             className="p-2 text-black rounded w-[25%] bg-neutral-300"
             required
           >
+            <option value="">Selecione</option>
+            <option value="visitante">visitante</option>
             <option value="novato">novato</option>
             <option value="membro">membro</option>
             <option value="veterano">veterano</option>

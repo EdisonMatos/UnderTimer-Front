@@ -46,7 +46,7 @@ export default function LoginMembers() {
 
       const data = await response.json();
 
-      console.log("Resposta recebida:", data);
+      "Resposta recebida:", data;
 
       if (!response.ok) {
         throw new Error(data.error || "Erro no login");
