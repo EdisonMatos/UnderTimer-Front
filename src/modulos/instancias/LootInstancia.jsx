@@ -52,7 +52,7 @@ export default function LootInstancia({
   }
 
   async function adicionarLoot() {
-    if (role === "novato" || "visitante") {
+    if (role === "novato" && "visitante") {
       toast.error("Novatos não podem adicionar loot.");
       return;
     }

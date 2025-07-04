@@ -12,7 +12,7 @@ export default function CriarInstancia({
   const userRole = localStorage.getItem("role");
 
   const handleClick = () => {
-    if (userRole === "novato" || "visitante") {
+    if (userRole === "novato" && "visitante") {
       toast.error("Você não tem permissão para criar eventos ou instâncias.");
       return;
     }

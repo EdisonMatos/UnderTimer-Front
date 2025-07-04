@@ -18,7 +18,7 @@ export default function MembrosInstancia({
   const username = localStorage.getItem("apelido");
 
   const handleEditarClick = (membroId) => {
-    if (userRole === "novato" || "visitante") {
+    if (userRole === "novato" && "visitante") {
       toast.error("Você não tem permissão para editar os membros.");
       return;
     }
@@ -37,7 +37,7 @@ export default function MembrosInstancia({
   };
 
   const handleDeletarClick = (membroId) => {
-    if (userRole === "novato" || "visitante") {
+    if (userRole === "novato" && "visitante") {
       toast.error("Você não tem permissão para editar os membros.");
       return;
     }
@@ -108,6 +108,84 @@ export default function MembrosInstancia({
     }
   };
 
+  const handleQueroVaga = async (membro) => {
+    const apelidoRaw = localStorage.getItem("apelido") || "Usuário";
+    const apelido =
+      apelidoRaw.charAt(0).toUpperCase() + apelidoRaw.slice(1) + " ❌✅";
+
+    try {
+      await axios.put(
+        `https://undertimer-biel.onrender.com/membrosinstancia/${membro.id}`,
+        { ...membro, name: apelido }
+      );
+
+      setInstancias((prev) =>
+        prev.map((inst) =>
+          inst.id === instId
+            ? {
+                ...inst,
+                membros: inst.membros.map((m) =>
+                  m.id === membro.id ? { ...m, name: apelido } : m
+                ),
+              }
+            : inst
+        )
+      );
+    } catch (err) {
+      toast.error("Erro ao solicitar vaga.");
+    }
+  };
+
+  const handleAceitarVaga = async (membro) => {
+    const nomeSemIcones = membro.name.split(" ❌✅")[0];
+
+    try {
+      await axios.put(
+        `https://undertimer-biel.onrender.com/membrosinstancia/${membro.id}`,
+        { ...membro, name: nomeSemIcones }
+      );
+
+      setInstancias((prev) =>
+        prev.map((inst) =>
+          inst.id === instId
+            ? {
+                ...inst,
+                membros: inst.membros.map((m) =>
+                  m.id === membro.id ? { ...m, name: nomeSemIcones } : m
+                ),
+              }
+            : inst
+        )
+      );
+    } catch (err) {
+      toast.error("Erro ao aceitar vaga.");
+    }
+  };
+
+  const handleRecusarVaga = async (membro) => {
+    try {
+      await axios.put(
+        `https://undertimer-biel.onrender.com/membrosinstancia/${membro.id}`,
+        { ...membro, name: "" }
+      );
+
+      setInstancias((prev) =>
+        prev.map((inst) =>
+          inst.id === instId
+            ? {
+                ...inst,
+                membros: inst.membros.map((m) =>
+                  m.id === membro.id ? { ...m, name: "" } : m
+                ),
+              }
+            : inst
+        )
+      );
+    } catch (err) {
+      toast.error("Erro ao recusar vaga.");
+    }
+  };
+
   return (
     <div className="p-2 mt-4 mb-4 rounded-md bg-neutral-900">
       <h4 className="mb-2 font-semibold ">Membros</h4>
@@ -116,7 +194,7 @@ export default function MembrosInstancia({
           <thead>
             <tr className="w-full text-left text-gray-400">
               <th className="w-[5%] lg:w-[5%]"> Nº </th>
-              <th className="w-[12%] lg:w-[10%]"> Nome </th>
+              <th className="w-[17%] lg:w-[17%]"> Nome </th>
               <th className="w-[15%] lg:w-[13%]"> Função </th>
               <th className="w-[18%] min-[375px]:w-[25%] lg:w-[20%]">
                 {" "}
@@ -133,28 +211,25 @@ export default function MembrosInstancia({
                 <tr key={membro.id} className="border-t border-neutral-800">
                   <td>{i + 1}</td>
                   <td>
-                    {editandoMembro[membro.id] ? (
-                      <input
-                        type="text"
-                        value={membro.name}
-                        onChange={(e) =>
-                          setInstancias((prev) =>
-                            prev.map((instMap) =>
-                              instMap.id === instId
-                                ? {
-                                    ...instMap,
-                                    membros: instMap.membros.map((m) =>
-                                      m.id === membro.id
-                                        ? { ...m, name: e.target.value }
-                                        : m
-                                    ),
-                                  }
-                                : instMap
-                            )
-                          )
-                        }
-                        className="p-1 h-5 text-black rounded w-[90%]"
-                      />
+                    {membro.name === "" ? (
+                      <button
+                        className="text-neutral-400 hover:text-blue-300 text-[10px] md:text-sm"
+                        onClick={() => handleQueroVaga(membro)}
+                      >
+                        🔘 Quero a vaga
+                      </button>
+                    ) : membro.name.endsWith("❌✅") &&
+                      instGerenciadaPor === "organizador" &&
+                      username === instUpdatedBy ? (
+                      <span className="text-[10px] md:text-sm">
+                        {membro.name.split(" ❌✅")[0]}{" "}
+                        <button onClick={() => handleRecusarVaga(membro)}>
+                          ❌
+                        </button>{" "}
+                        <button onClick={() => handleAceitarVaga(membro)}>
+                          ✅
+                        </button>
+                      </span>
                     ) : (
                       membro.name
                     )}
