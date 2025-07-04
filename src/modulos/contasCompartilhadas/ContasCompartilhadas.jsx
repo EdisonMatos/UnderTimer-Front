@@ -28,9 +28,6 @@ export default function ContasCompartilhadas() {
   const guildId = localStorage.getItem("guildId");
   const userRole = localStorage.getItem("role");
 
-  console.log(guildId);
-  console.log(userRole);
-
   const buscarContas = async () => {
     try {
       const res = await axios.get(API_URL);
@@ -179,7 +176,7 @@ export default function ContasCompartilhadas() {
               return (
                 <div
                   key={conta.id}
-                  className="bg-neutral-900 shadow-md shadow-black  p-2 rounded flex flex-col gap-2 lg:w-[200px] w-full h-fit"
+                  className="bg-cards shadow-md shadow-black  p-2 rounded flex flex-col gap-2 lg:w-[200px] w-full h-fit"
                 >
                   <input
                     name="descricao"
@@ -193,7 +190,7 @@ export default function ContasCompartilhadas() {
                         )
                       );
                     }}
-                    className="p-1 border rounded bg-neutral-800 border-neutral-700 disabled:opacity-70"
+                    className="p-1 border rounded bg-neutral-900 border-neutral-700 disabled:opacity-70"
                   />
                   <div className="relative">
                     <input
@@ -208,7 +205,7 @@ export default function ContasCompartilhadas() {
                           )
                         );
                       }}
-                      className="w-full p-1 pr-8 border rounded bg-neutral-800 border-neutral-700 disabled:opacity-70"
+                      className="w-full p-1 pr-8 border rounded bg-neutral-900 border-neutral-700 disabled:opacity-70"
                     />
                     <button
                       onClick={() => copiarTexto(conta.usuario)}
@@ -231,7 +228,7 @@ export default function ContasCompartilhadas() {
                           )
                         );
                       }}
-                      className="w-full p-1 pr-16 border rounded bg-neutral-800 border-neutral-700 disabled:opacity-70"
+                      className="w-full p-1 pr-16 border rounded bg-neutral-900 border-neutral-700 disabled:opacity-70"
                     />
                     <button
                       onClick={() =>

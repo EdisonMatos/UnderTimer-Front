@@ -381,7 +381,7 @@ export default function Instancias() {
       ));
 
   return (
-    <div className="mt-32">
+    <div className="">
       <h1 className="mb-6 text-[24px] font-semibold">Instâncias e Eventos</h1>
 
       <CriarInstancia

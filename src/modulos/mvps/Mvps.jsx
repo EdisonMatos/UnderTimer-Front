@@ -197,7 +197,7 @@ export default function Mvps() {
       (a, b) => parseTime(timers[a.id]) - parseTime(timers[b.id])
     );
     return (
-      <>
+      <div className="mb-32">
         <h3 className="mt-5 mb-5 text-lg font-semibold text-center text-white lg:text-left">
           {label}
         </h3>
@@ -240,7 +240,7 @@ export default function Mvps() {
             );
           })}
         </div>
-      </>
+      </div>
     );
   };
 
