@@ -190,7 +190,7 @@ export default function ContasCompartilhadas() {
                         )
                       );
                     }}
-                    className="p-1 border rounded bg-neutral-900 border-neutral-700 disabled:opacity-70"
+                    className="p-1 border rounded bg-neutral-900 border-neutral-700 disabled:opacity-70 "
                   />
                   <div className="relative">
                     <input

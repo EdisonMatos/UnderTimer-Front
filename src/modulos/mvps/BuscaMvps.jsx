@@ -17,7 +17,7 @@ export default function BuscaMvps({ search, setSearch }) {
               placeholder="Digite o nome do monstro..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full lg:w-[300px] px-3 py-2 text-sm text-black border border-gray-300 rounded bg-neutral-300"
+              className="w-full lg:w-[300px] px-3 py-2 text-sm border rounded  bg-neutral-800 border-gray-700 text-[12px] lg:text-[14px] text-white"
             />
           </div>
         </div>
