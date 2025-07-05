@@ -190,17 +190,17 @@ export default function MembrosInstancia({
     <div className="p-2 mt-4 mb-4 rounded-md bg-neutral-900">
       <h4 className="mb-2 font-semibold ">Membros</h4>
       <div className="w-full overflow-x-auto">
-        <table className="w-[600px] md:w-[900px] text-[9px] min-[375px]:text-[10px] md:text-sm mb-4">
+        <table className="w-[750px] md:w-[950px] text-[9px] min-[375px]:text-[10px] md:text-sm mb-4">
           <thead>
             <tr className="w-full text-left text-gray-400">
-              <th className="w-[5%] lg:w-[5%]"> Nº </th>
-              <th className="w-[17%] lg:w-[17%]"> Nome </th>
-              <th className="w-[15%] lg:w-[13%]"> Função </th>
+              <th className="w-[3%] lg:w-[5%]"> Nº </th>
+              <th className="w-[12%] lg:w-[17%]"> Nome </th>
+              <th className="w-[10%] lg:w-[13%]"> Função </th>
               <th className="w-[18%] min-[375px]:w-[25%] lg:w-[20%]">
                 {" "}
                 Confirmado{" "}
               </th>
-              <th className="w-[45%] lg:w-[50%]"> Observação </th>
+              <th className="w-[48%] lg:w-[50%]"> Observação </th>
               <th className="w-[5%] lg:w-[10%]"> Ações </th>
             </tr>
           </thead>
@@ -213,7 +213,7 @@ export default function MembrosInstancia({
                   <td>
                     {membro.name === "" ? (
                       <button
-                        className="text-neutral-400 hover:text-blue-300 text-[10px] md:text-sm"
+                        className="text-neutral-200 hover:text-blue-300 text-[10px] md:text-sm opacity-30 hover:opacity-70"
                         onClick={() => handleQueroVaga(membro)}
                       >
                         🔘 Quero a vaga
@@ -294,7 +294,7 @@ export default function MembrosInstancia({
                       </span>
                     ) : (
                       <button
-                        className="text-neutral-400 hover:text-blue-300 text-[10px] md:text-sm"
+                        className="text-neutral-400 hover:text-blue-300 text-[10px] md:text-sm opacity-30 hover:opacity-70"
                         onClick={() => confirmarMembro(membro)}
                       >
                         🔘 Falta confirmar

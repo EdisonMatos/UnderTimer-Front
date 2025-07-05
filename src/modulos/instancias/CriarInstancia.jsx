@@ -33,7 +33,7 @@ export default function CriarInstancia({
             onChange={(e) =>
               setNovaInstancia((prev) => ({ ...prev, name: e.target.value }))
             }
-            className="p-2 text-black border border-gray-300 rounded bg-neutral-300 lg:w-[20%]"
+            className="p-2 border rounded lg:w-[20%] bg-neutral-800 border-gray-700 text-[12px] lg:text-[14px] text-white"
           />
 
           <select
@@ -54,7 +54,7 @@ export default function CriarInstancia({
                 }));
               }
             }}
-            className="p-2 text-black border lg:w-[220px] border-gray-300 rounded bg-neutral-300"
+            className="p-2 border lg:w-[220px] rounded bg-neutral-800 border-gray-700 text-[12px] lg:text-[14px] text-white"
           >
             <option value="padrao">Imagem padrão</option>
             <option value="personalizada">Imagem personalizada</option>
@@ -71,7 +71,7 @@ export default function CriarInstancia({
                   spriteUrl: e.target.value,
                 }))
               }
-              className="p-2 text-black border border-gray-300 rounded bg-neutral-300 lg:w-[20%]"
+              className="p-2 border rounded  lg:w-[20%] bg-neutral-800 border-gray-700 text-[12px] lg:text-[14px] text-white"
             />
           )}
 
@@ -81,7 +81,7 @@ export default function CriarInstancia({
             onChange={(e) =>
               setNovaInstancia((prev) => ({ ...prev, last: e.target.value }))
             }
-            className="p-2 text-black border border-gray-300 rounded bg-neutral-300 lg:w-[15%]"
+            className="p-2 border  rounded  lg:w-[15%] bg-neutral-800 border-gray-700 text-[12px] lg:text-[14px] text-white"
           />
 
           <select
@@ -92,7 +92,7 @@ export default function CriarInstancia({
                 gerenciadapor: e.target.value,
               }))
             }
-            className="p-2 text-black border border-gray-300 rounded bg-neutral-300 lg:w-[20%]"
+            className="p-2 border rounded lg:w-[20%] bg-neutral-800 border-gray-700 text-[12px] lg:text-[14px] text-white"
           >
             <option value="">Gerenciada por</option>
             <option value="organizador">Quem criou</option>

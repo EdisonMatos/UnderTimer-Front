@@ -33,8 +33,10 @@ export default function AddMembroInstancia({
   };
 
   return (
-    <>
-      <p className="mt-4 font-semibold">Adicionar membro:</p>
+    <div className="p-2 mt-4 rounded-lg bg-neutral-900">
+      <p className="font-semibold text-[12px] lg:text-[14px]">
+        Adicionar membro:
+      </p>
       <div className="flex justify-between gap-2 mt-3">
         <input
           type="text"
@@ -49,7 +51,7 @@ export default function AddMembroInstancia({
               },
             }))
           }
-          className="p-2 text-black border rounded w-[25%] bg-neutral-300 border-gray-300"
+          className="p-2 text-white border rounded w-[25%] bg-neutral-800 border-gray-700 text-[12px] lg:text-[14px]"
         />
         <input
           type="text"
@@ -64,7 +66,7 @@ export default function AddMembroInstancia({
               },
             }))
           }
-          className="p-2 text-black border rounded w-[25%] bg-neutral-300 border-gray-300"
+          className="p-2 text-white border rounded w-[25%] bg-neutral-800 border-gray-700 text-[12px] lg:text-[14px]"
         />
         <button
           onClick={() => handleAdicionarClick(instanciaId)}
@@ -73,11 +75,11 @@ export default function AddMembroInstancia({
             (!novosMembros[instanciaId]?.name?.trim() &&
               !novosMembros[instanciaId]?.role?.trim())
           }
-          className="px-4 py-2 text-white bg-primary hover:scale-105 transition-all rounded w-[36%] disabled:opacity-50"
+          className="px-4 py-2 text-white bg-primary hover:scale-105 transition-all rounded w-[36%] disabled:opacity-50 text-[12px] lg:text-[14px]"
         >
           {carregandoMembros[instanciaId] ? "..." : "Adicionar"}
         </button>
       </div>
-    </>
+    </div>
   );
 }
