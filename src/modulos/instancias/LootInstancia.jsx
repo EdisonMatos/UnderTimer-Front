@@ -169,11 +169,11 @@ export default function LootInstancia({
   }
 
   return (
-    <div className="w-full overflow-x-auto">
-      <div className="flex items-center justify-between">
+    <div className="w-full overflow-x-auto ">
+      <div className="flex items-center justify-between ">
         <button
           onClick={() => setMostrarAdicionarLoot((prev) => !prev)}
-          className="text-sm font-semibold text-blue-400 hover:underline"
+          className="text-sm font-semibold text-blue-400 hover:underline text-[12px] lg:text-[14px] py-2"
           type="button"
         >
           {mostrarAdicionarLoot ? "Ocultar" : "Adicionar Loot +"}
@@ -191,51 +191,54 @@ export default function LootInstancia({
       </div>
 
       {mostrarAdicionarLoot && (
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            adicionarLoot();
-          }}
-          className="flex flex-col gap-2 mb-4 sm:flex-row sm:flex-wrap"
-        >
-          <input
-            type="text"
-            placeholder="Nome do loot (obrigatório)"
-            value={novoLoot.name}
-            onChange={(e) =>
-              setNovoLoot((prev) => ({ ...prev, name: e.target.value }))
-            }
-            className="w-full p-2 text-black rounded sm:w-[30%]"
-            disabled={carregando}
-          />
-          <input
-            type="text"
-            placeholder="Quem dropou? (Opcional)"
-            value={novoLoot.updatedby}
-            onChange={(e) =>
-              setNovoLoot((prev) => ({ ...prev, updatedby: e.target.value }))
-            }
-            className="w-full p-2 text-black rounded sm:w-[30%]"
-            disabled={carregando}
-          />
-          <input
-            type="number"
-            placeholder="Preço (opcional)"
-            value={novoLoot.preco || ""}
-            onChange={(e) =>
-              setNovoLoot((prev) => ({ ...prev, preco: e.target.value }))
-            }
-            className="w-full p-2 text-black rounded sm:w-[20%]"
-            disabled={carregando}
-          />
-          <button
-            type="submit"
-            disabled={carregando}
-            className="px-4 py-2 text-white rounded bg-primary disabled:opacity-50 sm:w-[15%]"
+        <div className="mt-2">
+          <p className="mb-2 font-bold">Preencha os campos</p>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              adicionarLoot();
+            }}
+            className="flex flex-col gap-2 p-2 mb-4 rounded-lg bg-neutral-800 sm:flex-row sm:flex-wrap"
           >
-            {carregando ? "..." : "Adicionar"}
-          </button>
-        </form>
+            <input
+              type="text"
+              placeholder="Nome do loot (obrigatório)"
+              value={novoLoot.name}
+              onChange={(e) =>
+                setNovoLoot((prev) => ({ ...prev, name: e.target.value }))
+              }
+              className="w-full p-2 text-white rounded sm:w-[30%] bg-neutral-900 border-gray-800 text-[12px] lg:text-[14px]"
+              disabled={carregando}
+            />
+            <input
+              type="text"
+              placeholder="Quem dropou? (Opcional)"
+              value={novoLoot.updatedby}
+              onChange={(e) =>
+                setNovoLoot((prev) => ({ ...prev, updatedby: e.target.value }))
+              }
+              className="w-full p-2 text-white rounded sm:w-[30%] bg-neutral-900 border-gray-800 text-[12px] lg:text-[14px]"
+              disabled={carregando}
+            />
+            <input
+              type="number"
+              placeholder="Preço (opcional)"
+              value={novoLoot.preco || ""}
+              onChange={(e) =>
+                setNovoLoot((prev) => ({ ...prev, preco: e.target.value }))
+              }
+              className="w-full p-2 text-white rounded sm:w-[20%] bg-neutral-900 border-gray-800 text-[12px] lg:text-[14px]"
+              disabled={carregando}
+            />
+            <button
+              type="submit"
+              disabled={carregando}
+              className="px-4 py-2 text-white rounded bg-primary disabled:opacity-50 sm:w-[15%]"
+            >
+              {carregando ? "..." : "Adicionar"}
+            </button>
+          </form>
+        </div>
       )}
 
       <table className="w-[500px] lg:w-full text-left text-gray-300 text-[10px] lg:text-[12px]">
