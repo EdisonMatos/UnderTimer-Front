@@ -254,7 +254,7 @@ export default function Instancias() {
 
   const renderInstancias = (lista) =>
     lista
-      .sort((a, b) => new Date(a.last).getTime() - new Date(b.last).getTime())
+      .sort((a, b) => new Date(b.last).getTime() - new Date(a.last).getTime())
       .map((inst) => (
         <div
           key={inst.id}
